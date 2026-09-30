@@ -1,0 +1,206 @@
+{
+  "name": "deep-v2",
+  "order": 15,
+  "label": "DEEP-V2 — amber military & tech mysteries",
+  "description": "Submarines, spy missions, lost aircraft, rockets and the machines behind them, told in warm amber and gold on black, like an old machine switching on: real archive footage in a lamp-lit amber console with a timecode, dates in glowing gold type over black, an abstract route chart of the journey, a vintage cross-section drawing of the vessel with the crew as pictograms and the ones the story follows in red, an amber radar screen of contacts, a lamp-lit console readout of the facts, the wall map of a headquarters the camera pushes into, amber maps with a cream route, and pictures painted as mid-century magazine illustrations where no footage exists. No captions.",
+  "tagline": "Amber and gold: glowing dates, lit bulbs, old consoles, the map room.",
+  "points": [
+    "Footage on a lamp-lit amber console",
+    "Dates in glowing gold type",
+    "Vintage cross-section drawings",
+    "Radar, bulb-lit readouts, the map room",
+    "Amber maps, cream routes",
+    "Mid-century painted stills"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.03 a minute with the Gemini free tier (voice + cutouts); about $0.30 a minute when footage is watched on paid credits",
+  "render_x": 4.0,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "vLZJLcQMJCqxjrHGEVDO",
+    "voice_name": "Connery — Deep & Immersive Documentary",
+    "wavespeed_voice": "Brian",
+    "gender": "male",
+    "wavespeed_stability": 0.85
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "depth",
+      "motion",
+      "maps",
+      "spotlight",
+      "objects",
+      "headlines",
+      "sound"
+    ],
+    "on": [
+      "youtube",
+      "stock",
+      "motion",
+      "maps",
+      "spotlight",
+      "objects",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "deep2",
+    "director": true,
+    "title_font": "'Montserrat', 'Barlow Condensed', Impact, sans-serif",
+    "title_weight": "800",
+    "accent": [
+      "#EAB81A",
+      "#F3E3B8",
+      "#FFD95A",
+      "#E8701A",
+      "#FF4A2A"
+    ],
+    "warn": "#FF4A2A",
+    "good": "#FFD95A",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H1AB8EA&",
+    "captions": {
+      "font": "Barlow Condensed SemiBold",
+      "size": 56,
+      "upper": true,
+      "karaoke": false,
+      "outline": 0.5,
+      "shadow": 0.6,
+      "line_chars": 46,
+      "margin_v": 70
+    },
+    "still_suffix": " Painted as a 1960s space-age magazine illustration: gouache and airbrush on board, visible brush texture, warm amber, gold and burnt-orange light against deep black-brown shadows, a limited palette, soft halation and fine film grain, cinematic 16:9 framing, no text, no watermark, no logo, no modern CGI look.",
+    "footage_grade": "colorbalance=rs=0.10:gs=0.03:bs=-0.12:rm=0.06:bm=-0.08,eq=saturation=0.7:contrast=1.12:brightness=-0.03",
+    "dust": false,
+    "vignette": true,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "monitor",
+      "frame_every": 2,
+      "monitor_label": "ARCHIVE",
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0,
+      "monitor_ground": "monitor_amber",
+      "monitor_label_colour": "#EAB81A",
+      "monitor_tc_colour": "#FFD95A",
+      "monitor_glow": "#E8701A",
+      "monitor_label_font": "Montserrat-ExtraBold.ttf",
+      "monitor_text_scale": 1.6,
+      "monitor_grade": "colorbalance=rs=.12:gs=.04:bs=-.14,eq=saturation=.62:contrast=1.12:brightness=-0.03",
+      "frame_clear_of_labels": true
+    },
+    "maps": {
+      "skin": "twotone",
+      "every_s": 40,
+      "gap_s": 4,
+      "zoom_accent": "#EAB81A",
+      "colors": {
+        "land": "#C98A14",
+        "landLight": "#E0A42A",
+        "landDark": "#9A6A10",
+        "landNear": "#7A4A0E",
+        "landDim": "rgba(122,74,14,0.55)",
+        "coast": "rgba(255,217,90,0.5)",
+        "hi": "#FFD95A",
+        "hiLight": "#FFE68A",
+        "hiDark": "#C98A14",
+        "pin": "#FFF1C8",
+        "pinLight": "#FFF1C8",
+        "route": "#FFF1C8",
+        "ink": "#FFE7B3",
+        "plateInk": "#FFE7B3"
+      }
+    },
+    "photofx": {
+      "every_s": 30,
+      "gap_s": 3,
+      "keyline": ""
+    },
+    "sound": {
+      "sfx_db": -16,
+      "music_rel_db": -12,
+      "duck_db": -8,
+      "track": "long-note-four"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 24,
+      "window_s": 24,
+      "candidates": 4,
+      "repeat": false,
+      "watcher": "gemini"
+    },
+    "options_note": "DEEP-V2: real archive footage on a lamp-lit amber console, dates in glowing gold type, amber radar, bulb-lit readouts, vintage cross-section drawings, the map room, amber maps, and mid-century painted stills where no footage exists. No captions by default.",
+    "reference": "styles/deep-v2.jpg",
+    "labels": {
+      "pos": "tl",
+      "font": "Montserrat ExtraBold",
+      "sub_font": "Barlow Condensed SemiBold",
+      "size": 104,
+      "sub_size": 108,
+      "colour": "#EAB81A",
+      "sub_colour": "#F3E3B8",
+      "rule": "#E8701A",
+      "glow": "#E8701A",
+      "enter": "blur",
+      "upper": true,
+      "spacing": 1.5
+    },
+    "scene_prompt": "You are the art director for a faceless YouTube video.\n\nCHANNEL: [INSERT CHANNEL HERE]\n\nBelow is the full spoken SCRIPT. Design [INSERT COUNT HERE] distinct background\nSCENES that carry this video visually.\n\nRULES\n- Each scene illustrates a MOMENT the narrator actually reaches. Read the script\n  and follow its order; scene 1 belongs at the start, the last at the end.\n- Atmospheric imagery, never text on screen. No words, letters or numbers.\n- No faces looking at camera unless the channel is built on a person.\n- One subject per scene, described concretely: what is in frame, the light, the\n  distance. \"A hand resting on a closed book, low window light\" — not \"wisdom\".\n- Vary the distance across the set: wide, middle, close. A pool of fifteen\n  medium shots edits like a slideshow.\n\nPICTURE STYLE — this channel's stills. Every prompt you write follows it:\n- Each picture is a painted mid-century illustration, as if from a 1960s science, aviation or naval magazine:\n  gouache and airbrush on board, visible brush texture, simplified confident shapes, soft halation, fine grain.\n- A warm, restrained palette: amber, gold, burnt orange, cream and deep black-brown shadow. Name colours in\n  words, never as hex codes. No teal, no cyan, no blue glow, no neon, no saturated or candy colour.\n- Old light only: incandescent bulbs, lamp-lit instrument panels, a low dawn or dusk sun, one warm work lamp.\n- Never paint the channel's graphics as pictures: no wireframes, no holograms, no cutaway diagrams, no glowing\n  or see-through figures, no monitor or CRT frames, no interface screens, no stencilled type, no timecodes.\n  Those are drawn separately by the edit.\n- Machines and rooms look like their real era: riveted metal, bakelite, analog dials, toggle switches, canvas\n  and leather — nothing sleek, no modern CGI, no sci-fi styling.\n- People, when they appear, are ordinary period figures seen from behind, in profile or in silhouette.\n\nReturn ONLY a JSON array of [INSERT COUNT HERE] objects:\n\n  {\"text\": \"<the line of narration this scene belongs to>\",\n   \"prompt\": \"<a complete image-generation prompt>\"}\n\nSCRIPT:\n[INSERT SCRIPT HERE]\n"
+  },
+  "pacing": {
+    "graphic_every_min": 0.6,
+    "graphic_ratio": 0.3,
+    "graphic_dur_s": 6.0,
+    "graphic_max_s": 8.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 124,
+    "cut_s": 4.2,
+    "hook_s": 60,
+    "scene_share_hook": 0.66,
+    "scene_share_body": 0.5,
+    "hook_notes": "This is a military or technical mystery: the first minute opens on a stencil (the date or the place of the cold open), a map (amber) on the first place, a cutaway of the vessel, aircraft, rocket or station the story is about the first time it is named, a readout of the mission's facts within the first 40 seconds, a spotlight on the first public person named, and text labels for depths, distances, speeds and dates.",
+    "body_notes": "After the hook: archive footage in the monitor carries it; a route when a journey or a distance is described; a sonar when contacts, detection or pursuit are described; a cutaway when the story goes inside a machine; a readout for any list of specifications or facts; a maproom when a plan, an operation or a headquarters is described; a stencil on every new date; a map when the story moves; a spotlight on each new public person. One graphic every 20 to 30 seconds, never the same twice in a row."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a channel about military and technological mysteries — submarines that vanished, spy operations under the sea, aircraft that never landed, rockets, radar, cables, codes — told like a classified file read aloud.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each, in causal or chronological order.\n- Everything is real: real vessels with their names and numbers, real operations, real dates, real depths, distances, speeds and crews, real officers and engineers. Use only facts you are certain of; round what is disputed or classified and say \"around\" or \"reportedly\".\n- Beat 1 is a cold open on the most dramatic real moment — the last message, the contact on the sonar, the dive, the launch — with the date, the place and one number, then the question the story turns on.\n- Every beat names what can be drawn or shown: the machine (so a cutaway can be built), the route (so a chart can be drawn), the contacts, the headquarters, the specifications, the places on a map, the archive footage that exists.\n- Explain how the technology worked, plainly, at the moment the story needs it — one mechanism per beat at most.\n- Every few beats a turn: what they expected, what actually happened. Keep one revelation for the last third.\n- The last beat lands what was found, what is still unknown, or what the mission changed, and returns to the image of the cold open.\nFor each beat, write the facts it states and the things on screen that carry them.",
+    "script": "Write the complete narration for this file from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A deep, unhurried narrator with the authority of someone who has read the declassified pages. Short sentences. Present tense for the operation, past tense for background. Fragments at the turns: \"Four hundred feet. Then silence.\"\n- The first words are the cold open: a date, a place and a number, in the middle of the most dramatic moment.\n- Every sentence carries something the file can show: a vessel, a place, a date, a depth, a distance, a name, a mechanism.\n- Say numbers and dates the way they are read aloud (\"October nineteen seventy-one\", \"twelve hundred kilometres\", \"three hundred and sixty feet\"), never digits or symbols.\n- Explain the technology in one clear sentence when the story needs it, never as a lecture.\n- Real facts only. No invented dialogue, no invented figures; classified details are said as \"reportedly\" or \"around\".\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- A question the viewer wants answered every minute or so, answered soon after.\n- Never say \"in this video\". End on what was found or what remains unknown, back at the image of the cold open; then one short line asking viewers to subscribe for the next file."
+  },
+  "thumbnail": {
+    "brief": "Near-black background with a warm amber glow: the vessel, aircraft or machine of the story half in shadow, lit like an old instrument panel, painted in a 1960s magazine-illustration style. Two to four words of headline in a heavy geometric sans (Montserrat ExtraBold), glowing gold with an orange halo, top-left, one word in cream. No faces, no arrows, no emoji.",
+    "accent": "#EAB81A",
+    "note": "Send Claude five thumbnails from military-history channels you wish were yours and ask it to rewrite this brief."
+  },
+  "output": {
+    "burn_subs": false,
+    "desc": true,
+    "thumbnails": true,
+    "sources": false
+  }
+}

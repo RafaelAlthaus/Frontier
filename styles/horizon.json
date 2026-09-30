@@ -1,0 +1,190 @@
+{
+  "name": "horizon",
+  "order": 21,
+  "label": "HORIZON — data documentaries",
+  "description": "Big questions answered with real numbers: why a country stopped having children, how a currency collapsed, what an ageing world will look like. Real news footage full frame, and between it the numbers drawn big and calm on a near-black navy — the line a country draws while the camera follows its pen, a population pyramid turning over from 1960 to 2100, a hundred people shrinking to five across four generations, a figure that rolls like an odometer, countries side by side, a real document on the table with its translation, a real person's words typed as the narrator reads them. Every figure comes from the World Bank or the UN, fetched by the engine, and the script is fact-checked before the voice. Real newspaper headlines, maps, the real people named, interview soundbites with subtitles. No captions.",
+  "tagline": "Real numbers, drawn big: charts, pyramids, documents, quotes.",
+  "points": [
+    "Charts drawn from World Bank data",
+    "Population pyramids 1950–2100",
+    "Generations shrinking row by row",
+    "Real documents with translations",
+    "Quotes typed as they are read",
+    "Real footage, no captions"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.05 a minute with the Gemini free tier (voice + photo cut-outs); the World Bank and UN data is free; about $0.30 a minute when footage is watched on paid credits",
+  "render_x": 3.5,
+  "language": "English",
+  "voice": {
+    "provider": "ai33",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+    "voice_name": "Liam — clear, curious documentary narrator",
+    "wavespeed_voice": "Liam",
+    "note": "Liam, the ElevenLabs narrator the HORIZON sample was voiced with. Any ElevenLabs voice id works; ask Claude Code to list voices (make_video.algrow_voices()) for another.",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "on": [
+      "youtube",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "horizon",
+    "director": true,
+    "title_font": "'Playfair Display', Georgia, serif",
+    "title_weight": "400",
+    "accent": [
+      "#E0434C",
+      "#F4F1EA",
+      "#F2B84B",
+      "#8FB3D9",
+      "#E0434C"
+    ],
+    "warn": "#E0434C",
+    "good": "#F4F1EA",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H4C43E0&",
+    "captions": {
+      "off": true,
+      "font": "Poppins SemiBold",
+      "size": 46,
+      "upper": false,
+      "karaoke": false,
+      "outline": 0.4,
+      "shadow": 0.6,
+      "line_chars": 46
+    },
+    "footage_grade": "eq=contrast=1.06:saturation=0.86:gamma=0.97,colorbalance=rs=0.03:bs=-0.03:rh=0.02:bh=-0.02",
+    "dust": false,
+    "vignette": true,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": true,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "maps": {
+      "skin": "midnight",
+      "every_s": 45,
+      "gap_s": 4
+    },
+    "headlines": {
+      "marker": "#8E1D2A",
+      "every_s": 30,
+      "gap_s": 3,
+      "smooth": true
+    },
+    "photofx": {
+      "every_s": 40,
+      "gap_s": 3,
+      "keyline": ""
+    },
+    "soundbites": {
+      "montage": false,
+      "quotes": 2,
+      "max_s": 9.0,
+      "soundups": 2
+    },
+    "sound": {
+      "sfx_db": -18,
+      "music_rel_db": -7,
+      "duck_db": -8,
+      "moods": true,
+      "opening": "dramatic",
+      "epidemic": {
+        "music": {
+          "dramatic": "cinematic documentary tension pulses",
+          "quiet": "melancholic minimal piano documentary",
+          "inspiring": "hopeful cinematic documentary strings"
+        },
+        "sfx_flavor": "cinematic documentary",
+        "avoid": ["comedy", "trap", "edm", "cartoon"]
+      }
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 26,
+      "candidates": 4,
+      "repeat": false,
+      "watcher": "gemini",
+      "sources": ["youtube"],
+      "archive_watch": 0
+    },
+    "footage_taste": "Real news reports and documentary footage of the actual places and people: streets, classrooms, hospitals, offices, officials at podiums, archive film. Never generic stock, never posed actors, never AI imagery.",
+    "options_note": "HORIZON: real news footage full frame; between it the numbers drawn from World Bank and UN data (a following line chart, a population pyramid that turns over, generations, odometer figures, country bars), real documents with a translation, quotes typed as they are read, chapter tabs, real headlines. No captions.",
+    "reference": "styles/horizon.jpg",
+    "labels": {
+      "pos": "tl",
+      "font": "Poppins SemiBold",
+      "sub_font": "Playfair Display",
+      "size": 34,
+      "sub_size": 32,
+      "colour": "#F4F1EA",
+      "rule": "#E0434C",
+      "enter": "wipe",
+      "upper": true,
+      "spacing": 2
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.5,
+    "graphic_ratio": 0.32,
+    "graphic_dur_s": 6.5,
+    "graphic_max_s": 9.5,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 158,
+    "cut_s": 3.8,
+    "hook_s": 60,
+    "scene_share_hook": 0.5,
+    "scene_share_body": 0.4,
+    "same_tool_penalty": 0.6,
+    "hook_notes": "This is a data documentary: the first minute opens on real footage of the people or the place, a real newspaper headline within the first 40 seconds, a numroll or a titlecard when the central number is first said, and the linechart of that number when its history is told. One graphic every 15 to 20 seconds; footage between them.",
+    "body_notes": "After the hook: real footage carries every sentence that describes people, places or events. A graphic carries a sentence that is a NUMBER: linechart when a number's history over decades is told (World Bank series), pyramid when a population's age or its future is described, gens when the script works out what a rate means for generations, hbars when countries or things are compared, yearbars for a count per year with one or two moments picked out, numroll when one figure changes to another, ticker for one enormous sum, strike for a list of things given up or lost, docshot when the narration names a real document, poster or letter, quote when a real person's exact words are read, readline for the one sentence the whole video turns on, tab at each new chapter. A real headline when the press reported it. A map when the story moves. Never the same graphic twice in a row; at most one linechart and one pyramid every two minutes."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a documentary channel that answers big questions with real numbers — demographics, economies, health, cities, energy, the way a country changes over decades — told like a well-researched long-form feature.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 3 minutes, 10 minutes, 20 minutes]\n\nPlan the video as numbered beats of about 30-60 seconds each.\n- Everything is real: real countries, cities, people, reports, dates and figures from official statistics (national statistics offices, the World Bank, the UN, the OECD). Use only facts you are certain of; round a disputed figure and say who says it.\n- Beat 1 is a cold open: a present-tense SCENE with one real person or moment, the country or place named in the first two sentences, the central number revealed one beat later, then the contradiction or the question the story turns on.\n- Then a bridge back to the beginning of the story (\"It wasn't always like this.\"), and the number's history told as a line: where it started, the year it crossed a line that matters, where it is now.\n- One human detail per act: a real person, a real school, a real document, a real quote.\n- Pair every number with its consequence, and use contrast pairs (then and now, here and there).\n- Mark the moments where a real interview can speak for itself as [[clip: who says what]] lines.\n- Explain why, with the causes the evidence supports, one per beat.\n- The last beat turns: what has changed recently, what the experts disagree on, and one closing line that recasts the title.\nFor each beat, write the facts it states, the number that can be drawn and the footage that exists.",
+    "script": "Write the complete narration from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A clear, curious narrator who has done the reading. Short declarative sentences; fragments at the turns (\"Same rooms. Same toys.\").\n- The first two sentences name the country or place and put the viewer inside a real moment.\n- Every sentence carries something the video can show: a place, a person, a document, or a number that can be drawn.\n- Say numbers the way they are read aloud (\"zero point seven two\", \"two hundred and thirty thousand\", \"nineteen sixty\"), never digits or symbols.\n- Numbers come with what they mean: what they were before, what they cause, who they touch.\n- Real facts only. Quotes are the person's exact words. No invented dialogue, no invented figures; disputed points are attributed (\"officials credit…\", \"according to the UN…\").\n- Keep the [[clip: …]] lines from the plan on their own lines where a real interview should play.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- Never say \"in this video\". End on the line that recasts the title; then one short line asking viewers to subscribe."
+  },
+  "thumbnail": {
+    "brief": "Near-black navy, one real photo of the story's place or people on the right fading into it, one big number in a white serif on the left (the story's central figure), a thin red rule under it. Two to four words of headline in caps. No arrows, no emoji, no faces pulling expressions.",
+    "accent": "#E0434C",
+    "note": "Send Claude five thumbnails from data-documentary channels you admire and ask it to rewrite this brief."
+  }
+}

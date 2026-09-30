@@ -1,0 +1,3 @@
+earth_day.jpg, earth_aux.png: made with Natural Earth (public domain, naturalearthdata.com).
+  earth_day = Natural Earth II with Shaded Relief, Water and Drainages, resampled to 4096x2048.
+  earth_aux = R: city lights plotted from Natural Earth populated places, G: water mask.

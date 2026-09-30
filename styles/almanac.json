@@ -1,0 +1,190 @@
+{
+  "name": "almanac",
+  "order": 20,
+  "label": "ALMANAC — the history of people and things",
+  "description": "History told like an encyclopedia entry you cannot put down: who someone was, what a thing was, and how one led to the other. Real archive film and real photographs, printed in three inks — mustard, ink black, paper white. Names rise out of dark bars beside each person's real photo, the objects the story turns on become collector's cards, the era's film runs through a 35 mm strip, every frame its own shot, that spins down onto one frame and dives into it, big figures ring up on cash-register drums, and the verdict is proofed on a printing press and stamped.",
+  "tagline": "The history of people and things, printed like an almanac: real archive film, collector's cards, press proofs.",
+  "points": [
+    "Name bars: each person's real photo, the name rising in yellow on a dark bar",
+    "Collector's cards for the objects, machines and documents the story turns on",
+    "A 35 mm film strip of the real archive footage, every frame its own shot, that spins down onto one frame and dives into it",
+    "A hand of cards for the people who share one moment; one is pulled to the lens",
+    "Figures on cash-register drums, a card wall that turns into a portrait, a press proof with a stamped verdict",
+    "Every shot graded into the same two inks, so film, photos and graphics read as one printed page"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.05 a minute with the Gemini free tier (voice + cut-outs); about $0.60 a minute when footage is watched on paid credits",
+  "render_x": 4.5,
+  "language": "English",
+  "voice": {
+    "provider": "ai33",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "MFZUKuGQUsGJPQjTS4wC",
+    "voice_name": "Jon — Warm & Grounded Storyteller",
+    "wavespeed_voice": "Brian",
+    "note": "Jon — a warm, grounded American narrator (the COURTSIDE voice). Ask Claude Code to list voices (make_video.algrow_voices()) and swap the id for a channel voice of its own.",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "depth",
+      "objects",
+      "motion",
+      "vox",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound",
+      "avatar"
+    ],
+    "on": [
+      "youtube",
+      "objects",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "almanac",
+    "director": true,
+    "title_font": "'Inter Display Black','Inter Black',Inter,sans-serif",
+    "title_weight": "800",
+    "accent": [
+      "#E6BE61",
+      "#F8D848",
+      "#151515",
+      "#F3F1ED",
+      "#C8372D"
+    ],
+    "warn": "#C8372D",
+    "good": "#E6BE61",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H48D8F8&",
+    "captions": {
+      "font": "Inter SemiBold",
+      "size": 48,
+      "upper": false,
+      "karaoke": false,
+      "box": true,
+      "outline": 0.5,
+      "outline_colour": "&H26151515",
+      "shadow": 0.0,
+      "line_chars": 46,
+      "margin_v": 84
+    },
+    "footage_grade": "hue=s=0,eq=contrast=1.14:brightness=0.02,colorlevels=romin=0.082:gomin=0.082:bomin=0.082:romax=0.957:gomax=0.945:bomax=0.941",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "maps": {
+      "skin": "film",
+      "every_s": 60,
+      "gap_s": 6
+    },
+    "headlines": {
+      "marker": "#F8D848",
+      "press": true,
+      "real_only": true,
+      "every_s": 45,
+      "gap_s": 4
+    },
+    "photofx": {
+      "every_s": 24,
+      "gap_s": 3,
+      "keyline": "",
+      "spot_move": "tilt",
+      "draw_objects": false
+    },
+    "sound": {
+      "sfx_db": -17,
+      "music_rel_db": -7,
+      "duck_db": -8,
+      "track": "Documentary 1 | documentary 2 | documentary 3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 4,
+      "repeat": false,
+      "watcher": "gemini",
+      "sources": [
+        "youtube",
+        "archive"
+      ]
+    },
+    "labels": {
+      "pos": "tl",
+      "font": "Inter SemiBold",
+      "sub_font": "Inter SemiBold",
+      "size": 48,
+      "sub_size": 28,
+      "colour": "#FFFFFF",
+      "box": "#2B2B2B",
+      "box_text": "#F8D848",
+      "rule": "",
+      "enter": "slide",
+      "upper": false
+    },
+    "footage_taste": "real footage of the period and the place above all: newsreels, government, museum and university film, home movies, the real buildings, streets, ships and machines of the story; then the real places as they look today when the story reaches the present. Never stock footage, never actors in period costume, never modern reenactments or AI-made 'archive', never b-roll that only pretends to be old.",
+    "options_note": "ALMANAC: real archive film and real photographs, name bars, collector's cards, a film strip, a hand of cards, cash-register figures, a card wall and a press proof, all printed in the same three inks.",
+    "reference": "styles/almanac.jpg"
+  },
+  "pacing": {
+    "graphic_every_min": 0.8,
+    "graphic_ratio": 0.34,
+    "graphic_dur_s": 6.4,
+    "graphic_max_s": 10.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 140,
+    "cut_s": 3.4,
+    "hook_s": 60,
+    "scene_share_hook": 0.72,
+    "scene_share_body": 0.56,
+    "hook_notes": "This is the history of a person or a thing: the viewer decides in the first minute. Open on a reel — the era's real archive film running through the card's film strip, the title one word or a year, the camera diving into the frame as the place is named. Then, inside the first minute: a bar the first time the main person is named (their real photo, the name rising in yellow); a card on the first object, machine or document the story turns on; a tally on the first big figure the narration says; an old newspaper (press) on the first reported fact; a map of the first place named. Cut every 2-3 seconds in the hook between real footage, real photos and the kit; never the same shot twice.",
+    "body_notes": "After the hook, real archive footage carries it, every shot graded into the same two inks. The ALMANAC kit marks the joints of the story every 30 to 60 seconds: a bar for every person who matters, the first time they are named (never twice for the same person); a card for every object, machine, building or document the story turns on; a hand when two to five people share one moment (a gang, a cabinet, a band, the sides of a case), pulling the one the story follows next; a tally for a big figure the narration says; a cardwall at a turning point, on the words that turn it; a reel when the story enters a new era or a new place (at most one every two minutes); a register for the verdict the whole story has built to (a sentence, a sale, a ban, a record), once, near the end. Between the kit's scenes: a photo spotlight for other people, an old newspaper for every reported fact of the era, a map when the story travels, text labels for names, years and figures. Never the same template twice in a row.",
+    "same_tool_penalty": 0.8,
+    "rank": {
+      "graphic": 5.6
+    }
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of ALMANAC, a YouTube channel that tells the history of people and things — a gangster, an inventor, a ship, a machine, a building, a company, a scandal — like an encyclopedia entry nobody can stop reading: real people, real objects, real places, real dates and real numbers, each one on screen.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each (a 2-minute episode has 2 or 3 beats), in causal or chronological order.\n- Everything is real: people, objects, places, dates, prices, counts, court cases, records, quotes. Use only facts you are certain of. Where sources disagree, plan the widely cited figure with \"around\".\n- Beat 1 is a cold open: a present-tense SCENE at the story's most telling moment — a date, a place and a thing you can see — with the identity held back for a beat, then the reveal in one line, then the contradiction in one line. Say the city AND the state or country the first time a place is named.\n- Then the bridge: \"But to understand how ... ended up there, you have to go back to ...\". Only now does the chronology start.\n- Every beat is anchored to things a camera, a photograph, a newspaper or a map can SHOW: a named person, a named object, a city, a building, a dated event, a figure. The edit finds real archive film, real photographs and real newspaper pages for them, so name them precisely (\"the Lexington Hotel, Chicago\", \"the 1928 Thompson submachine gun\", \"his tax return for 1928\").\n- Name the people and say exactly what each of them did and when: every named person gets a card with their real photograph. Name the objects the story turns on: each one gets a collector's card of its own.\n- Plan the big moments the edit builds its graphics on: the moment a new era or place opens; the two to five people who share one moment (a gang, a cabinet, a band, the sides of a case) and the one the story follows next; the one big figure the story turns on; the turning point; the verdict the whole story builds to (a sentence, a sale, a ban, a record) in one word.\n- Every act carries one humanising detail nobody else would think to film. Find the real ones in interviews, profiles, court records and obituaries; never invent one.\n- Numbers are drama only when paired with a consequence. Plan at least one single figure that lands and at least two contrast pairs.\n- Every few beats a turn, a question the viewer wants answered, and the answer a beat later. The last beat lands the consequence as a fact or a number and returns to the image of the cold open.\n\nFor each beat, write the facts it states and the concrete things on screen that prove them (footage, photographs, objects, pages, places).",
+    "script": "Write the complete narration for this history from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A warm, grounded American narrator: curious, precise, never breathless — a documentary voice that sounds like it has read the file. Short declarative sentences written for the ear. Present tense in the scenes, past tense for background. Fragments at the turns: \"Eleven years.\" \"Not for murder.\"\n- The first words are the cold open scene: a date, a place or a thing, in the middle of the most telling moment. Never a greeting, never \"in this video\", never the channel's name.\n- Every sentence carries something concrete the edit can show: a name, an object, a city, a building, a date, a number, a newspaper, a photograph.\n- Say numbers the way you read them aloud: \"a hundred million dollars\", \"nineteen twenty-nine\", \"eleven years\" — never digits or symbols.\n- Real facts only. No invented quotes or figures; disputed figures are rounded and said with \"around\". When a person really said something on record, you may state it (\"He told reporters he was only a businessman.\").\n- A person's full name the first time, then the surname. An object's exact name the first time, then plainly.\n- Pair every number with what it meant. Contrast pairs and the irony history hands the story land as their own short sentences, never buried mid-paragraph.\n- Every minute or so, a question the viewer wants answered, answered soon after.\n- The last two lines: the closing contrast, then the line that recasts the title. Then one short line asking viewers to subscribe for the next story.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no quotation marks around dialogue, no lists, no emoji."
+  },
+  "thumbnail": {
+    "brief": "A real black-and-white archive photograph of the person or the thing at the heart of the story, cut out and large, on a mustard (#E6BE61) or clean white ground with a thin dark bar running behind it. Three to five words of headline in a heavy grotesque sans (Inter Display Black): ink black on the mustard, or yellow (#F8D848) on the dark bar. Faint printed-paper texture. No glow, no arrows, no cartoons, no stickers.",
+    "accent": "#F8D848"
+  },
+  "script_parts": true
+}

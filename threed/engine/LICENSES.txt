@@ -1,0 +1,11 @@
+Frontier 3D engine — third-party material
+- three.js (vendor/three/): MIT License, Copyright 2010-2026 Three.js Authors (header of each file).
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+  documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+  persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice
+  and this permission notice shall be included in all copies or substantial portions of the Software.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+- Fonts (fonts/): EB Garamond, Inter, Cinzel, Courier Prime — SIL Open Font License 1.1; Special Elite — Apache 2.0.
+- Earth maps (lib/nature/data/): made with Natural Earth, public domain (see lib/nature/data/ATTRIBUTION.txt).
+Everything else in this folder is Frontier's own code.

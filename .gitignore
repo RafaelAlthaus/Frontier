@@ -1,0 +1,36 @@
+# ── Secrets — never commit ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+.venv/
+__pycache__/
+*.pyc
+
+# ── macOS / editors ───────────────────────────────────────────────────────────
+.DS_Store
+.idea/
+.vscode/
+
+# ── What Frontier makes (videos, working files, previews) ─────────────────────
+output/
+preview/
+motion_preview/
+farm_queue/
+*.bak
+*.bak-*
+*.zip
+
+# ── This computer's own memory (footage already used, temporary picture links) ─
+youtube_used.json
+pexels_used.json
+assets/characters/hosted.json
+
+# ── Update backups (update.py copies replaced files here) ─────────────────────
+.frontier/backup/
+
+# ── Music — tracks you licensed; kept out in case the repository is ever shared ─
+# delete these two lines to version your music too
+assets/music/**
+!assets/music/README.txt

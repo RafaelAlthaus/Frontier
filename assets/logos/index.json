@@ -1,0 +1,134 @@
+{
+ "openai": {
+  "page": "OpenAI",
+  "file": "File:OpenAI logo 2025 (wordmark).svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/af/OpenAI_logo_2025_%28wordmark%29.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 376,
+  "mono": true,
+  "dark": true
+ },
+ "anthropic": {
+  "page": "Anthropic",
+  "file": "File:Anthropic logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 157,
+  "mono": true,
+  "dark": true
+ },
+ "xai": {
+  "page": "SpaceXAI",
+  "file": "File:SpaceXAI 2026 full logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/SpaceXAI_2026_full_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1394,
+  "h": 171,
+  "mono": true,
+  "dark": true
+ },
+ "google gemini": {
+  "page": "Google Gemini",
+  "file": "File:Google Gemini logo 2025.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Google_Gemini_logo_2025.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 316,
+  "mono": false,
+  "dark": true
+ },
+ "meta": {
+  "page": "Meta Platforms",
+  "file": "File:Meta Platforms Inc. logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 282,
+  "mono": false,
+  "dark": true
+ },
+ "qwen": {
+  "page": "Qwen",
+  "file": "File:Qwen Logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/6/65/Qwen_Logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 411,
+  "mono": false,
+  "dark": false
+ },
+ "perplexity": {
+  "page": "Perplexity AI",
+  "file": "File:Perplexity AI logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Perplexity_AI_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 336,
+  "mono": false,
+  "dark": true
+ },
+ "nvidia": {
+  "page": "Nvidia",
+  "file": "File:NVIDIA logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/NVIDIA_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1387,
+  "h": 256,
+  "mono": false,
+  "dark": true
+ },
+ "deepseek": {
+  "page": "DeepSeek",
+  "file": "File:DeepSeek logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/DeepSeek_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 297,
+  "mono": false,
+  "dark": true
+ },
+ "mistral ai": {
+  "page": "Mistral AI",
+  "file": "File:Mistral AI logo (2025–).svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Mistral_AI_logo_%282025%E2%80%93%29.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1390,
+  "h": 984,
+  "mono": false,
+  "dark": true
+ },
+ "alibaba": {
+  "page": "Alibaba Group",
+  "file": "File:Alibaba-Group-Logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/en/8/80/Alibaba-Group-Logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 179,
+  "mono": false,
+  "dark": true,
+  "no_ondark": true
+ },
+ "nonexistent fake corp 9000": {
+  "miss": true,
+  "page": "Nonexistent Fake Corp 9000"
+ },
+ "grok": {
+  "page": "Grok (chatbot)",
+  "file": "File:Grok-2025-logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/5/51/Grok-2025-logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1400,
+  "h": 388,
+  "mono": true,
+  "dark": true
+ },
+ "github": {
+  "page": "GitHub",
+  "file": "File:GitHub Invertocat Logo.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1340,
+  "h": 1306,
+  "mono": true,
+  "dark": true
+ },
+ "united nations": {
+  "page": "United Nations",
+  "file": "File:Emblem of the United Nations.svg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/5/52/Emblem_of_the_United_Nations.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  "w": 1390,
+  "h": 1179,
+  "mono": false,
+  "dark": false,
+  "no_ondark": true
+ }
+}

@@ -1,0 +1,75 @@
+{
+  "name": "folio",
+  "order": 22,
+  "label": "FOLIO — the illustrated explainer",
+  "description": "An animated history-and-science explainer that looks like a picture book coming to life. Every frame is an illustration drawn in code: flat shapes with soft gradients, one warm light you can see, depth of field, cartoon people with big eyes who look the same all film, small serif labels for places, years and names, and engineering diagrams on cream paper ('Fig. 1') whenever the story explains how something works. A calm narrator, a soft score, no footage and no captions.",
+  "tagline": "A moving picture book: every shot drawn in code, every number on screen, every 'how' on paper.",
+  "points": [
+    "Every shot is an illustration Claude draws in code — no stock, no footage, no AI pictures",
+    "The same characters in every shot, walking, pointing and reacting on the words",
+    "Places, years and names in quiet serif labels, placed on the spoken word",
+    "Cream-paper diagrams (Fig. 1) for every 'how it works'",
+    "Camera-driven transitions: whiteouts, pushes into objects, whip pans, sliding paper",
+    "A calm narrator and a written score, mastered to YouTube loudness"
+  ],
+  "script_craft": "story",
+  "cost": "the voice costs cents; Claude draws every shot on your Claude Code plan — about $7 of Opus a minute at API prices (a 10-minute video is roughly 2 % of a Claude Max 20x week); rendering runs on this computer, about 20 minutes per minute of video in all",
+  "render_x": 20.0,
+  "language": "English",
+  "voice": {
+    "provider": "ai33",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "49S3tHf0uTVzQN5pADIu",
+    "voice_name": "Amy — Warm, Mature, Audiobook Narrator (American female)",
+    "wavespeed_voice": "Sarah",
+    "gender": "female",
+    "note": "The reference narrator is female, median pitch 185 Hz, 162 words a minute. Amy measures 193 Hz; at speed 1.15 she reads at the reference's pace. Alternatives on ai33: Alexandria — History Documentary (QyCGbzzEtSqHWJ8rNRMK, lower, 154 Hz), Harper — Female American Documentary (Fihx1nL7DQV0DEuFJSG1).",
+    "speed": 1.15
+  },
+  "features": {
+    "offered": [],
+    "on": []
+  },
+  "look": {
+    "visuals": "folio",
+    "reference": "styles/folio.jpg",
+    "title_font": "'EB Garamond', Georgia, serif",
+    "title_weight": "400",
+    "accent": [
+      "#E8A33A",
+      "#3F7BBF",
+      "#6EA2CA",
+      "#C13A29",
+      "#E5DEC4"
+    ],
+    "warn": "#C13A29",
+    "good": "#3F7BBF",
+    "caption_accent": "&H3AA3E8&",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "encode": {
+      "preset": "slow",
+      "tune": "animation",
+      "crf": 18
+    },
+    "folio": {
+      "review": true,
+      "writers": 3,
+      "captions": false
+    },
+    "sound": {
+      "music": true
+    },
+    "options_note": "FOLIO draws the whole video in code: Claude Opus writes every shot and an art director checks it, then this computer renders it — about 20 minutes per minute of video, most of it Claude drawing three shots at a time. There is no footage, stock or picture model to pay for."
+  },
+  "pacing": {
+    "wpm": 162
+  },
+  "prompts": {
+    "outline": "You are the head writer of an animated explainer channel that tells how one invention, discovery or idea came to be — the people, the problem, the insight and the moment it worked — the way a well-made picture book would, for a curious adult.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 3 minutes, 10 minutes, 20 minutes]\n\nPlan the video as numbered beats of about 20-40 seconds each, in this shape:\n1. A modern hook with a real number: the present-day scale of the thing (\"Every day, around 100,000 planes climb into the sky.\"), then one line that hands the debt to the people of the story, where they came from and the underdog detail (\"…two brothers from Dayton, Ohio, neither of whom had a high school diploma.\").\n2. The origin as a scene with a year: one concrete object or event from their early life, what it was made of, what they did with it.\n3. The insight, as a contrast pair the viewer can see (\"A bike is unstable, but a rider balances it.\"), then where the idea came from (nature, another trade, an accident) and a three-to-five-word verdict.\n4. The setback: the numbers or the world said no; a real quote from the person if one exists.\n5. The fix, explained like an engineer: what they built or measured, how many, what was wrong before, and the physics or maths in plain words — the beat a paper diagram will show.\n6. The climax as a timed scene: the date, the weather, one detail of the body or the place, the action, then the result as number fragments (\"Twelve seconds. A hundred and twenty feet.\") and a modern comparison that makes the number physical.\n7. A coda that jumps forward in time to a surprising echo of the story, in one or two sentences.\nEverything is real: real people, places, dates, numbers and quotes you are certain of. Round a disputed figure and say who says it. For each beat, write the facts it states, the object or place it shows, and the number or diagram it can draw.",
+    "script": "Write the complete narration from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A calm, clear narrator telling a true story she knows well. Short declarative sentences, most under twelve words; fragments at the turns (\"Warp the wings.\" \"That's lift.\").\n- The first sentence is the modern number; the second hands it to the people of the story and names their town.\n- Every sentence shows something: a person doing something, an object, a place at a time of day, or a number that can be drawn. When a thing is made of parts, name the parts. When something works, say how in one or two plain sentences (\"Push air down, and the air pushes the wing up.\").\n- Years and dates are said the way they are read aloud (\"In 1878,\" \"December 17, 1903.\") and every number is paired with what it means.\n- Real facts only. Quotes are the person's exact words and say who said them. No invented dialogue, no invented figures.\n- No questions to the viewer, no \"in this video\", no \"let's\", no sign-off, no call to subscribe: the last line is the coda.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists."
+  }
+}

@@ -1,0 +1,175 @@
+{
+ "name": "3d",
+ "builtin": true,
+ "order": 1.5,
+ "label": "3D — history rebuilt in 3D",
+ "description": "Real stories retold as a premium 3D documentary: the places, the ships, the crowds and the people of the story rebuilt in real-time 3D — faceless white figures in era-correct clothes, real light, fog and weather, drone moves through the scene. Claude directs every shot from the narration, looks at preview stills of each one and fixes what is wrong before the final render on this computer's graphics card. Quiet 2D graphics carry the numbers and dates, maps the routes, real footage the rest.",
+ "tagline": "History rebuilt in 3D — directed, checked and fixed by Claude before it renders.",
+ "points": [
+  "The whole story rebuilt in real-time 3D, cut like a trailer",
+  "Drone and FPV shots, inserts of the details, titles on screen",
+  "Places, ships, planets, towns and crowds of any era",
+  "Claude directs and checks every shot, then repairs any that fail",
+  "Music per chapter from your Epidemic Sound account, or your own tracks",
+  "Renders on your own graphics card"
+ ],
+ "script_craft": "story",
+ "cost": "the voice is about $0.05 a minute; Claude's directing runs on your Claude Code plan (a 10-minute video uses about 5 % of a Claude Max 5x week); the 3D renders on this computer, about 15-20 minutes per minute of video",
+ "render_x": 12,
+ "language": "English",
+ "voice": {
+  "provider": "algrow",
+  "engine": "elevenlabs",
+  "model": "eleven_multilingual_v2",
+  "chunk_chars": 900,
+  "voice_id": "",
+  "voice_name": "",
+  "wavespeed_voice": "Brian",
+  "note": "Pick a calm, grounded documentary narrator at go.algrow.online/tool and paste its id here (or set ALGROW_VOICE_ID in .env to use one voice everywhere). wavespeed_voice is the voice used when WaveSpeed speaks instead of Algrow.",
+  "gender": "male"
+ },
+ "features": {
+  "offered": [
+   "threed",
+   "youtube",
+   "stock",
+   "ai_images",
+   "motion",
+   "maps",
+   "headlines",
+   "sound",
+   "avatar"
+  ],
+  "on": [
+   "threed",
+   "maps",
+   "sound"
+  ],
+  "prefer": "youtube"
+ },
+ "look": {
+  "graphics": "documentary",
+  "threed": {
+   "share": 0.85,
+   "min_share": 0.8,
+   "max_share": 0.9,
+   "fill": "auto",
+   "map_max_s": 5,
+   "review_rounds": 3,
+   "sub": 6,
+   "model": "claude-opus-5-5"
+  },
+  "title_font": "'EB Garamond', Georgia, serif",
+  "title_weight": "500",
+  "accent": [
+   "#D9A93F",
+   "#F3EEE4",
+   "#9DB1BA",
+   "#C4553F"
+  ],
+  "warn": "#C4553F",
+  "good": "#7FA58F",
+  "skins": [
+   "noir"
+  ],
+  "caption_accent": "&H3FA9D9&",
+  "captions": {
+   "font": "Roboto Condensed",
+   "size": 46,
+   "upper": false,
+   "karaoke": false,
+   "outline": 0.5,
+   "shadow": 0.6,
+   "line_chars": 48
+  },
+  "footage_grade": "eq=contrast=1.04:saturation=0.9:gamma=0.99",
+  "dust": false,
+  "vignette": false,
+  "leak": false,
+  "encode": {
+   "preset": "medium",
+   "tune": "film",
+   "crf": 19
+  },
+  "cinema": {
+   "chapter_cards": false,
+   "title_card": false,
+   "year_cards": false,
+   "labels": false,
+   "dust_on_archive": false,
+   "framed_every": 0,
+   "tv_every": 0,
+   "pop_every": 0
+  },
+  "sound": {
+   "sfx_db": -18,
+   "music_rel_db": -6,
+   "duck_db": -7,
+   "intro_s": 25,
+   "intro_db": 2,
+   "moods": true,
+   "opening": "dramatic",
+   "epidemic": {
+    "music": {
+     "dramatic": "dark cinematic",
+     "tension": "suspense tension",
+     "wonder": "space wonder",
+     "eerie": "eerie drone",
+     "epic": "epic orchestral",
+     "hopeful": "hopeful cinematic",
+     "quiet": "cinematic ambient",
+     "inspiring": "uplifting orchestral",
+     "finale": "uplifting orchestral"
+    },
+    "sfx_flavor": "cinematic space documentary",
+    "avoid": [
+     "comedy",
+     "funny",
+     "quirky",
+     "cartoon",
+     "kids",
+     "children",
+     "trap",
+     "edm",
+     "christmas",
+     "happy",
+     "lofi"
+    ]
+   }
+  },
+  "youtube": {
+   "hook_s": 60,
+   "hook_window_s": 20,
+   "window_s": 30,
+   "candidates": 4,
+   "repeat": false,
+   "watcher": "gemini",
+   "sources": [
+    "youtube",
+    "archive"
+   ]
+  },
+  "reference": "styles/3d.jpg",
+  "options_note": "3D videos are almost entirely real-time 3D, cut like a trailer: drone and FPV shots of 2-5 s, close-up inserts of the details, dates and numbers on screen. Claude directs every shot, checks a 5-frame strip of each one for static or glitchy moves, people inside furniture, water in rooms and missing key images, and fixes them before this computer's graphics card renders the final; a last repair pass re-renders any shot that comes out black, empty or blown. Only the finished video is shown. Maps appear where the geography matters; real footage and 2D graphics are off by default and can be switched on. The render farm cannot render 3D: 3D videos are made on this computer."
+ },
+ "pacing": {
+  "graphic_every_min": 0.75,
+  "graphic_ratio": 0.22,
+  "graphic_dur_s": 6.0,
+  "graphic_max_s": 8.0,
+  "cold_open_s": 0,
+  "white_fade": 0.0,
+  "punch": false,
+  "wpm": 135
+ },
+ "stock_queries": [],
+ "prompts": {
+  "outline": "You are the head writer of a premium documentary YouTube channel whose pictures are rebuilt in cinematic 3D: real events, real people and real places, told as a story you cannot stop watching.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each, in causal or chronological order.\n- Everything is real: real people, real places, real dates, real numbers. Use only facts you are certain of. Where sources disagree, plan the widely cited round figure with \"around\", or the range.\n- Beat 1 is a cold open: drop the viewer into the most dramatic real moment of the story — a place, a time, a sight — then pull back to how it came to that.\n- Every beat is anchored to things a 3D scene can SHOW: a place and its landscape, the weather and the time of day, a ship, a vehicle, a building, a crowd, a named person doing something (arriving, pointing, running, waiting, watching). Name them precisely.\n- Name the people and say exactly what each of them did and when.\n- Build tension: every few beats a turn, a question the viewer wants answered, and the answer a beat later.\n- The last beat lands the consequence as a fact or a number, and returns to the image of the cold open.\nFor each beat, write the facts it states and the concrete sights that show them.",
+  "script": "Write the complete narration for this documentary from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A calm, confident narrator. Short declarative sentences, mostly present tense for the story, past tense for background. Fragments are welcome at turning points: \"Two minutes.\" \"Nobody answered.\"\n- The first words are the cold open: a place, a time or a sight, in the middle of the most dramatic moment.\n- Every sentence carries something a camera could film: a place, a person doing something, a ship, a crowd, the weather, the light. Numbers and dates go in their own short sentences.\n- Real facts only. No invented quotes, no invented figures; disputed figures are rounded and said with \"around\".\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no quotation marks around dialogue, no lists.\n- Write dates and numbers the way a narrator reads them aloud (\"April fourteenth, nineteen twelve\", \"two thousand two hundred people\"), never digits or symbols.\n- Every minute or two, a question the viewer wants answered, answered soon after.\n- Never say \"in this video\". End on the consequence, back at the image of the cold open; then one short line asking viewers to subscribe for the next story."
+ },
+ "thumbnail": {
+  "brief": "One monumental cinematic 3D frame from the story: the real place, ship or event at its most dramatic moment, rendered like a feature-film previz — faceless white figures for any people, volumetric light, fog, one warm light source, deep contrast. Two to four words of headline in a quiet serif, off-white, with one word in mustard (#D9A93F). No real faces, no arrows, no stickers, no cartoon.",
+  "accent": "#D9A93F",
+  "note": "Send Claude five thumbnails you wish were yours and ask it to rewrite this brief."
+ }
+}

@@ -1,0 +1,170 @@
+{
+  "name": "legend",
+  "order": 16,
+  "label": "LEGEND — told in the athlete's own voice",
+  "description": "\"John Daly Reveals the 5 Most Special Golfers He Ever Saw\" — told by John Daly. The film opens on a real clip of the athlete or star talking on camera, about twenty seconds; their voice is cloned from that very clip, and the story continues in the first person, in their voice, over real footage and real photos of every person named. They are never shown again. Warm memoir look: photos centred over a blurred copy with a cream keyline, a yellow-bordered close-up inset sliding in, numbered chapter cards for each person on the list, lower thirds, scorecards, the narrator's own line as a card, dated years. No captions.",
+  "tagline": "A real clip, then the story in the star's own cloned voice.",
+  "points": [
+    "Opens on a real clip of the star",
+    "Voice cloned from that clip",
+    "First person, over real footage",
+    "Real photo of every person named",
+    "Numbered chapter cards",
+    "Warm memoir look, no captions"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.03 a minute with the Gemini free tier (voice + cutouts; the voice clone is free on the Professional plan); about $0.30 a minute on paid credits",
+  "render_x": 4.5,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "ppLqTilh7rH7fbUVlXsf",
+    "voice_name": "David — Documentary (the stand-in when no clip is found)",
+    "wavespeed_voice": "Brian",
+    "note": "The cloned voice of the person in the title replaces this one for each video (legend.py); this is the stand-in when no interview clip with captions can be found.",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "motion",
+      "spotlight",
+      "objects",
+      "headlines",
+      "maps",
+      "sound"
+    ],
+    "on": [
+      "youtube",
+      "motion",
+      "spotlight",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "legend",
+    "director": true,
+    "legend": {
+      "clip_s": 20,
+      "min_s": 12,
+      "max_s": 28,
+      "clone": "algrow",
+      "lang": "EN_US"
+    },
+    "title_font": "'DM Serif Display', 'Bebas Neue', Georgia, serif",
+    "title_weight": "400",
+    "accent": [
+      "#C99A3B",
+      "#F4EBDD",
+      "#2F6B3A",
+      "#B0322A",
+      "#1B1712"
+    ],
+    "warn": "#B0322A",
+    "good": "#2F6B3A",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H3B9AC9&",
+    "captions": {
+      "font": "Lora",
+      "size": 54,
+      "upper": false,
+      "karaoke": false,
+      "outline": 0.5,
+      "shadow": 0.6,
+      "line_chars": 44,
+      "margin_v": 76
+    },
+    "footage_grade": "eq=contrast=1.05:saturation=1.02:gamma=1.02,colorbalance=rs=0.04:gs=0.01:bs=-0.05",
+    "dust": true,
+    "vignette": true,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "blurfill",
+      "frame_every": 1,
+      "keyline": "F4EBDD",
+      "inset": "F2C230",
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "photofx": {
+      "every_s": 18,
+      "gap_s": 3,
+      "keyline": "",
+      "spot_move": "tilt"
+    },
+    "sound": {
+      "sfx_db": -19,
+      "music_rel_db": -7,
+      "duck_db": -8,
+      "track": "courtside/inspiring/ES_Soar - Daniella Ljungsberg.mp3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 4,
+      "repeat": false,
+      "watcher": "gemini"
+    },
+    "options_note": "LEGEND: the video opens on a real interview clip of the person in the title, their voice is cloned from it (Algrow, one clone per person, remembered), and the story continues in their first person over real footage and a real photo of every person named. Titles like \"X Reveals the 5 ...\" or \"X on the day ...\" work best.",
+    "reference": "styles/legend.jpg",
+    "labels": {
+      "pos": "bc",
+      "font": "DM Serif Display",
+      "sub_font": "Lora",
+      "size": 60,
+      "sub_size": 34,
+      "colour": "#F4EBDD",
+      "rule": "#C99A3B",
+      "enter": "blur",
+      "upper": false,
+      "sub_italic": true
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.7,
+    "graphic_ratio": 0.3,
+    "graphic_dur_s": 5.0,
+    "graphic_max_s": 6.5,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 136,
+    "cut_s": 4.0,
+    "hook_s": 60,
+    "scene_share_hook": 0.6,
+    "scene_share_body": 0.5,
+    "hook_notes": "This is a first-person memoir: the first minute (after the real clip) opens on the narrator's own footage, a line card on the first sentence worth framing, a chapter card with its number the first time a person on the list is named, a spotlight (a real photo) of every person named, a lower third on each new person who is not on the list, and a years card if a career is summed up.",
+    "body_notes": "After the hook: real footage of the people named carries it, every shot centred over its blurred copy; a chapter card each time the next person or item of the list is named (numbered in order); a spotlight on every person named — real photos only, never the same photo twice; a scorecard when scores, records or numbers of a round, a season or a career are given; a line card for one sentence per chapter the narrator himself says; a lower third for every other real person; years for a career summed up. Never a graphic in the first 3 seconds after a chapter card."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the writer of a first-person YouTube memoir spoken by a real athlete or star. The video opens on a REAL clip of them talking, then continues in THEIR voice — the narration IS the person, in the first person, telling the story the title promises: the five toughest opponents, the players they admired, the day everything changed.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each.\n- The narrator is the person in the title. Everything they say must be TRUE of them: real games, real seasons, real people, real numbers, real places, things they have really said or documented opinions consistent with what they have said in interviews. Use only facts you are certain of; when their opinion is not on record, keep to what the record shows and let the tone carry it. Never invent a private detail, a quarrel or a quote.\n- Beat 1 continues straight from the opening clip: what people keep asking them, and the question of the title. Then a personal reason the question matters to them, from their real career.\n- If the title is a list (\"the 5 ...\"), plan one beat per person or item, in a deliberate order (the one they cannot leave out first, the one that surprises last). For each: who the person is in one line (real titles, real years), one real moment the two of them shared or the narrator witnessed (a real tournament, a real game, a real date), and what the narrator took from it.\n- Every beat names people, places, tournaments, games, dates and numbers a camera or a photo can show. Every person named gets their real photo on screen, so name them fully.\n- The last beat answers the title in one honest line and returns to what people keep asking.\nFor each beat, write the facts it states and the real footage and photos on screen that carry them.",
+    "script": "Write the complete narration for this first-person memoir from the plan below. The narration is spoken by the person in the title, in the first person, in their own voice.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- Like the person talking to a friend across a table: plain words, their own rhythm, warmth, a little humour, no showing off. Short sentences. \"People ask me about the same things all the time.\" \"Let me start with Fuzzy.\"\n- The first words pick up where the opening clip left off — the same thought, continued — never a greeting, never an introduction, never a repeat of the clip.\n- Say the full name of every person the first time they come up, then the first name or the nickname.\n- Real facts only, in the narrator's voice: real years, real titles, real scores, real places. Say numbers and dates the way they are spoken (\"nineteen ninety-one\", \"twelve under\"), never digits or symbols. Where an opinion is not on record, say what the record shows and let the feeling carry it — never invent a private detail or a quote.\n- Each chapter (each person or item on the list) begins by naming them and ends with one line about what the narrator took from them.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists, no quotation marks.\n- Never say \"in this video\". End on the honest one-line answer, back at what people keep asking; then one short line, still in the narrator's voice, asking viewers to subscribe."
+  },
+  "thumbnail": {
+    "brief": "A real photo of the star of the title, warm and film-like, close, looking off camera, on the left; on the right two to four real photos of the people the list names as small warm prints with cream borders. Three to five words of headline in a condensed display face, cream, with one word in gold. A light film grain. No arrows, no cartoons, no emoji.",
+    "accent": "#C99A3B",
+    "note": "Send Claude five thumbnails from athlete-story channels you wish were yours and ask it to rewrite this brief."
+  }
+}

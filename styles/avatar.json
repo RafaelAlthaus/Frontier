@@ -1,0 +1,106 @@
+{
+ "name": "avatar",
+ "order": 4,
+ "label": "AI Presenter",
+ "description": "A real-looking person opens every video and talks straight to camera, then it cuts to pictures drawn for the exact words being spoken. Built to be cheap: no generated video clips, a fresh picture every ten seconds, and graphics doing the heavy lifting.",
+ "tagline": "A face people trust, then the pictures do the talking.",
+ "points": [
+  "A presenter opens every video",
+  "gpt-image-2 pictures, a new one every ten seconds",
+  "Depth pop brings every picture to life",
+  "No generated clips — the cheapest way to fill a video"
+ ],
+ "script_craft": "story",
+ "cost": "about $0.09 a minute with pictures only, $0.11 with everything on",
+ "render_x": 2.2,
+ "language": "English",
+ "voice": {
+  "provider": "algrow",
+  "engine": "elevenlabs",
+  "model": "eleven_multilingual_v2",
+  "chunk_chars": 900,
+  "voice_id": "MFZUKuGQUsGJPQjTS4wC",
+  "voice_name": "Jon — Warm & Grounded Storyteller",
+  "wavespeed_voice": "Brian",
+  "note": "A public ElevenLabs voice, so this channel renders out of the box. Swapping it means swapping \"gender\" too — the presenter list is filtered by it.",
+  "gender": "male"
+ },
+ "features": {
+  "offered": [
+   "youtube",
+   "ai_images",
+   "depth",
+   "sound",
+   "avatar"
+  ],
+  "on": [
+   "ai_images",
+   "depth",
+   "sound",
+   "avatar"
+  ],
+  "prefer": "ai_images"
+ },
+ "look": {
+  "graphics": "documentary",
+  "title_font": "'Roboto Condensed', Helvetica, sans-serif",
+  "title_weight": 700,
+  "accent": [
+   "#E9B44C",
+   "#F4F1EA",
+   "#7C9EB2",
+   "#D9765F"
+  ],
+  "warn": "#C4553F",
+  "good": "#7FA58F",
+  "skins": [
+   "noir"
+  ],
+  "caption_accent": "&H4CB4E9&",
+  "captions": {
+   "font": "Roboto Condensed",
+   "size": 48,
+   "upper": false,
+   "karaoke": true,
+   "outline": 0.6,
+   "shadow": 0.6,
+   "line_chars": 42
+  },
+  "footage_grade": "eq=contrast=1.03:saturation=0.98:gamma=1.0",
+  "dust": false,
+  "vignette": false,
+  "leak": false,
+  "encode": {
+   "preset": "medium",
+   "tune": "film",
+   "crf": 19
+  },
+  "options_note": "The presenter is the point of this channel, so it is ticked by default — pick the face and the length under Options. Generated video clips are left off: they are the dearest thing in a video and pictures plus graphics carry it for a fraction.",
+  "photofx": {
+   "every_s": 20,
+   "gap_s": 3
+  },
+  "director": true,
+  "placement": "story"
+ },
+ "pacing": {
+  "graphic_every_min": 1.0,
+  "graphic_ratio": 0.35,
+  "graphic_dur_s": 6.0,
+  "graphic_max_s": 9.0,
+  "cold_open_s": 0,
+  "white_fade": 0.0,
+  "punch": true,
+  "wpm": 150,
+  "photo_every_s": 7
+ },
+ "stock_queries": [],
+ "prompts": {
+  "outline": "You are the writer of a YouTube channel where a real person talks straight to camera and the pictures illustrate them.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 8 minutes, 12 minutes]\n\nPlan the video in plain prose, as numbered beats of about one minute each.\n- Beat 1 opens on the viewer's own life: something they can look at, feel or check right now, phrased as a question they will answer in their head. This is what the presenter says to camera, so keep it spoken and direct.\n- Every beat is anchored to something showable: an object, a place, a number, a before and after, a named brand or method. A picture is drawn every ten seconds, so each beat needs several concrete things to look at.\n- Reframe the problem at least once: what the viewer thinks is going on is not what is going on.\n- Build to a practical payoff — what to do instead, in order.\n- The last beat lands one thing to do today and returns to the image from beat 1.\nFor each beat, write the beat number, one line on what happens, and the concrete things the edit can show.",
+  "script": "Write the complete narration from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- One person talking to one person. Warm, plain, certain. Short sentences. Contractions.\n- The FIRST TWO SENTENCES are spoken by a presenter on camera, so they must work as speech: an observation about something in the viewer's own home or life, then a question they answer in their head. No preamble, no greeting, no channel name.\n- Every sentence carries something concrete the edit can show: an object, a number, a brand, a place, a step.\n- Say the real thing. No invented studies, no invented figures; round and say 'about' when unsure.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- Write numbers the way they are read aloud ('about forty dollars', 'two minutes'), never digits or symbols.\n- Never say 'in this video'. End on the one thing to do today, then one short line asking viewers to subscribe."
+ },
+ "thumbnail": {
+  "brief": "The presenter's face, large and to one side, reacting; the thing the video is about big and clear on the other side. Bright, everyday, no studio look.",
+  "accent": "#E9B44C"
+ }
+}

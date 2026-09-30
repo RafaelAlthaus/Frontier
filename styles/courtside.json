@@ -1,0 +1,313 @@
+{
+  "name": "courtside",
+  "order": 2,
+  "label": "COURTSIDE — sports documentaries",
+  "description": "Sports and NBA documentaries cut like a streaming film: real game footage, real photos of every player named (never AI), old newspapers animated on screen, Kodak contact strips, an old television for archive footage, cinematic black-and-white maps, article lines over darkened photos, stats tables, chapter cards, real interview clips with their own sound, and a VHS grade for the old stories — clean and modern for a young star like Lamine Yamal. The story comes first: cold open, rise, fall, what remains.",
+  "tagline": "Real photos, old newspapers, Kodak strips, VHS — the story first.",
+  "points": [
+    "Real footage and real photos only",
+    "Old newspapers, animated",
+    "Kodak strips and an old TV",
+    "Cinematic maps and chapter cards",
+    "Interview clips with their own sound",
+    "Dramatic or inspiring music by chapter"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.04 a minute with the Gemini free tier (voice + cutouts); about $0.60 a minute when footage is watched on paid credits",
+  "render_x": 4.0,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "MFZUKuGQUsGJPQjTS4wC",
+    "voice_name": "Jon — Warm & Grounded Storyteller",
+    "wavespeed_voice": "Brian",
+    "note": "A grounded American narrator for sports documentaries. Ask Claude Code to list voices (make_video.algrow_voices()) and swap the id for a deeper one.",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "depth",
+      "objects",
+      "motion",
+      "vox",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound",
+      "avatar"
+    ],
+    "on": [
+      "youtube",
+      "objects",
+      "depth",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "chapters": {
+    "pause_s": 1.4,
+    "card": true
+  },
+  "look": {
+    "graphics": "documentary",
+    "director": true,
+    "vhs": true,
+    "title_font": "'Inter Display Black','Inter Black',Inter,sans-serif",
+    "title_weight": "900",
+    "accent": [
+      "#F26D21",
+      "#F2ECE0",
+      "#8FA5B4",
+      "#C8321F",
+      "#E0B34A"
+    ],
+    "warn": "#C8321F",
+    "good": "#7FA58F",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H216DF2&",
+    "captions": {
+      "font": "Inter SemiBold",
+      "size": 46,
+      "upper": false,
+      "karaoke": false,
+      "outline": 0.5,
+      "shadow": 0.7,
+      "line_chars": 48
+    },
+    "footage_grade": "eq=contrast=1.08:saturation=0.84:gamma=0.98,colorbalance=rs=0.03:bs=-0.04:rh=0.03:bh=-0.05,rgbashift=rh=2:bh=-2",
+    "dust": true,
+    "overlay": "overlay_vhs.mp4",
+    "overlay_png": "vhs_lines.png",
+    "vignette": false,
+    "leak": true,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "docgfx": {
+      "skin": "vhs",
+      "serif": "'EB Garamond'"
+    },
+    "maps": {
+      "skin": "film",
+      "every_s": 40,
+      "gap_s": 4
+    },
+    "headlines": {
+      "marker": "#F26D21",
+      "press": true,
+      "every_s": 35,
+      "gap_s": 4
+    },
+    "photofx": {
+      "every_s": 14,
+      "gap_s": 3,
+      "keyline": "",
+      "strip": true,
+      "spot_move": "tilt",
+      "depth_every": 2,
+      "draw_objects": false,
+      "matchcut": true,
+      "textcut": true
+    },
+    "cinema": {
+      "chapter_cards": true,
+      "title_card": false,
+      "year_cards": true,
+      "labels": true,
+      "dust_on_archive": true,
+      "framed_every": 0,
+      "tv_every": 9,
+      "tv": "retro",
+      "strobe_guard": true,
+      "dark": true,
+      "pop_every": 9,
+      "pop_max": 4,
+      "vhs": true
+    },
+    "soundbites": {
+      "montage": true,
+      "quotes": 1,
+      "max_s": 9.0,
+      "montage_max": 4,
+      "soundups": 2
+    },
+    "sound": {
+      "sfx_db": -16,
+      "music_rel_db": -7,
+      "duck_db": -8,
+      "moods": true,
+      "opening": "dramatic",
+      "lead_tracks": {
+        "dramatic": "dramatic documentary",
+        "inspiring": "winning documentary"
+      }
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 4,
+      "repeat": false,
+      "watcher": "gemini",
+      "sources": [
+        "youtube"
+      ]
+    },
+    "options_note": "Sports documentaries: real game footage, real photos of every player named, old newspapers animated, Kodak strips, an old TV for archive shots, black-and-white film maps, interview clips with their own sound, and a VHS grade for the old stories. Paste YouTube links of source videos into Extra instructions to use them as research. The opening montage is real interviews only: people on camera saying the name.",
+    "reference": "styles/courtside.jpg",
+    "labels": "center"
+  },
+  "pacing": {
+    "graphic_every_min": 0.9,
+    "graphic_ratio": 0.3,
+    "graphic_dur_s": 6.0,
+    "graphic_max_s": 9.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 138,
+    "cut_s": 3.4,
+    "hook_s": 60,
+    "scene_share_hook": 0.72,
+    "scene_share_body": 0.56,
+    "hook_notes": "This is a sports documentary: the viewer decides in the first minute. Open on the strongest real picture — the footage of the moment, a Kodak strip of the player, or the old newspaper — and put a map of the FIRST place the cold open names (a city, a courthouse, an arena) inside the first 15 seconds: the map tells the viewer where we are. In the first minute use: a match cut (6-10 real photos of the main person, every face on one spot, a flash and a shutter per cut) on the FIRST time they are named, right after the opening montage; a Kodak strip (2 or 3 real photos) on the second public person who matters, or on the main person later in the hook; a place card on the first city; an old newspaper (press) on the first reported fact — a draft, a trade, a lawsuit, a record, a death; a map when the story moves to a new city or country; a stats table when numbers are compared; a pull line (a real sentence from a real article, with the outlet and date) on a claim the press made; a photo spotlight on every other person named; a number graphic on the figure that matters most; and text labels on the footage between the scenes for every name, year and figure.",
+    "body_notes": "After the hook: real footage carries it; a Kodak strip or a spotlight every time a new person matters (real photos only, never twice the same person in the same tool); an old newspaper (press) on every reported fact of the era — a trade, a contract, a court decision, a record, a firing — and a headline (the modern web page) only for stories from the internet era; a map when the story moves city or country; a place card on a new city; a stats table for a comparison of numbers, a number graphic for one figure; a pull line for a documented sentence from an article; a quote graphic only for a documented quote; a pivot or question at a real turn; three to five text labels a minute. A story from before the 1990s has little footage: real photographs carry more of it — a strip, a spotlight or a pull line every 20 to 25 seconds, each of a DIFFERENT real photo — so no shot has to play twice."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a sports documentary YouTube channel — NBA above all, but any sport — in the tradition of ESPN's 30 for 30 and the best Netflix sports films: real athletes, real games, real numbers, told as a story the viewer cannot stop watching.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 2 minutes, 10 minutes, 20 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each (a 2-minute episode has 2 or 3 beats), in causal or chronological order.\n- Everything is real: real players, coaches, teams, arenas, cities, dates, draft picks, stat lines, contracts, court cases, quotes. Use only facts you are certain of. Where sources disagree, plan the widely cited round figure with \"around\".\n- Beat 1 is a cold open: drop the viewer into the most dramatic real moment — the draft night, the injury, game seven, the courtroom, the phone call — with a date, a place and a number, then pull back to how it came to that. Say the city AND the state or country the first time a place is named.\n- Every beat is anchored to things a camera, a photo, a newspaper or a map can SHOW: a named person, a city, an arena, a dated game, a stat line, a contract figure, a headline that really ran, an interview the person really gave. The edit finds real footage, real photos and real newspaper pages for these, so name them precisely (\"the 1971 Supreme Court case Haywood v. NBA\", \"Loyola of Chicago, 1972\", \"UPS delivery truck, Chicago\").\n- Name the people and say exactly what each of them did and when. Every named person will get their real photo on screen.\n- Build tension: every few beats a turn, a question the viewer wants answered, and the answer a beat later. Sports stories have an arc — the rise, the fall, what remains — or the reverse; plan it.\n- Numbers matter: the pick number, the points a game, the years, the dollars, the wins. Plan at least one comparison of real numbers (a stats table) and one single figure that lands.\n- The last beat lands the consequence as a fact or a number, and returns to the image of the cold open.\nHOW THE BEST SPORTS DOCUMENTARIES ARE BUILT (plan for all of it)\n- The cold open is a SCENE in the present tense with the identity held back for a beat: \"It's mid-May in Chicago, and in the bowels of UPS, the company's tallest executive is at ease with his crew.\" Then the reveal in one line (\"In 1972 he was the first player taken in the NBA draft\"), then the contradiction in one line (\"Fifteen years later he was driving a UPS truck\"). Three sentences, and the viewer cannot leave.\n- Then the bridge: \"But to understand how X ended up there, you have to go back to Y.\" Only now does the chronology start.\n- Every act carries one humanising detail nobody else would think to film — the mother keeping recruiting letters in a grocery bag, the uniform sewn from two pairs of pants, the tickets he bought his family for the game he never entered. Find the real ones; they are in interviews, profiles and obituaries. Never invent one.\n- Numbers are drama only when paired with a consequence: \"33 points and 23 rebounds against Jim Chones — and the next night, undefeated UCLA.\" \"He averaged 12.9 minutes and 4.4 points. There just weren't many minutes for him.\"\n- Contrast pairs: who went second and became MVP; who the team drafted two years later; four seasons in the league against thirty-three years at the company. Plan at least two.\n- The wound is one specific scene, told with particulars (the hometown game, the family in the stands, not one minute on the floor) — never a general \"it was hard\".\n- The turn fate hands the story (the same player he had outplayed is drafted to replace him) — plan it where it lands hardest.\n- Late in the story, a reframe from someone else's mouth (\"maybe your number one draft wasn't that good, but you are the number one person here\"), then the closing contrast, then one thesis line that recasts the title (\"the job people laughed at lasted thirty-three years\").\n- The man's own voice: plan 2 or 3 moments where the narration sets up a line the person really said in an interview — the edit cuts to the real clip there. Note them as \"[CLIP: what he says about what]\" in the beat.\n\nCHAPTERS\nGroup the beats into chapters: 2 or 3 for an episode under five minutes, 5 to 9 for a long one. The cold open is not a chapter: chapter 1 begins right after it. The beat that opens a chapter carries the chapter title and its mood at the end of its label, exactly like \"BEAT 3 (2:00–3:00) [CHAPTER: The Man Who Sued the League | dramatic]\" — the title 2 to 4 words — the shorter the better, it has to be read in two seconds — concrete and strong, never a question, never a spoiler of the next twist; the mood one of dramatic, inspiring or quiet — the music of that chapter follows it. The titles become the chapter cards in the video and the chapter list in the YouTube description.\n\nFor each beat, write the facts it states and the concrete things on screen that prove them.",
+    "script": "Write the complete narration for this sports documentary from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A calm, deep American documentary narrator — the voice of a 30 for 30 film. Short declarative sentences, present tense in the action, past tense for background. Fragments at the turns: \"Second pick.\" \"Forty hours later, he was gone.\"\n- The first words are the cold open: a date, a place or a number, in the middle of the most dramatic moment. Say the city and the state or country the first time a place is named.\n- Every sentence carries something concrete the edit can show: a name, a team, a city, a date, a number, an arena, a headline, a photograph.\n- Say the numbers the way a broadcaster reads them aloud: \"eighteen point two points a game\", \"the number one pick\", \"one point nine million dollars\", \"nineteen seventy-one\" — never digits or symbols.\n- Real facts only. No invented quotes, no invented figures; disputed figures are rounded and said with \"around\". When a person really said something on record, you may state it (\"He told the Tribune he was tired.\") — the edit may cut to the real interview there.\n- Plain spoken text only: no headings other than the chapter lines below, no stage directions, no speaker labels, no quotation marks around dialogue, no lists.\n- Every minute or so, a question the viewer wants answered, answered soon after.\n- Never say \"in this video\". End on the consequence, back at the image of the cold open; then one short line asking viewers to subscribe for the next story.\nTHE CRAFT (what makes it fire)\n- Open on a present-tense scene with the identity held back for a beat, then the reveal in one line, then the contradiction in one line. Then the bridge: \"But to understand how ..., you have to go back to ...\".\n- Short declarative sentences. Fragments at the turns: \"His name, Bill Walton.\" \"Second pick.\" \"That DNP hurt. But it cut deeper than that.\"\n- Pair every number with what it meant. Keep the humanising details from the plan word for word — they are the film.\n- Contrast pairs and the irony fate hands the story land as their own short sentences, never buried mid-paragraph.\n- The last two lines: the closing contrast, then the thesis that recasts the title. Then the subscribe line.\n- INTERVIEW HANDOFFS: where the plan marks [CLIP: ...], write the narration so it hands off to the person's own voice, then put one line holding only \"[[clip: what he says, in a few words]]\" on its own line right after that paragraph (for example \"[[clip: Martin on being laughed at for driving a UPS truck]]\"). The edit finds the real interview and cuts to it there, with its own sound, and the narration waits. Two or three per episode, never inside a sentence, never the same moment twice.\n- `[[mood: inspiring]]` (or dramatic / quiet) on its own line where the MUSIC turns inside a chapter — the exact paragraph where the story lifts or darkens (the day the help comes, the night it all breaks). A chapter's `| mood` is the mood at its start; use the marker when the chapter changes its mind halfway.\n\nCHAPTER HEADINGS\nWhen a beat's label ends with [CHAPTER: … | mood], begin that beat's narration with one line holding only \"## \", the chapter title exactly as given, then \" | \" and the mood (for example \"## The Man Who Sued the League | dramatic\") — nothing else on that line — then the narration on the next line. Never write any other heading, label or stage direction. The first sentence after a chapter heading re-anchors the viewer: the place, the year or the person, said outright.\n\nWrite ONLY the narration as one continuous text in paragraphs (plus the chapter heading lines and the [[clip: ...]] lines). Begin with the first spoken word and end with the last.\n\nTHE SHAPE OF THE ANSWER (exactly this — a script missing its \"## \" lines or its \"[[clip: …]]\" lines is wrong):\n<the cold open paragraphs>\n\n## From Cotton Fields to Gold | inspiring\n<narration paragraph>\n[[clip: Haywood on leaving Detroit for the ABA]]\n<narration paragraph>\n\n## The Case That Changed the League | dramatic\n<narration paragraphs>\n\nEvery beat the plan labels [CHAPTER: …] gets its \"## \" line; every [CLIP: …] note in the plan gets its \"[[clip: …]]\" line right after the paragraph that sets it up."
+  },
+  "thumbnail": {
+    "brief": "A real photograph of the athlete at the turning point of the story — a portrait, a draft-night handshake, a courtroom step, a jersey from behind — high contrast, a warm or cold cast, film grain, one strong light. Three to five words of headline in a heavy grotesque sans (Inter Display Black), white, one word in hardwood orange, upper left or lower left. A thin white or orange rule under the headline. No arrows, no cartoons, no stickers.",
+    "accent": "#F26D21",
+    "note": "Send Claude five thumbnails from sports documentary channels you wish were yours and ask it to rewrite this brief."
+  },
+  "rules": [
+    "Real footage and real photos only; the image model draws nothing but the printed newspaper page (look.photofx.draw_objects false).",
+    "The opening name montage is real interviews only: people on camera saying the name, a whole positive sentence when one is said, one cut per video. Every cut is looked at on its first, middle and last frame (soundbites._on_camera, one clip per look, a yes/no per frame); a cut that opens on a title graphic is trimmed to the name, one that drifts into B-roll or a photo is cut back, and when nothing passes there is no montage - a rejected cut is never kept to have one. Hit on the first frame and every cut, riser into the last, name box centred, picture and sound fade out before the first narrated word.",
+    "Interview clips ([[clip: ...]] in the script) play with their own sound while the narration pauses; the picture must show the speaker all the way (a clip that drifts into B-roll is cut where it drifts) and the words are quoted under it in the italic serif.",
+    "Labels: names, figures and phrases centred in the display face with an orange rule (look.labels center); places and dates stay the top-left tracked stamp; no orange phrase boxes; year cards snap in with a chroma split and never sit on a photo scene.",
+    "Maps (film skin): the whole country first for most of a second, one smooth ease-in-out flight to the place, then a slow bend and push for the rest of the scene; a map of the first place the cold open names inside the first 15 seconds.",
+    "Newspapers say what the narration says at that moment: a real clipping only when it reports that fact, else a page drawn by gpt-image-2 from the wire sentences with the real photo in halftone, read back letter for letter, no invented facts, no masthead; the camera lands close on the headline and drifts down the column.",
+    "Kodak strips carry 2-3 different real photos of the person (Bing Images through Chromium when Algrow's 500 px copies are too small; a photo only when its caption names the person); quick eased zoom-out, light leak, a click on every change, 15 fps.",
+    "Chapters: '## Title | mood' lines in the script, 2-4 word titles, no episode title on the card, a real photo of the person visible behind the text, a soft glitch and eased motion; a chapter card moves behind an interview clip, never drops it.",
+    "Music: the cold open is dramatic, then each chapter's mood (dramatic / inspiring / quiet shelves); the lead track of a shelf plays first (dramatic documentary, winning documentary), never the same track twice, every track levelled before the join, the bed 7 dB under the voice and ducked 8 dB more under it.",
+    "Footage: no stock-library previews (footageforpro, Pond5, Shutterstock, Getty, CriticalPast are skipped by title and channel; the shot log marks text: watermark); a shot plays twice only framed tighter; footage matches the narration; Gemini watches first, OpenLux next.",
+    "Television: every ninth archive shot at most, four different camera moves; depth pop without the white keyline.",
+    "The script is checked for facts before the voice; it keeps a hard word limit, the chapter and clip markers are restored when a rewrite drops them, and the craft (present-tense cold open, the bridge, one human detail per act, contrast pairs, a reframe from someone else's mouth) is in the prompts.",
+    "Every subject search is checked against who the person is (sport, episode title): a namesake — a DJ, a streamer, another athlete — never reaches the montage or a quote.",
+    "A scene a chapter card or an interview clip lands on moves just behind or in front of it, by worth (maps and pages before strips before graphics); a scene dropped for room is named in the log, never lost silently.",
+    "Music turns where the story turns: a chapter's `| mood` is the mood at its start, and `[[mood: …]]` on its own line moves the music mid-chapter (the inspiring track began at a chapter whose first half was the low point).",
+    "The main person is introduced with a match cut right after the opening montage: 6-10 real photos, the face on one spot, a white flash and a shutter on every cut (look.photofx.matchcut); the Kodak strip comes later or for the second person.",
+    "The hook breathes like a great recap intro: after a sentence of narration a real clip plays with ITS OWN sound — a dunk with the roar, a buzzer, a chant — then the next sentence (look.soundbites.soundups: 2, chosen from the shot logs, cut at sentence ends, a whoosh in and a hit out).",
+    "The sound design is real: the Epidemic pack in assets/sfx/es (shutters on every photo cut, whooshes, crowd beds, a clean hit) stands in for the synthesised cues wherever it exists.",
+    "Every edit should be as varied as the story allows: a match cut, a strip, a tilt, a sound-up, a map, a newspaper, a table — never the same device twice in a row, never a template the viewer can predict.",
+    "A text match cut once per video where the facts pile up: 3-5 lines of 1-4 words, each on a hard cut to another real photo of the subject, the words on one spot, a hit per cut (look.photofx.textcut)."
+  ],
+  "process": [
+    "Render: run_pipeline(title, minutes, style='courtside', features={youtube, objects, motion, maps, spotlight, headlines, sound on; stock, ai_images, vox, avatar off}); about 20-25 minutes for a two-minute video on a loaded Mac. Read script.txt before the voice when the facts matter.",
+    "Read script.chapters.txt before the voice is done and fix facts in script.txt, script.chapters.txt, outline.txt and the derived JSON (chapters, clips_wanted, moods_wanted) together, then delete audio.mp3 and _chunks_audio so the voice records again from the corrected text.",
+    "The pipeline checks itself: montage and interview cuts on three frames, newspaper read-back, strip captions, the join's length (per-file sum), a frozen picture after the final mux (muxed again up to three times), music levelled per track.",
+    "Look before sending: a contact sheet (ffmpeg -vf 'fps=1/3,scale=320:-1,tile=8x7'), the montage frames, the first map, the first newspaper, the strip, both chapter cards, and volumedetect per music stretch.",
+    "A short join or a frozen picture means the disk: check df -h and uptime, free space (old output/ jobs are 0.5-1.7 GB each), then rerender_timeline.py <slug> rebuilds the timeline from the cache without paying again.",
+    "A single wrong slot in a finished job is swapped in place: edit that entry in plan.json (a photo slot is ['photo', path, false, seconds]), delete its segments/seg_NNN.mp4 and video.mp4, and re-run the assembly with force off; the montage can be rebuilt from soundbites/montage/say_*.mp4 into the same 7.9 s slot."
+  ],
+  "lessons": [
+    {
+      "date": "2026-09-21",
+      "what": "Robin saw the Boston Herald page drift off the paper onto white: the 'real page' was a 489 px photograph of the newspaper padded to an 1800 px square, and the press camera drifted past its edge.",
+      "fix": "headlines._trim_real_page cuts a real page out of its background and rejects one narrower than 900 px (the story is drawn instead); the press camera is clamped to the paper with a minimum zoom that always covers the frame."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "Test #3's rebuild nearly drew an AI object (a 'Reebok contract' studio photo): the cached-director path never told photofx which channel it was, so draw_objects read as on.",
+      "fix": "make_video sets _STYLE_NOW at the start of run_pipeline, before any module asks."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "Test render #3 (Len Bias): the script had three wrong facts (nine days, not four, since the Celtics' title; under 48 hours, not 63, from draft to death; Hyattsville, not Landover); markers written without a blank line folded paragraphs together; a sound-up download stalled ten minutes on a dead read; a strip carried one photo of a namesake from a mortuary site; the match cut never reached photofx (a handoff patch had not been saved).",
+      "fix": "Fact-check before the voice (Robin's rule, now also a step in the process); markers end a paragraph in the parser; section downloads time out at four minutes; a strip needs two photos; the handoff verified by grep after every patch."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "Robin's review of the Bob Love test: the chapter title looked like it entered twice (the chroma ghosts sat on the landed position while the title was still rising); the inspiring track began at a chapter whose first half was the low point; the edit needed more variety.",
+      "fix": "One entrance with the chroma snap at the landing; `[[mood: …]]` markers move the music mid-chapter; the match cut (faces on one spot, flash + shutter), sound-up clips with their own sound in the hook, and the Epidemic sound pack — all in the default Documentary style too."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "Test render #2 (Bob Love, 1:30): the montage took 'Bob Love' from a DJ and a streamer of the same name; a chapter card and the montage silently dropped both maps, a newspaper and a graphic ('moved out of their way' meant dropped, and the move offset sat inside the 0.3 s margin so nothing ever moved); the question graphic was an orange box; a rejected drawn newspaper fell straight to the typeset page; a 1968 page carried a photo of the man at eighty.",
+      "fix": "Namesake filter on candidate videos (title/channel vs who the subject is) and 'never a namesake' in the pick prompts; cinema._make_room settles scenes around cards and clips by worth and names any drop; the question graphic on the tape look is a display line with a rule; a rejected drawing is drawn once more; the photo pick prefers era-true pictures."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "Two non-interview cuts (game footage, a show's title graphic) opened the film and three FOOTAGEFORPRO-watermarked stock shots got into the cut; both were only seen after the render.",
+      "fix": "Every check runs at selection time with no fallback: three frames per cut, one clip per look; stock sellers skipped by title and channel, text: watermark in the shot log."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "A vision check of a dozen frames in one call slipped its numbering (one answer came back 0-based) and approved game footage.",
+      "fix": "One clip per call, three frames, a per-frame {\"pass\": true|false} answer."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "The Mac's disk was 98 % full with a load of 46: file reads answered 'Operation timed out', the segment join stopped early, the final mux repeated the last frame under the looped overlays for the rest of the video, treatments fell back to plain footage.",
+      "fix": "_warm_read before the join and the mux, the join's expected length from the per-file sum, _picture_stalls (freezedetect on shrunk, blurred frames) with up to three muxes; free the disk first."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "A talk-show cut sat 20 dB under a Zoom interview; a quiet dramatic cue followed by a full piano piece made the second track jump.",
+      "fix": "loudnorm on every soundbite wav (cut) and on every mood track before the crossfade join."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "A style change made during a render did not reach the running job (styles load at process start; sfx imports lazily, so its code did).",
+      "fix": "Re-mix a finished job's sound with sfx.mix and mux it under the picture instead of rendering again."
+    },
+    {
+      "date": "2026-09-21",
+      "what": "Bing photo search started a second sync Playwright inside the newspaper module's browser and failed ('Sync API inside the asyncio loop').",
+      "fix": "photofx.bing_photos runs in a thread of its own when a loop is already running."
+    },
+    {
+      "date": "2026-09-20",
+      "what": "Newspapers: a real clipping about another story, and a drawn page that invented 'unanimous' for a 7-2 vote and a masthead.",
+      "fix": "about_claim check on real pages; drawn pages only from the wire sentences, read back for invented facts and the exact headline."
+    },
+    {
+      "date": "2026-09-20",
+      "what": "Kodak strips had one photo (Algrow returns 500 px copies) and once a Celtics player captioned as the subject.",
+      "fix": "Bing Images through Chromium with the browser session's downloads; a photo only when its caption names the person; perceptual-hash dedupe."
+    },
+    {
+      "date": "2026-09-20",
+      "what": "Chapter cards near-black, long titles, a hard glitch; the tightening pass dropped the ## and [[clip]] lines; a lead sentence made of numbers was not found in the captions.",
+      "fix": "Cards on real photos with a lighter shade and 2-4 word titles; markers restored after a rewrite (difflib); a second-sentence lead."
+    },
+    {
+      "date": "2026-09-20",
+      "what": "Maps waited two seconds before moving, circled the place at random, opened too close to know where we are; a title clipped on the right.",
+      "fix": "The whole country first, one ease-in-out flight, bend and push; wipe overshoot."
+    },
+    {
+      "date": "2026-09-20",
+      "what": "Bottom-left labels read as templated AI; the orange phrase box was disliked; the top-left dateline was loved.",
+      "fix": "Names, figures and phrases centred with a rule; datelines keep the stamp."
+    }
+  ],
+  "final": "2026-09-21 — reference renders: output/spencer-haywood-the-rookie-who-beat-the-nba (the style), output/bob-love-the-nba-all-star-who-washed-dishes-for-4-45-9e5ba8 (the checks), output/len-bias-the-no-2-pick-who-died-two-days-after-the-d-7a2ac0 (match cut, sound-up, mood turn)."
+}

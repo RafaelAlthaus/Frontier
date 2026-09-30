@@ -1,0 +1,181 @@
+{
+  "name": "news",
+  "order": 15,
+  "label": "NEWS — geopolitics & news explainers",
+  "description": "Wars, crises and elections explained like a newsroom's best segment: real news footage full frame with a breaking band and a crawling ticker, relief maps with the story's country pale cyan, the neighbours salmon, red heat and yellow dots where it burns, arrows of movement between named places, boxed place labels pinned on the footage, the same public figure in panels across the years, real quotes from real reports as lower thirds, figures counting up with their source, real article pages. No captions; the labels do the talking.",
+  "tagline": "A newsroom's best segment: heat maps, arrows, tickers, panels over time.",
+  "points": [
+    "Footage with a news band and ticker",
+    "Relief maps with red heat",
+    "Arrows between named places",
+    "Boxed labels pinned on footage",
+    "Panels of one person over years",
+    "Real quotes as lower thirds"
+  ],
+  "script_craft": "teaching",
+  "cost": "about $0.05 a minute with the Gemini free tier (voice + cutouts) plus about $0.15 per presenter appearance; about $0.30 a minute when footage is watched on paid credits",
+  "render_x": 3.8,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "9ZbFvrGBxO3uSmsw6wdI",
+    "voice_name": "Walter — Serious News Anchor",
+    "wavespeed_voice": "Brian",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound",
+      "objects",
+      "avatar"
+    ],
+    "on": [
+      "youtube",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound",
+      "avatar"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "frontline",
+    "director": true,
+    "title_font": "'Archivo Black', 'Oswald', Impact, sans-serif",
+    "title_weight": "400",
+    "accent": [
+      "#E0322B",
+      "#101214",
+      "#F5C400",
+      "#BFE8E6",
+      "#E9A6A0"
+    ],
+    "warn": "#E0322B",
+    "good": "#2F8F83",
+    "skins": [
+      "clean"
+    ],
+    "caption_accent": "&H2B32E0&",
+    "captions": {
+      "font": "Inter SemiBold",
+      "size": 53,
+      "upper": false,
+      "karaoke": false,
+      "box": true,
+      "outline": 0.5,
+      "outline_colour": "&H2E000000",
+      "shadow": 0.0,
+      "line_chars": 48,
+      "margin_v": 130,
+      "mute_under_frames": true
+    },
+    "footage_grade": "eq=contrast=1.06:saturation=0.95:gamma=1.0",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "news",
+      "frame_every": 3,
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "maps": {
+      "skin": "heat",
+      "every_s": 30,
+      "gap_s": 3
+    },
+    "headlines": {
+      "marker": "#F5C400",
+      "every_s": 35,
+      "gap_s": 3
+    },
+    "photofx": {
+      "every_s": 30,
+      "gap_s": 3,
+      "keyline": ""
+    },
+    "sound": {
+      "sfx_db": -21,
+      "music_rel_db": -7,
+      "duck_db": -7,
+      "track": "documentary/Documentary 1.mp3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 3,
+      "repeat": false,
+      "watcher": "gemini"
+    },
+    "options_note": "NEWS: real news footage with a breaking band, relief maps with red heat, arrows of movement, boxed place labels, panels of a person over the years, real quotes as lower thirds, real article pages. No captions — the labels and lower thirds carry the words. Opens on three seconds of the channel's presenter at his desk (look.avatar).",
+    "reference": "styles/news.jpg",
+    "labels": {
+      "pos": "br",
+      "font": "Archivo Black",
+      "sub_font": "Oswald",
+      "size": 46,
+      "sub_size": 28,
+      "colour": "#FFFFFF",
+      "box": "#101214",
+      "box_text": "#FFFFFF",
+      "enter": "slide",
+      "upper": true
+    },
+    "avatar": {
+      "id": "anchor",
+      "seconds": 3,
+      "provider": "infinitetalk"
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.65,
+    "graphic_ratio": 0.35,
+    "graphic_dur_s": 5.5,
+    "graphic_max_s": 7.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 148,
+    "cut_s": 3.4,
+    "hook_s": 60,
+    "scene_share_hook": 0.7,
+    "scene_share_body": 0.55,
+    "hook_notes": "This is a news explainer: the first minute opens on a ticker (the headline of the day with real items and the time) or a newsbar (a real quote from a real report) on the first reported fact, a map (heat) on the first country named, a label on the first city, an arrows graphic when forces, money or people move between named places, a count on the first figure that matters, a headline (the real article) on the first claim, a spotlight on the first public figure, and text labels on the footage for names and dates.",
+    "body_notes": "After the hook: news footage carries it, every third shot in the news band; a map with heat when the story moves country; a label on each new city; arrows for any movement between places; a newsbar for every real quote from an official, an outlet or a report; a count for every figure with a source; timeline when a public figure's position changed over the years (real dates); a headline for every real article or statement page; a spotlight on each new public figure. Something new every 12 to 18 seconds. A timeline (3-5 real dated events with a short line each) whenever the story lists what happened when."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a geopolitics and news explainer channel — wars, sanctions, elections, borders, energy — that explains what is happening and why with the discipline of a newsroom and the clarity of a good teacher.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each.\n- Everything is real and attributed: real officials, real dates, real figures with their source (a ministry, an agency, a think tank, an outlet), real quotes from real statements and reports (quote them exactly, say who and when), real places that a map can show. Use only facts you are certain of; round what is disputed and say \"around\" or \"according to\".\n- Beat 1 is the hook: the news moment that makes the question urgent — a headline, a quote, a number, a map that changed — then the question the episode answers.\n- Every beat anchors to things the newsroom can show: a place on a map with what moved where, a figure with its source, a quote with its speaker and outlet, a public figure whose position changed over time, the footage that exists.\n- Explain the mechanism — why this actor does this, what it costs, who it hits — one per beat. Take the other side's argument seriously once.\n- Every few beats a turn: what everyone expected, what happened. End with what to watch next, as facts, not predictions dressed as facts.\n- The last beat answers the question in one line and returns to the headline of the hook.\nFor each beat, write the facts it states, their sources, and the things on screen that carry them.",
+    "script": "Write the complete narration for this explainer from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A serious, clear anchor explaining to a smart viewer who has been busy. Short sentences. Present tense for what is happening, past tense for how it came to be. No drama in the voice — the facts are dramatic enough.\n- The first words are the hook: the headline, the quote or the number, and the date.\n- Attribute every claim: \"according to the Pentagon\", \"the foreign secretary said on the twenty-fourth\", \"Reuters reported\". Quote real statements briefly and exactly; never invent one.\n- Name every place the way it appears on a map, and say where it is the first time (\"Kherson, on the Dnipro, in the south\").\n- Say numbers and dates the way they are read aloud (\"a hundred and ninety thousand troops\", \"February the twenty-fourth\"), never digits or symbols.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- A question the viewer wants answered every minute or so, answered soon after.\n- Never say \"in this video\". End on the one-line answer and what to watch next, back at the headline; then one short line asking viewers to subscribe for the next explainer."
+  },
+  "thumbnail": {
+    "brief": "A clean map or a real news photo with one boxed black label in a heavy grotesque, white text, and a red highlight on the country or the place. Light grey ground, salmon and pale cyan for the countries, one yellow arrow. Three or four words of headline in the heavy grotesque, black on white or white on red, top-left. No emoji, no cartoons.",
+    "accent": "#E0322B",
+    "note": "Send Claude five thumbnails from news-explainer channels you wish were yours and ask it to rewrite this brief."
+  }
+}

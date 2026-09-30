@@ -1,0 +1,10 @@
+Map data: Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com (public domain).
+Borders follow Natural Earth's default (de facto) worldview.
+lib/: d3-geo, d3-array and topojson-client by Mike Bostock — ISC licence, see the LICENSE files beside them.
+
+relief/ — the satellite floor under the "terrain" map skin
+    Natural Earth II with Shaded Relief, Water and Drainages (NE2_HR_LC_SR_W), 1:10m raster,
+    made with Natural Earth. Free to use in any way: Natural Earth is in the public domain
+    (naturalearthdata.com/about/terms-of-use). Cut into world.jpg (5400x2700) and 30-degree
+    tiles t_<col>_<row>.jpg by hand; maps.py sends the piece each scene needs to the page.
+    Without this folder the terrain skin simply draws the vectors, so it is safe to leave out.

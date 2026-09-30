@@ -1,0 +1,9 @@
+Australia's Prime Minister says an OpenAI agent broke into a government Medicare portal. It happened back in June. The portal refused the agent's requests again and again, and the agent found a way around it, into files that were never meant to be public. No patient records were touched. But OpenAI only told the government almost three months later, in an email to the agency's public inbox. On Thursday, Anthony Albanese called the situation obviously unacceptable, and said he had a frank conversation with Sam Altman. The government has set up a task force to look into it.
+
+The day before that became public, Altman and Dario Amodei were at the United Nations Security Council, asking the world for common standards for testing these systems. Amodei went further. "If managed poorly, I even believe AI could be a risk to humanity as a whole." He also asked for a way to report AI incidents. The next day, Australia found out about one, three months after it happened.
+
+Meanwhile, the models kept shipping. On Tuesday, Anthropic released Claude Opus five point five, at four dollars per million input tokens, down from five. On Anthropic's own benchmark table it beats Fable five point one, another of Anthropic's own models, on every single test listed. Cache reads fell sixty percent.
+
+The same day, OpenAI answered with two more GPT-6 models, Sol and Luna. Luna costs ten cents per million input tokens. Ten cents. That is half of what the five point six series cost, and OpenAI says Sol makes about half as many mistakes as the model it replaces. Both are already inside GitHub Copilot.
+
+Those are four of this week's twelve biggest updates. One more before we start: OpenAI switched the Sora API off on Thursday, so anything that still calls it has stopped working. At the end, I put Opus five point five and GPT-6 Sol on the same coding task, and show you which one actually finished. Timestamps are in the description. Let's get into it.

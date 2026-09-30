@@ -1,0 +1,173 @@
+{
+  "name": "dossier",
+  "order": 11,
+  "label": "DOSSIER — true crime & internet mysteries",
+  "description": "True crime and internet mysteries told as a case file on a black table: real footage lying on an aviation chart under a spotlight, real posts and documents as cards, notices and messages typed out like a teletype, a red crosshair on what was found, the main person's name in gold serif, a tracking box on the suspect, two-colour dialogue between police and suspect, and a typewriter caption in the corner. Web pages, real photos, maps in a chart skin.",
+  "tagline": "A case file on a black table: typed alerts, red crosshairs, real documents.",
+  "points": [
+    "Typewriter captions, top-left",
+    "Footage as prints on a chart",
+    "Real posts and documents",
+    "Red crosshair, tracking box",
+    "Gold serif names",
+    "Two-colour dialogue cards"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.04 a minute with the Gemini free tier (voice + cutouts); about $0.30 a minute when footage is watched on paid credits",
+  "render_x": 4.0,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "n1PvBOwxb8X6m7tahp2h",
+    "voice_name": "Michael C. Vincent — Suspenseful Storyteller",
+    "wavespeed_voice": "Brian",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "depth",
+      "objects",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "on": [
+      "youtube",
+      "stock",
+      "objects",
+      "motion",
+      "maps",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "dossier",
+    "director": true,
+    "title_font": "'Cinzel', 'Special Elite', Georgia, serif",
+    "title_weight": "700",
+    "accent": [
+      "#E3231B",
+      "#EDE6D6",
+      "#F5E14A",
+      "#D9B25F",
+      "#3B6FD9"
+    ],
+    "warn": "#E3231B",
+    "good": "#7FA58F",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H1B23E3&",
+    "captions": {
+      "mode": "typewriter",
+      "font": "Special Elite",
+      "size": 44,
+      "colour": "#EDE6D6",
+      "line_chars": 46,
+      "left_x": 120,
+      "top": 900,
+      "hold": 0.2
+    },
+    "footage_grade": "eq=contrast=1.1:saturation=0.72:gamma=0.97,colorbalance=rs=-0.03:gs=-0.01:bs=0.05",
+    "dust": false,
+    "vignette": true,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "print",
+      "frame_every": 2,
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "maps": {
+      "skin": "chart",
+      "every_s": 45,
+      "gap_s": 4
+    },
+    "headlines": {
+      "marker": "#F5E14A",
+      "every_s": 30,
+      "gap_s": 3
+    },
+    "photofx": {
+      "every_s": 22,
+      "gap_s": 3,
+      "keyline": ""
+    },
+    "sound": {
+      "sfx_db": -16,
+      "music_rel_db": -6,
+      "duck_db": -7,
+      "track": "orchestral/piano sad, documentary.mp3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 3,
+      "repeat": false,
+      "watcher": "gemini"
+    },
+    "options_note": "DOSSIER: real footage lying on a chart, real posts and documents as cards, typed notices, a red crosshair on the evidence, the name in gold, a tracking box on the suspect, typewriter captions. Paste links to the real posts, articles or videos into Extra instructions and they are used as research.",
+    "reference": "styles/dossier.jpg",
+    "labels": {
+      "pos": "tr",
+      "font": "Special Elite",
+      "sub_font": "Courier Prime",
+      "size": 54,
+      "sub_size": 30,
+      "colour": "#F5E14A",
+      "rule": "#E3231B",
+      "enter": "type",
+      "upper": true
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.6,
+    "graphic_ratio": 0.35,
+    "graphic_dur_s": 6.0,
+    "graphic_max_s": 8.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 132,
+    "cut_s": 3.6,
+    "hook_s": 60,
+    "scene_share_hook": 0.7,
+    "scene_share_body": 0.55,
+    "hook_notes": "This is a case file. The first minute opens on a stamp (the year or the place typed big over the footage) on the first date or place, a disclaimer only if the story holds violence or a crime against a person, then title_gold on the first time the main person is named, a headline (the real post, page or message) on the first thing that was written online, an alert for the first notice, warning, message or court order the story quotes, a crosshair on the first thing found or targeted, a map (the chart) on the first place that matters, a spotlight on every other public person named, and text labels on the footage for names, dates and figures.",
+    "body_notes": "After the hook: the real footage carries it, treated as prints on the chart. A stack (the real documents, posts or messages as cards) whenever the story quotes something written; a dialogue when two people exchanged real words (police and suspect, two users, a call); a tracker on a public person the story follows; a crosshair on each new piece of evidence; an alert for any notice or warning; a headline for every real page named; a map when the story moves; a spotlight on each new public person; a stamp on each new year. Never twice the same tool in a row."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a true-crime and internet-mystery YouTube channel — cases that began online: a post, a message, a forum, a disappearance, a scam, a manhunt — told like a case file being opened on a table.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each, in the order an investigator would lay the evidence out.\n- Everything is real: real names of PUBLIC people (the accused, the officials, the journalists, the public figures), real places, real dates, real posts and messages quoted as they were written, real court documents, real news reports. Use only facts you are certain of; round what is disputed and say \"around\". Private victims and minors are described, not named, unless their names are widely reported.\n- Beat 1 is a cold open on the single most gripping real moment — the post that started it, the last message, the knock at the door, the notice that went out — with the date and the place, then the question the whole case turns on.\n- Every beat is anchored to EVIDENCE a camera can show: a post or thread (quote it), a message, a document, a notice, a photo, a place on a map, a piece of footage. Name each piece precisely.\n- Every few beats a turn: what the evidence seemed to say, and what it actually meant. Keep one revelation for the last third.\n- The last beat lands the outcome as a fact — the sentence, the verdict, the person still missing, the account still online — and returns to the image of the cold open.\nFor each beat, write the facts it states and the pieces of evidence on screen that prove them.",
+    "script": "Write the complete narration for this case file from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A low, measured narrator who has read every page of the file. Short sentences. Present tense for the case as it unfolds, past tense for the background. Fragments at the turns: \"Three days. No reply.\" \"The account went dark.\"\n- The first words are the cold open: a date, a place, a post or a message, in the middle of the most gripping moment.\n- Quote what was really written, briefly and exactly, and say where (\"On 4chan he wrote\", \"the embassy notice read\"). Never invent a quote, a message or a document.\n- Every sentence carries something the case file can show: a name, a place, a date, a post, a document, a photo, a number.\n- Say dates and numbers the way they are read aloud (\"August 13th, 2021\", \"three hundred thousand dollars\"), never digits or symbols.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- A question the viewer wants answered every minute or so, answered soon after.\n- Never say \"in this video\". End on the outcome, back at the image of the cold open; then one short line asking viewers to subscribe for the next case."
+  },
+  "thumbnail": {
+    "brief": "A real photo or a real screenshot from the case at the centre, desaturated, on a black ground with a red crosshair or a red tracking box over the key detail. Two to four words of headline in a typewriter face, cream or marker yellow, top-left or bottom-left, one word in red. A small paper-file texture. No cartoons, no arrows, no emoji.",
+    "accent": "#E3231B",
+    "note": "Send Claude five thumbnails from true-crime channels you wish were yours and ask it to rewrite this brief."
+  }
+}

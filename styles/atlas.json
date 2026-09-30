@@ -1,0 +1,164 @@
+{
+  "name": "atlas",
+  "order": 13,
+  "label": "ATLAS — cartoon history explainers",
+  "description": "History explained in a thick-outline cartoon world: every picture drawn flat with bold black outlines and a yellowed-paper palette, a TIME MACHINE bar at the bottom when the story jumps in time, a flipchart of eras and dynasties, a wristwatch showing the year, a bouncy title card, paint-wave wipes between chapters, scoreboards of armies and gold, a signpost of where the story could go, cartoon maps with thick outlines and handwritten names, and comic captions. Playful narration, real facts.",
+  "tagline": "History as a bold cartoon: the time machine, the flipchart, the paint wipe.",
+  "points": [
+    "Flat cartoon pictures, bold outlines",
+    "TIME MACHINE bar on every jump",
+    "Flipchart of eras and rulers",
+    "Wristwatch years, paint wipes",
+    "Cartoon maps, handwritten names",
+    "Comic captions with a pop"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.15 a minute (voice + twelve drawn stills) plus about $0.50 once for four Seedance clips",
+  "render_x": 3.5,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "yl2ZDV1MzN4HbQJbMihG",
+    "voice_name": "Alex — Upbeat, Energetic and Clear",
+    "wavespeed_voice": "Brian",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "ai_images",
+      "depth",
+      "motion",
+      "maps",
+      "sound",
+      "youtube",
+      "stock"
+    ],
+    "on": [
+      "ai_images",
+      "depth",
+      "motion",
+      "maps",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "atlas",
+    "director": true,
+    "title_font": "'Bangers', 'Lilita One', Impact, sans-serif",
+    "title_weight": "400",
+    "accent": [
+      "#D93B2B",
+      "#2A1D12",
+      "#6DB33F",
+      "#3B8BD9",
+      "#F2C230"
+    ],
+    "warn": "#D93B2B",
+    "good": "#6DB33F",
+    "skins": [
+      "paper_light"
+    ],
+    "caption_accent": "&H2B3BD9&",
+    "captions": {
+      "mode": "comic",
+      "font": "Lilita One",
+      "size": 62,
+      "colour": "#FFFFFF",
+      "outline_colour": "#2A1D12",
+      "line_chars": 34,
+      "margin_v": 90
+    },
+    "still_suffix": " Flat 2D cartoon illustration with thick confident black outlines, bold simple shapes, cel shading, a warm yellowed-paper palette with red, green and blue accents, characters with simple faces and big expressive gestures, everything readable at a glance, 16:9. Text appears only when it is itself the subject of the shot — a sign, a banner, a date on a scroll — exactly as the prompt spells it. No captions, no watermark, no logo, no photographic realism.",
+    "footage_grade": "eq=contrast=1.05:saturation=1.1",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "zoom": "alternate",
+    "encode": {
+      "preset": "slow",
+      "tune": "animation",
+      "crf": 18
+    },
+    "cinema": {
+      "frame": "paper",
+      "frame_every": 2,
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "maps": {
+      "skin": "cartoon",
+      "every_s": 35,
+      "gap_s": 3
+    },
+    "photofx": {
+      "every_s": 40,
+      "gap_s": 3,
+      "keyline": ""
+    },
+    "sound": {
+      "sfx_db": -19,
+      "music_rel_db": -6,
+      "duck_db": -7,
+      "track": "courtside/inspiring/ES_Cloudbreak - Jobii.mp3"
+    },
+    "options_note": "ATLAS: a cartoon world drawn for the exact words, with the TIME MACHINE bar, the flipchart, the wristwatch, paint wipes, scoreboards and cartoon maps. Real footage is off by default so the world stays drawn — tick YouTube footage to mix real shots in as paper prints. Every other drawn picture is set in motion by a cheap image-to-video model (look.animate).",
+    "reference": "styles/atlas.jpg",
+    "labels": {
+      "pos": "tl",
+      "font": "Bangers",
+      "sub_font": "Patrick Hand",
+      "size": 72,
+      "sub_size": 40,
+      "colour": "#2A1D12",
+      "box": "#FFFFFF",
+      "box_text": "#2A1D12",
+      "enter": "pop",
+      "upper": true
+    },
+    "animate": {
+      "every": 2,
+      "seconds": 5,
+      "resolution": "720p",
+      "max": 4,
+      "prompt": "slow smooth cinematic camera push in, very gentle parallax, the characters blink and shift their weight a little, cloth and flags sway softly, clouds drift; nothing new appears, no camera shake, keep exactly the flat cartoon look, thick black outlines and colours of the picture"
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.7,
+    "graphic_ratio": 0.35,
+    "graphic_dur_s": 5.5,
+    "graphic_max_s": 7.5,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 150,
+    "cut_s": 4.5,
+    "photo_every_s": 6,
+    "hook_s": 60,
+    "scene_share_hook": 0.55,
+    "scene_share_body": 0.45,
+    "hook_notes": "This is a cartoon history explainer: the first minute opens on a stamp (the episode's title card), a timemachine on the first jump in time (from now to the year of the story), a watch on the year the story lands in, a map (cartoon) on the first place, a flipchart when eras, rulers or stages are listed, and text labels for names and years over the pictures.",
+    "body_notes": "After the hook: the drawn pictures carry it; a timemachine on every jump of more than a century; a wave (paint wipe) between chapters; a scoreboard whenever two sides or two numbers are compared; a signpost when the story could go several ways or the roads out of a place are named; a flipchart for any list of eras, rulers, dynasties or stages; a map when the story moves; a watch on a new year that matters. Keep it moving: something new every 8 to 12 seconds."
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a history explainer channel drawn as a bold cartoon — the whole of Rome in ten minutes, a dynasty per page, the Cold War as a scoreboard — funny in the telling, rigorous in the facts.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each, in chronological order unless a flash-forward earns its place.\n- Everything is real: real rulers, battles, dates, treaties, cities, numbers. Use only facts you are certain of; round what historians dispute and say \"around\". Jokes come from the facts (a king who lost the same war twice), never from invented ones.\n- Beat 1 is the hook: the strangest true fact of the story, or the question everyone gets wrong, then a jump back to where it starts (say the year).\n- Every beat names things a cartoon can draw: a person with one trait to exaggerate, a place, an object, an army, a year on a watch, two sides to score. Plan at least one comparison of real numbers (a scoreboard) and one list of eras or rulers (a flipchart).\n- Every few beats a turn the viewer did not see coming, and a jump in time announced with the year.\n- The last beat lands why it still matters today, in one line, and returns to the strange fact of the hook.\nFor each beat, write the facts it states and the drawings on screen that carry them.",
+    "script": "Write the complete narration for this cartoon history episode from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A quick, bright, funny narrator who loves this stuff and never talks down. Short sentences. Present tense for the action (\"Caesar crosses the river. Nobody stops him.\"), past tense for background. A dry aside every minute, always built on a real fact.\n- The first words are the hook: the strange true fact or the question, then \"To see why, we go back to\" and the year.\n- Say every year and every number the way they are read aloud (\"seven fifty-three BC\", \"eighty thousand soldiers\"), never digits.\n- Every jump in time is said out loud with the year, so the time machine can move.\n- Every sentence names something to draw: a person, a place, an object, a number.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- Never say \"in this video\". End on why it matters today, back at the hook; then one short line asking viewers to subscribe for the next episode."
+  },
+  "thumbnail": {
+    "brief": "A flat cartoon scene with thick black outlines: the main figure of the story with one exaggerated trait, on a yellowed-paper ground with one bold flat colour behind. Two or three words of headline in a bouncy comic face, dark ink with a white stroke, top or bottom, one word in red. A small flag, crown or coin as the only prop. No photographs, no gradients.",
+    "accent": "#D93B2B",
+    "note": "Send Claude five thumbnails from cartoon history channels you wish were yours and ask it to rewrite this brief."
+  }
+}

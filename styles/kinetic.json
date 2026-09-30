@@ -1,0 +1,177 @@
+{
+  "name": "kinetic",
+  "order": 12,
+  "label": "KINETIC — essays where the words are the picture",
+  "description": "Essays where the words are the picture: one huge word on a turn, the clip pinned to a chalkboard with the line written under it in chalk, chalk line drawings that draw themselves (a lightbulb, a brain, an arrow, a clock, a target), white line-drawn stills that sketch themselves on, phone cards stacking then scattering round a serif title, a real comment with its phrases highlighted, headlines scrolling by, sources typed with a cursor. Lowercase techno-mono captions at the bottom, the key word yellow.",
+  "tagline": "The words are the picture: clusters, white pages, phone cards, comments.",
+  "points": [
+    "One huge word on a turn",
+    "Clips on a chalkboard, the line in chalk",
+    "Chalk icons that draw themselves",
+    "Line-drawn stills sketch on",
+    "Phone cards, comments, headlines",
+    "Lowercase mono captions, key word yellow"
+  ],
+  "script_craft": "teaching",
+  "cost": "about $0.10 a minute (voice + four drawn stills + cutouts); YouTube watching is free on the Gemini tier",
+  "render_x": 3.5,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "8x8Otoub1daqoxY72hug",
+    "voice_name": "Louis — Deep, Profound and Thoughtful",
+    "wavespeed_voice": "Daniel",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "motion",
+      "spotlight",
+      "headlines",
+      "sound",
+      "objects"
+    ],
+    "on": [
+      "youtube",
+      "ai_images",
+      "stock",
+      "motion",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "kinetic",
+    "director": true,
+    "title_font": "'Inter Display Black','Inter Black',Inter,sans-serif",
+    "title_weight": "900",
+    "accent": [
+      "#F2C230",
+      "#FFFFFF",
+      "#E5322D",
+      "#8A8A86",
+      "#FAFAF8"
+    ],
+    "warn": "#E5322D",
+    "good": "#7FA58F",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H30C2F2&",
+    "captions": {
+      "mode": "stack",
+      "font": "Kode Mono",
+      "big_font": "Kode Mono",
+      "serif_font": "Playfair Display",
+      "size": 84,
+      "accent": "#F2C230",
+      "box_colour": "#E5322D",
+      "words": 5,
+      "y": 540,
+      "left_x": 150,
+      "right_x": 1770,
+      "block_w": 720,
+      "hold": 0.25,
+      "lower": true,
+      "line_chars": 15
+    },
+    "footage_grade": "eq=contrast=1.08:saturation=0.82:brightness=-0.05:gamma=0.98,colorbalance=rs=-0.02:bs=0.04",
+    "dust": false,
+    "vignette": true,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "board",
+      "frame_every": 3,
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0
+    },
+    "headlines": {
+      "marker": "#F2C230",
+      "every_s": 30,
+      "gap_s": 3
+    },
+    "photofx": {
+      "every_s": 14,
+      "gap_s": 2
+    },
+    "sound": {
+      "sfx_db": -20,
+      "music_rel_db": -7,
+      "duck_db": -7,
+      "track": "documentary/documentary 3.mp3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 3,
+      "repeat": false,
+      "watcher": "gemini"
+    },
+    "options_note": "KINETIC: the caption gathers word by word left and right of the frame; big single words, white pages with typed lines, phone cards, real comments and headlines. Paste links to the studies, articles or videos you quote into Extra instructions.",
+    "reference": "styles/kinetic.jpg",
+    "labels": {
+      "pos": "tc",
+      "font": "Kode Mono",
+      "sub_font": "Inter SemiBold",
+      "size": 48,
+      "sub_size": 28,
+      "colour": "#FFFFFF",
+      "box": "#F2C230",
+      "box_text": "#111111",
+      "enter": "pop",
+      "upper": false
+    },
+    "still_suffix": " Drawn EXACTLY like the reference: white hand-drawn marker lines on a pure black background, a single confident but imperfect hand, wobbly line weight, small gaps and overshoots, no shading, one small scribble of yellow or orange at most, no text, plenty of empty black space around the drawing, 16:9. Only the subject described, nothing else.",
+    "reveal": "sketch",
+    "style_image": "kits/kinetic/sketch_ref.png",
+    "footage_taste": "aesthetic and cinematic, moody: slow motion, rain on a window, silhouettes against light, empty rooms, neon at night, close-ups of hands and eyes, film grain, shallow focus — the feel of a psychology essay, never corporate stock"
+  },
+  "pacing": {
+    "graphic_every_min": 0.55,
+    "graphic_ratio": 0.35,
+    "graphic_dur_s": 6.0,
+    "graphic_max_s": 8.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 140,
+    "cut_s": 4.0,
+    "hook_s": 60,
+    "scene_share_hook": 0.66,
+    "scene_share_body": 0.5,
+    "hook_notes": "This is an essay: the first minute opens on a bigword (one or two words of the opening question), a doodle (a chalk icon drawn for the idea: a lightbulb for an idea, a brain for thinking, a clock for time, a target for a goal, with 1-3 words beside it), then a board (the clip or the quote that set the question off, with the line written under it), a comment for the first real post quoted, and text labels for names and figures, and a spotlight (the real photo) on EVERY person named — an author, a scientist, an investor — the moment their name is said.",
+    "body_notes": "After the hook: footage carries it, every third shot pinned to the chalkboard; a doodle every 30-40 seconds on the idea of the moment (icons: lightbulb, brain, arrow, question, clock, dollar, heart, eye, gear, target, chart, person, fire, star, check, cross, book, phone, key, cloud); a board for a quote or a clip; a comment for every real post quoted; a sources card when studies or figures are listed; a scroll when several headlines are named; a bigword on every turn of the argument; a mosaic for a joke about what cannot be shown. Something new every 8 to 12 seconds. A spotlight with the real photo on every person named, every time a new name comes up; real footage of the thing named is always welcome between the drawings.",
+    "photo_every_s": 14
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a YouTube essay channel about how people think, work, date, spend and decide — psychology, business, culture — in the tradition of the best video essayists: one sharp question, real evidence, a clear answer.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the essay in plain prose, as numbered beats of about one minute each.\n- Beat 1 asks the question the title promises in the plainest words, from a real thing people say or post — a real comment, a real clip, a real headline (quote it). Then the claim the essay will test.\n- Every beat carries real evidence: a real study with its author and year, a real figure, a real quote from a real public person, a real article, a real post. Use only facts you are certain of; round what is disputed and say \"around\".\n- Build like an argument: the common answer, why it fails, the better answer, the mechanism behind it, what to do with it. One counter-argument taken seriously.\n- Name the people (public figures, authors, researchers) and the outlets; name what people post in the words they use.\n- The last beat answers the question in one line the viewer can repeat, and returns to the comment or clip of the opening.\nFor each beat, write the claim it makes and the real evidence on screen that carries it.",
+    "script": "Write the complete narration for this essay from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A calm, sharp, conversational British essayist talking to one viewer. Short sentences with a rhythm — the caption shows them word by word, so every sentence must be worth reading. Fragments at the turns: \"Not harder. Louder.\" \"Which is the point.\"\n- The first words are the question, or the real comment, clip or headline that raised it.\n- Quote real people, studies and posts briefly and exactly, and say who (\"Pew found in 2023\", \"one comment under the video said\"). Never invent a quote or a figure.\n- Every minute a question, answered soon after. Every three or four sentences one line the viewer would screenshot.\n- Say numbers the way they are read aloud (\"sixty-three per cent\"), never digits or symbols.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- Never say \"in this video\". End on the one-line answer, back at the opening; then one short line asking viewers to subscribe."
+  },
+  "thumbnail": {
+    "brief": "A dark, cinematic frame with one big lowercase word or a three-word question in a rounded techno mono, white, with one word in yellow — or a white page with a screenshot and a bold black line. Deep charcoal ground, a lot of empty space, one real photo or clip still small in a corner. No arrows, no red circles, no emoji.",
+    "accent": "#F2C230",
+    "note": "Send Claude five thumbnails from essay channels you wish were yours and ask it to rewrite this brief."
+  }
+}

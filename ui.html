@@ -1,0 +1,1766 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frontier</title>
+<style>
+/* ── FRONTIER ───────────────────────────────────────────────────────────────
+   Three questions, one button. Everything else is folded away until it's
+   needed, because most of the time the answer to "which options?" is "the
+   defaults". Edit this file and reload the page — nothing to rebuild.        */
+
+:root{
+  --bg:#08070a; --bg2:#0d0c10;
+  --panel:rgba(255,255,255,.035); --panel2:rgba(255,255,255,.055);
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+  --ink:#f6f4f0; --dim:#8d8880; --dimmer:#5f5b55;
+  --amber:#ffb020; --amber2:#ff8a00; --amber-dim:rgba(255,176,32,.14);
+  --ok:#4ade80; --bad:#f87171;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 520px at 50% -12%, rgba(255,150,20,.10), transparent 62%),
+    var(--bg);
+  color:var(--ink); min-height:100vh;
+  font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+::selection{background:rgba(255,176,32,.28)}
+
+/* ── shell ───────────────────────────────────────────────────────────────── */
+.wrap{max-width:820px;margin:0 auto;padding:0 24px 120px}
+
+header{padding:44px 0 8px;text-align:center}
+.logo{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+/* The supplied PNG is the flat mark on transparency — no glow baked in —
+   so the amber halo is added here, softly, to match the brand. */
+.logo img{height:44px;display:block;
+  filter:drop-shadow(0 0 22px rgba(255,150,20,.38)) drop-shadow(0 0 6px rgba(255,190,90,.22))}
+.logo .fallback{
+  font-weight:800;font-size:30px;letter-spacing:-.5px;
+  text-shadow:0 0 26px rgba(255,180,60,.5);
+}
+.logo .chev{color:var(--amber);font-size:32px;line-height:1;margin-right:2px}
+.tag{color:var(--dim);margin:8px 0 0;font-size:14.5px}
+
+/* ── steps ───────────────────────────────────────────────────────────────── */
+.step{margin-top:38px}
+.step-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px}
+.num{
+  width:24px;height:24px;flex:0 0 24px;border-radius:50%;
+  background:var(--amber-dim);border:1px solid rgba(255,176,32,.3);
+  color:var(--amber);font-size:12px;font-weight:700;
+  display:grid;place-items:center;transform:translateY(2px);
+}
+.step h2{margin:0;font-size:17px;font-weight:650;letter-spacing:-.2px}
+.step .hint{color:var(--dimmer);font-size:13.5px;margin-left:auto}
+
+/* channels */
+.channels{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(205px,1fr))}
+.ch{
+  text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);padding:10px 11px 12px;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .12s;
+}
+.ch:hover{background:var(--panel2);border-color:var(--line2)}
+.ch:focus-visible{outline:none;border-color:rgba(255,176,32,.55);box-shadow:0 0 0 2px rgba(255,176,32,.3)}
+.ch:active{transform:scale(.995)}
+.ch[aria-pressed=true]{
+  border-color:rgba(255,176,32,.55);background:rgba(255,176,32,.07);
+  box-shadow:0 0 0 1px rgba(255,176,32,.2), 0 8px 30px -14px rgba(255,150,20,.6);
+}
+.ch b{display:block;font-size:14px;font-weight:650;margin-bottom:3px;line-height:1.3}
+.ch span{display:block;color:var(--dim);font-size:13px;line-height:1.45}
+.ch .lang{color:var(--dimmer);font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;margin-top:8px}
+/* the card's tagline and its points (tagline / points in the style file) */
+.ch .tagline{color:#cfc9c0;font-size:12.3px;line-height:1.42;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden}
+/* compact cards: the tagline, the price and the sample carry a channel; its points sit in the tooltip */
+.channels .ch ul.pts,.channels .ch .lang{display:none}
+.ch ul.pts{list-style:none;margin:9px 0 2px;padding:0;display:grid;gap:5px}
+.ch ul.pts li{position:relative;padding-left:15px;color:var(--dim);font-size:12.8px;line-height:1.42}
+.ch ul.pts li::before{content:"";position:absolute;left:3px;top:.55em;width:5px;height:5px;border-radius:50%;
+  background:var(--amber);opacity:.8}
+.ch-empty{
+  grid-column:1/-1;border:1px dashed var(--line2);border-radius:var(--r);
+  padding:26px;text-align:center;color:var(--dim);font-size:14px;
+}
+.ch-empty b{color:var(--ink);display:block;margin-bottom:6px;font-weight:600}
+
+/* titles */
+textarea#title{
+  width:100%;min-height:96px;resize:vertical;padding:16px 18px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  outline:none;line-height:1.6;
+}
+textarea#title:focus{border-color:rgba(255,176,32,.5);background:var(--panel2)}
+textarea#title::placeholder{color:var(--dimmer)}
+
+/* length */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  padding:9px 17px;cursor:pointer;font-size:14px;transition:.15s;
+}
+.chip:hover{background:var(--panel2);border-color:var(--line2)}
+.chip[aria-pressed=true]{
+  background:rgba(255,176,32,.1);border-color:rgba(255,176,32,.55);color:#ffd189;
+}
+.chip input{width:52px;background:none;border:none;outline:none;text-align:center}
+
+/* go */
+.go{
+  margin-top:36px;width:100%;padding:17px;border:none;border-radius:var(--r);
+  background:linear-gradient(180deg,var(--amber),var(--amber2));
+  color:#1a1206;font-size:16px;font-weight:750;letter-spacing:-.1px;cursor:pointer;
+  box-shadow:0 10px 34px -12px rgba(255,150,20,.75);
+  transition:filter .15s,transform .1s;
+}
+.go:hover{filter:brightness(1.07)}
+.go:active{transform:translateY(1px)}
+.go:disabled{opacity:.4;cursor:default;filter:none;box-shadow:none}
+
+/* options disclosure */
+details.opts{margin-top:18px}
+details.opts summary{
+  cursor:pointer;color:var(--dim);font-size:13.5px;list-style:none;
+  display:inline-flex;align-items:center;gap:7px;padding:6px 0;
+}
+details.opts summary::-webkit-details-marker{display:none}
+details.opts summary::before{content:"›";transition:transform .18s;display:inline-block}
+details.opts[open] summary::before{transform:rotate(90deg)}
+.tutbox p{margin:0 0 10px;line-height:1.5}
+.tutbox ul{margin:6px 0 10px 18px;padding:0;line-height:1.5}
+.tutbox li{margin:0 0 8px}
+.tutbox code{font-size:.92em;opacity:.9}
+.tut-foot{opacity:.7;font-size:.92em}
+
+details.opts summary:hover{color:var(--ink)}
+.optbox{
+  margin-top:12px;padding:18px;background:var(--panel);
+  border:1px solid var(--line);border-radius:var(--r);
+  display:grid;gap:13px;
+}
+.opt{display:flex;align-items:center;gap:11px;font-size:14px}
+.opt input[type=checkbox]{
+  appearance:none;width:19px;height:19px;flex:0 0 19px;border-radius:6px;
+  border:1px solid var(--line2);background:var(--panel2);cursor:pointer;position:relative;
+}
+.opt input[type=checkbox]:checked{background:var(--amber);border-color:var(--amber)}
+.opt input[type=checkbox]:checked::after{
+  content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid #1a1206;border-width:0 2px 2px 0;transform:rotate(42deg);
+}
+.opt small{color:var(--dimmer);font-size:12.5px}
+.opt .num-in{
+  width:56px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:8px;padding:5px 9px;text-align:center;outline:none;
+}
+
+/* ── running ─────────────────────────────────────────────────────────────── */
+.run{
+  margin-top:32px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;
+}
+.run-top{padding:18px 20px;display:flex;align-items:center;gap:14px}
+.spin{
+  width:16px;height:16px;flex:0 0 16px;border-radius:50%;
+  border:2px solid rgba(255,176,32,.25);border-top-color:var(--amber);
+  animation:sp .8s linear infinite;
+}
+@keyframes sp{to{transform:rotate(360deg)}}
+.run-top b{font-weight:600;font-size:15px}
+.run-top .el{margin-left:auto;color:var(--dimmer);font-size:13px;font-variant-numeric:tabular-nums}
+.bar{height:2px;background:rgba(255,255,255,.07)}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--amber2),var(--amber));
+  width:0;transition:width .6s ease}
+.log{
+  margin:0;padding:14px 20px 18px;max-height:230px;overflow:auto;
+  font:12.5px/1.72 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--dim);white-space:pre-wrap;word-break:break-word;
+}
+.log b{color:var(--ink);font-weight:500}
+/* the render, drawn as its stages */
+.stages{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;padding:16px 20px 6px}
+.stg{position:relative;border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 44px;min-height:62px;
+  background:rgba(255,255,255,.015);transition:border-color .3s,background .3s}
+.stg .ic{position:absolute;left:14px;top:14px;width:18px;height:18px;border-radius:50%;border:2px solid var(--line2)}
+.stg b{display:block;font-size:13.5px;font-weight:600;color:var(--dim)}
+.stg span{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--dimmer);overflow:hidden;
+  text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.stg .t{position:absolute;right:12px;top:12px;font-size:11.5px;color:var(--dimmer);font-variant-numeric:tabular-nums}
+.stg.active{border-color:rgba(255,176,32,.45);background:var(--amber-dim)}
+.stg.active b{color:var(--ink)}
+.stg.active .ic{border-color:var(--amber);border-top-color:transparent;animation:sp .9s linear infinite}
+.stg.done b{color:var(--ink)}
+.stg.done .ic{border-color:var(--ok);background:var(--ok);
+  box-shadow:inset 0 0 0 3px var(--bg)}
+.stg.skip{opacity:.45}
+.stg.error{border-color:rgba(248,113,113,.5)}
+.stg.error .ic{border-color:var(--bad);background:var(--bad)}
+.stg .mini{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:8px;overflow:hidden}
+.stg .mini i{display:block;height:100%;background:var(--amber);width:0;transition:width .5s}
+/* a 3D video draws its steps with their own line icons (same place, size and colours as the status ring) */
+.stg.ico .ic{border:0;border-radius:0;background:none;box-shadow:none;animation:none;color:var(--dimmer);
+  width:20px;height:20px;left:13px;top:13px}
+.stg.ico .ic svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.stg.ico.active .ic{color:var(--amber);animation:icpulse 1.4s ease-in-out infinite}
+.stg.ico.done .ic{color:var(--ok)}
+.stg.ico.error .ic{color:var(--bad)}
+@keyframes icpulse{0%,100%{opacity:1}50%{opacity:.4}}
+.log .i3{display:inline-block;width:13px;height:13px;margin-right:6px;vertical-align:-2px;color:var(--amber)}
+.log .i3 svg{display:block;width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+/* the finished video — the only picture the progress view ever shows */
+.run-video{padding:4px 20px 14px}
+.run-video video{display:block;width:100%;max-width:760px;border-radius:12px;background:#000;border:1px solid var(--line)}
+.run-video small{display:block;margin-top:7px;color:var(--dimmer);font-size:12px}
+.logbox{margin:6px 20px 14px}
+.logbox summary{cursor:pointer;color:var(--dimmer);font-size:12.5px;padding:6px 0}
+.logbox .log{padding:10px 0 4px}
+.log .e{color:var(--bad)}
+
+/* queue */
+.qrow{
+  display:flex;align-items:center;gap:12px;padding:12px 20px;
+  border-top:1px solid var(--line);font-size:14px;
+}
+.qrow .dot{width:7px;height:7px;border-radius:50%;background:var(--dimmer);flex:0 0 7px}
+.qrow.done .dot{background:var(--ok)}
+.qrow.error .dot{background:var(--bad)}
+.qrow .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qrow .s{color:var(--dimmer);font-size:12.5px}
+
+/* ── library ─────────────────────────────────────────────────────────────── */
+.lib{margin-top:56px}
+.lib h2{font-size:17px;font-weight:650;margin:0 0 16px;letter-spacing:-.2px}
+.cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;transition:border-color .15s,transform .12s;
+}
+.card:hover{border-color:var(--line2);transform:translateY(-2px)}
+.card video{width:100%;aspect-ratio:16/9;display:block;background:#000;object-fit:cover}
+.card .meta{padding:12px 14px}
+.card .meta b{display:block;font-size:13.5px;font-weight:600;line-height:1.4;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card .meta span{color:var(--dimmer);font-size:11.5px;display:block;margin-top:5px}
+.lib-empty{color:var(--dimmer);font-size:14px;padding:8px 0}
+
+/* ── footer ──────────────────────────────────────────────────────────────── */
+footer{
+  margin-top:74px;padding-top:26px;border-top:1px solid var(--line);
+  color:var(--dimmer);font-size:13px;
+}
+.foot-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+footer .by{margin-right:auto}
+/* The byline is a link, so it looks like one on hover without shouting in a
+   row that is otherwise deliberately quiet. */
+footer .by a{
+  color:var(--dim);text-decoration:none;border-bottom:1px solid transparent;
+  transition:.15s;
+}
+footer .by a:hover{color:var(--ink);border-bottom-color:rgba(255,176,32,.55)}
+
+/* Updates sit above the credits, not beside them: a new version of the tool is
+   worth more to the person using it than a byline is, and buried in a row of
+   footer links it reads as one more logo. */
+.updates{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:15px 18px;margin-bottom:20px;border-radius:14px;
+  background:linear-gradient(100deg, rgba(255,176,32,.09), rgba(255,138,0,.04));
+  border:1px solid rgba(255,176,32,.22);
+}
+.updates .txt{flex:1;min-width:210px;color:var(--dim);line-height:1.5}
+.updates .txt b{display:block;color:var(--ink);font-weight:600;font-size:14px;margin-bottom:2px}
+.updates a{
+  text-decoration:none;white-space:nowrap;
+  background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.45);
+  color:#ffd189;padding:9px 16px;border-radius:999px;font-weight:600;font-size:13px;
+  transition:.15s;
+}
+.updates a:hover{background:rgba(255,176,32,.24);color:#fff0d0}
+footer a.algrow{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  color:var(--dim);padding:7px 13px;border:1px solid var(--line);border-radius:999px;
+  transition:.15s;
+}
+footer a.algrow:hover{border-color:var(--line2);color:var(--ink);background:var(--panel)}
+/* The PNG carries its own rounded corners, so no border-radius here —
+   a CSS radius on top would clip the frame the mark already draws. */
+footer a.algrow img{height:20px;width:20px;display:block}
+
+.err{
+  margin-top:16px;padding:13px 16px;border-radius:12px;font-size:14px;
+  background:rgba(248,113,113,.09);border:1px solid rgba(248,113,113,.28);color:#fca5a5;
+}
+.farm{
+  margin-top:14px;padding:13px 16px;border-radius:12px;
+  background:var(--panel);border:1px solid var(--line);
+}
+.farm-on{display:flex;align-items:center;gap:9px;font-size:14px;cursor:pointer}
+.farm-on small{color:var(--dim);font-size:12.5px;font-weight:400}
+.farm-body{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.farm-q{font-size:13px;color:var(--dim);margin-bottom:10px}
+.farm-q b{color:var(--ink);font-weight:600}
+.farm-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.farm-btn{
+  padding:8px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;
+  background:var(--panel2);border:1px solid var(--line2);color:var(--ink);
+}
+.farm-btn:hover{background:var(--amber-dim);border-color:var(--amber)}
+.farm-btn:disabled{opacity:.4;cursor:default;background:var(--panel2);border-color:var(--line)}
+.farm-btn.bad{color:#fca5a5;border-color:rgba(248,113,113,.3)}
+.farm-btn.bad:hover{background:rgba(248,113,113,.12);border-color:var(--bad)}
+.farm-log{
+  margin:11px 0 0;padding:10px 12px;max-height:210px;overflow:auto;
+  background:rgba(0,0,0,.32);border:1px solid var(--line);border-radius:10px;
+  font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);
+  white-space:pre-wrap;word-break:break-word;
+}
+.lib{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.lib-h{display:flex;align-items:baseline;gap:9px;font-size:13px;font-weight:600;margin-bottom:10px}
+.lib-h small{color:var(--dim);font-weight:400}
+.lib-row{
+  display:flex;align-items:center;gap:12px;padding:9px 10px;margin-bottom:7px;
+  background:var(--panel);border:1px solid var(--line);border-radius:11px;
+}
+.lib-row:hover{border-color:var(--line2)}
+.lib-thumb{
+  width:76px;height:43px;flex:0 0 76px;border-radius:6px;object-fit:cover;
+  background:rgba(0,0,0,.35);border:1px solid var(--line);
+}
+.lib-meta{flex:1;min-width:0}
+.lib-name{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lib-sub{font-size:11.5px;color:var(--dim);margin-top:2px}
+.lib-acts{display:flex;gap:6px;flex:0 0 auto}
+.lib-btn{
+  padding:6px 11px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:600;
+  background:var(--panel2);border:1px solid var(--line2);color:var(--ink);text-decoration:none;
+}
+.lib-btn:hover{background:var(--amber-dim);border-color:var(--amber)}
+.lib-btn.warn{color:#fca5a5;border-color:rgba(248,113,113,.28)}
+.lib-btn.warn:hover{background:rgba(248,113,113,.12);border-color:var(--bad)}
+.lib-none{font-size:12.5px;color:var(--dimmer);padding:6px 2px}
+.farm-on span{font-weight:700;letter-spacing:.04em;font-size:12.5px}
+.farm-setup{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.farm-step{display:flex;gap:9px;align-items:flex-start;padding:7px 0;font-size:13px}
+.farm-tick{
+  flex:0 0 17px;width:17px;height:17px;border-radius:50%;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+}
+.farm-tick.on{background:rgba(74,222,128,.16);color:var(--ok);border:1px solid rgba(74,222,128,.4)}
+.farm-tick.off{background:rgba(255,176,32,.12);color:var(--amber);border:1px solid rgba(255,176,32,.35)}
+.farm-step b{font-weight:600}
+.farm-step .how{display:block;color:var(--dim);font-size:12px;margin-top:2px;line-height:1.45}
+.farm-step code{font-size:11.5px;color:var(--dimmer)}
+.farm-guide{margin-top:10px;font-size:12.5px;color:var(--dim)}
+.farm-guide b{color:var(--amber);font-weight:600}
+.hidden{display:none!important}
+
+/* the cast box */
+.chars{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 10px}
+.chr{position:relative;width:112px;height:168px;padding:0;border-radius:11px;overflow:hidden;cursor:pointer;
+  background:#f1eee8;border:1px solid var(--line2);transition:border-color .15s,box-shadow .15s,transform .15s}
+.chr:hover{transform:translateY(-1px)}
+.chr img{width:100%;height:100%;object-fit:cover;object-position:50% 6%;display:block}
+.chr span{position:absolute;left:0;right:0;bottom:0;padding:18px 7px 6px;font-size:10.5px;line-height:1.25;
+  color:#fff;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.78))}
+.chr[aria-pressed="true"]{border-color:var(--amber);box-shadow:0 0 0 2px var(--amber)}
+.chr.up{background:var(--panel2);border:1px dashed var(--line2);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px}
+.chr.up b{font-size:28px;font-weight:300;line-height:1;color:var(--amber)}
+.chr.up span{position:static;background:none;padding:0 10px;text-align:center;color:var(--dim);font-size:11.5px}
+.chr.busy{opacity:.55;pointer-events:none}
+.charnote{font-size:12px;color:var(--dimmer);line-height:1.55}
+.chardesc{margin:14px 0 0}
+.picsonly{font-size:12.5px;color:var(--dim);line-height:1.55}
+.picsonly b{color:var(--ink);font-weight:600}
+.charbox{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.charbox textarea{width:100%;margin-top:10px;padding:11px 13px;border-radius:10px;resize:vertical;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--ink);
+  font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;outline:none}
+.charbox textarea:focus{border-color:var(--amber)}
+.ch .chref{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin-bottom:10px;
+  border:1px solid var(--line)}
+/* a channel's sample (look.sample): plays muted on its card, "Watch sample" opens it with sound */
+.chmedia{position:relative;margin-bottom:10px}
+.chmedia .chref{display:block;margin-bottom:0;background:#000}
+.watch{position:absolute;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:7px;
+  padding:5px 11px 5px 9px;border-radius:999px;cursor:pointer;
+  background:rgba(8,7,10,.74);border:1px solid rgba(255,255,255,.18);color:var(--ink);
+  font-size:11.5px;font-weight:600;letter-spacing:.1px;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:border-color .15s,background .15s}
+.watch:hover,.watch:focus-visible{outline:none;border-color:rgba(255,176,32,.6);background:rgba(22,15,6,.88)}
+.watch i{width:0;height:0;border-style:solid;border-width:4.5px 0 4.5px 7px;
+  border-color:transparent transparent transparent var(--amber)}
+.lightbox{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+  padding:4vh 4vw;background:rgba(4,3,6,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.lb{width:min(1120px,100%)}
+.lb-top{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.lb-top b{font-size:15px;font-weight:650}
+.lb-top span{color:var(--dim);font-size:13px}
+.lb-x{margin-left:auto;align-self:center;width:34px;height:34px;border-radius:50%;cursor:pointer;
+  font-size:20px;line-height:1;background:var(--panel2);border:1px solid var(--line2);color:var(--ink)}
+.lb-x:hover,.lb-x:focus-visible{outline:none;border-color:rgba(255,176,32,.6)}
+.lb video{display:block;width:100%;max-height:80vh;aspect-ratio:16/9;background:#000;border-radius:12px;
+  border:1px solid var(--line)}
+/* the mix sliders */
+.mix{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.mix-h{font-size:13px;color:var(--ink);margin-bottom:10px}
+.mix-h small{color:var(--dim);font-weight:400}
+.mix label{display:grid;grid-template-columns:118px 44px 1fr;align-items:center;gap:10px;
+  margin:9px 0;font-size:13px;color:var(--dim)}
+.mix label b{color:var(--amber);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.mix input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
+  background:var(--line2);outline:none;cursor:pointer}
+.mix input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--amber);border:2px solid #14110d;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.mix-note{margin-top:10px;font-size:11.5px;color:var(--dimmer);line-height:1.5}
+.card .dl{display:inline-block;margin-top:8px;font-size:11.5px;color:var(--amber);text-decoration:none}
+.card .acts{display:flex;flex-wrap:wrap;gap:0 14px}
+.card .thumbs{display:flex;gap:6px;margin-top:10px}
+.card .thumbs a{flex:1;min-width:0;display:block;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+.card .thumbs img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.card .thumbs a:hover{border-color:rgba(255,255,255,.35)}
+.card button.dl{background:none;border:0;padding:0;cursor:pointer;font:inherit;font-size:11.5px;color:var(--amber)}
+/* ── what goes into the video ────────────────────────────────────────────── */
+.ch .cost{display:inline-block;margin-top:6px;color:var(--amber);font-size:11.5px;font-weight:600}
+.feat-tip{margin-top:10px;color:var(--dim);font-size:12px;line-height:1.5}
+.feat .price{font-style:normal;font-weight:500;font-size:11px;color:var(--dimmer);margin-left:6px;
+  border:1px solid var(--line);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.feat.on .price{color:var(--amber);border-color:rgba(255,176,32,.35)}
+.feat-tip b{color:#e0675a;font-weight:600}
+.feat-h{display:flex;align-items:baseline;gap:10px;font-size:14px;font-weight:600;margin:2px 0 12px}
+.feat-h small{color:var(--dim);font-weight:400;font-size:12.5px}
+.feats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.feats{grid-template-columns:1fr}}
+.feat{display:flex;gap:11px;align-items:flex-start;padding:12px 13px;border-radius:12px;
+  background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:border-color .15s,background .15s}
+.feat:hover{border-color:var(--line2);background:var(--panel2)}
+.feat.on{border-color:rgba(255,176,32,.38);background:rgba(255,176,32,.06)}
+.feat.child{margin-left:22px}
+.feat input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:0 0 18px;margin-top:2px;
+  border-radius:5px;border:1px solid var(--line2);background:var(--panel2);cursor:pointer;position:relative}
+.feat input[type=checkbox]:checked{background:var(--amber);border-color:var(--amber)}
+.feat input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;
+  border:solid #14110d;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.feat b{display:block;font-size:14px;font-weight:600}
+.feat span{display:block;color:var(--dim);font-size:12.5px;line-height:1.45;margin-top:2px}
+.feat .miss{color:var(--bad);font-size:12px;margin-top:5px;font-weight:600}
+.feat.missing{opacity:.85;cursor:not-allowed;border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.05)}
+.feat.missing input{cursor:not-allowed}
+.feat-note{margin:12px 0 0;color:var(--dim);font-size:12.5px;line-height:1.5}
+.opt-sec{margin-top:22px}
+.opt-sec textarea{width:100%;margin-top:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:11px 13px;font-size:13.5px;line-height:1.5;resize:vertical;outline:none}
+.opt-sec textarea:focus{border-color:var(--line2)}
+.api-warn{margin-top:12px;padding:11px 14px;border-radius:12px;border:1px solid rgba(248,113,113,.4);
+  background:rgba(248,113,113,.07);color:var(--bad);font-size:13px;line-height:1.5}
+.chips.off{opacity:.35;pointer-events:none}
+.len-note{margin-top:10px;color:var(--amber);font-size:12.5px}
+
+.card .dl:hover{text-decoration:underline}
+
+/* ── the AI presenter ─────────────────────────────────────────────────── */
+.avbox{margin-top:22px}
+.avtabs{display:flex;gap:6px;margin:10px 0}
+.avtabs button{appearance:none;background:var(--panel);border:1px solid var(--line);color:var(--ink);
+  border-radius:999px;padding:5px 13px;font:inherit;font-size:12px;cursor:pointer}
+.avtabs button.on{background:var(--amber);border-color:var(--amber);color:#1a1405;font-weight:600}
+.avs{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:9px;margin-top:4px}
+.av{position:relative;border:2px solid var(--line);border-radius:11px;overflow:hidden;cursor:pointer;background:var(--panel)}
+.av img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+.av .nm{padding:5px 7px;font-size:11.5px;text-transform:capitalize;letter-spacing:.2px}
+.av.on{border-color:var(--amber)}
+.av .fav{position:absolute;top:5px;right:5px;width:23px;height:23px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(0,0,0,.55);color:#fff;font-size:13px;line-height:23px;text-align:center;padding:0}
+.av .fav.on{background:var(--amber);color:#1a1405}
+.av .zoom{position:absolute;top:5px;left:5px;width:23px;height:23px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(0,0,0,.55);color:#fff;font-size:13px;line-height:23px;text-align:center;padding:0}
+.av .zoom:hover{background:rgba(0,0,0,.8)}
+.avlb{position:fixed;inset:0;z-index:60;background:rgba(3,3,5,.97);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;
+  padding:24px}
+.avlb .box{width:min(1100px,100%)}
+.avlb img{display:block;width:100%;max-height:78vh;object-fit:contain;border-radius:12px;background:#000}
+.avlb .row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.avlb .row b{font-size:16px;text-transform:capitalize}
+.avlb .row p{margin:0;color:var(--dim);font-size:13px;line-height:1.5;flex:1 1 380px}
+.avlb button{appearance:none;border-radius:999px;padding:8px 16px;font:inherit;font-size:13px;cursor:pointer}
+.avlb .use{background:var(--amber);border:1px solid var(--amber);color:#1a1405;font-weight:650}
+.avlb .x,.avlb .nav{background:var(--panel);border:1px solid var(--line);color:var(--ink)}
+.avbar{display:flex;align-items:center;gap:12px;padding:8px 12px;border:1px solid rgba(255,176,32,.45);
+  border-radius:12px;background:rgba(255,176,32,.06);cursor:pointer;margin-bottom:4px}
+.avbar img{width:72px;aspect-ratio:16/10;object-fit:cover;border-radius:7px;display:block}
+.avbar b{font-size:14px;text-transform:capitalize}
+.avbar span{color:var(--dim);font-size:12.5px}
+.avbar .chg{margin-left:auto;color:var(--amber);font-size:12.5px;font-weight:600;white-space:nowrap}
+.avtimes{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.avtimes .lbl{font-size:13px}
+.avtimes button{appearance:none;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:999px;
+  padding:5px 12px;font:inherit;font-size:12px;cursor:pointer}
+.avtimes button.on{background:var(--amber);border-color:var(--amber);color:#1a1405;font-weight:600}
+.avlen{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.avlen input[type=range]{flex:1;min-width:170px;accent-color:var(--amber)}
+.avcost{font-size:12px;opacity:.75;white-space:nowrap}
+.avnote{font-size:12px;opacity:.6;margin-top:8px;line-height:1.5}
+
+
+
+/* ── the two studios ──────────────────────────────────────────────────── */
+.maintabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+.maintabs button{appearance:none;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:14px 18px;color:var(--ink);font:inherit;transition:border-color .15s,background .15s}
+.maintabs button:hover{border-color:var(--line2);background:var(--panel2)}
+.maintabs button b{display:block;font-size:14.5px;font-weight:750;letter-spacing:.9px}
+.maintabs button small{display:block;color:var(--dim);font-size:12.5px;margin-top:4px;line-height:1.4}
+.maintabs button.on{border-color:rgba(255,176,32,.6);background:rgba(255,176,32,.08);
+  box-shadow:0 0 0 1px rgba(255,176,32,.18), 0 10px 30px -16px rgba(255,150,20,.7)}
+.maintabs button.on b{color:var(--amber)}
+.help{margin-top:12px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);
+  color:var(--dim);font-size:13px;line-height:1.55}
+.help b{color:var(--ink)}
+/* the channel picker folds away once you have chosen */
+.chtoggle{appearance:none;background:none;border:1px solid var(--line);color:var(--dim);border-radius:999px;
+  padding:3px 11px;font:inherit;font-size:12px;cursor:pointer;margin-left:10px;white-space:nowrap}
+.chtoggle:hover{color:var(--ink);border-color:var(--line2)}
+.chbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px;padding:10px 14px;border:1px solid rgba(255,176,32,.45);
+  border-radius:12px;background:rgba(255,176,32,.06);cursor:pointer}
+.chbar b{font-size:14px;font-weight:650;white-space:nowrap;flex:0 0 auto}
+  .chbar span{color:var(--dim);font-size:12.5px;line-height:1.4;flex:1 1 240px;min-width:0}
+  /* a short cost note sits on the right; a long one (3D, FOLIO: a whole sentence) drops to its own line and wraps */
+  .chbar .cost{color:var(--amber);font-weight:600;margin-left:auto;flex:0 1 auto;max-width:100%;line-height:1.45}
+/* the presenter library, big, in its own step of the AI AVATAR studio */
+#avStep .avbox{margin-top:0}
+#avStep .avs{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.avvoice{font-size:12.5px;color:var(--dim);margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="logo" href="/" aria-label="Frontier">
+      <img id="brandmark" src="/brand/frontier.png" alt="Frontier"
+           onerror="this.remove();document.getElementById('wordmark').classList.remove('hidden')">
+      <span id="wordmark" class="fallback hidden"><span class="chev">&rsaquo;</span>Frontier</span>
+    </a>
+    <p class="tag">Type a title. Get a finished video.</p>
+  </header>
+
+  <nav class="maintabs" id="mainTabs" aria-label="Studio">
+    <button type="button" data-t="production"><b>FRONTIER PRODUCTION</b>
+      <small>Documentaries and edited videos: real footage, maps, headlines, graphics.</small></button>
+    <button type="button" data-t="avatar"><b>AI AVATAR</b>
+      <small>A real-looking presenter opens every video, then the pictures take over.</small></button>
+  </nav>
+  <div class="help"><b>Stuck on anything?</b> Ask Claude Code first — just describe what happened. It knows the
+    whole tool, reads the log, and fixes technical problems for you.</div>
+
+  <!-- 1 ─ channel -->
+  <section class="step">
+    <div class="step-head">
+      <span class="num">1</span><h2>Channel</h2>
+      <span class="hint" id="chHint"></span>
+      <button type="button" class="chtoggle" id="chToggle">Hide channels</button>
+    </div>
+    <div class="chbar hidden" id="chBar" title="Show all channels"></div>
+    <div class="channels" id="channels"></div>
+  </section>
+
+  <!-- 2 ─ presenter (AI AVATAR only) -->
+  <section class="step hidden" id="avStep">
+    <div class="step-head">
+      <span class="num">2</span><h2>Presenter</h2>
+      <span class="hint">who opens the video</span>
+      <button type="button" class="chtoggle" id="avToggle">Hide presenters</button>
+    </div>
+    <div class="avbox hidden" id="avBox">
+      <div class="avbar hidden" id="avBar" title="Show all presenters"></div>
+      <div class="mix-h">The presenter speaks your first lines to camera, then it cuts to the pictures
+        <small>— the cut lands on a pause in the read, never mid-word.</small></div>
+      <div class="avtabs" id="avTabs"></div>
+      <div class="avs" id="avs"></div>
+      <div class="avlen">
+        <label>Seconds of presenter: <b id="avSecVal">8</b></label>
+        <input type="range" id="avSec" min="1" max="15" step="1" value="8">
+        <span class="avcost" id="avCost"></span>
+      </div>
+      <div class="avtimes"><span class="lbl">Appearances:</span><span id="avTimes"></span></div>
+      <div class="avnote">Beyond the intro the presenter comes back during the video, on a pause in the read;
+        while the presenter is on screen nothing else is shown.</div>
+      <div class="avnote" id="avNote"></div>
+      <div class="avvoice" id="avVoice"></div>
+      <div class="api-warn hidden" id="avKeys"></div>
+    </div>
+  </section>
+
+  <!-- 2 ─ titles -->
+  <section class="step">
+    <div class="step-head">
+      <span class="num" id="numTitle">2</span><h2>Title</h2>
+      <span class="hint">one per line makes several</span>
+    </div>
+    <textarea id="title" placeholder="The Shadow You Keep Feeding Without Knowing It"></textarea>
+  </section>
+
+  <!-- 3 ─ length -->
+  <section class="step">
+    <div class="step-head">
+      <span class="num" id="numLen">3</span><h2>Length</h2>
+      <span class="hint" id="costHint"></span>
+    </div>
+    <div class="chips" id="lens"></div>
+    <div class="len-note hidden" id="lenNote">Your own script is in Options — the video is as long as your script, so length is ignored.</div>
+  </section>
+
+  <button class="go" id="go">Create video</button>
+
+  <div class="farm hidden" id="farm">
+    <label class="farm-on">
+      <input type="checkbox" id="f_on">
+      <span>CLOUD RENDER</span>
+      <small id="farmWhy">close the laptop — a rented machine makes the video instead</small>
+    </label>
+    <div class="farm-setup hidden" id="farmSetup"></div>
+    <div class="farm-body hidden" id="farmBody">
+      <div class="farm-q" id="farmQ"></div>
+      <div class="farm-row">
+        <button class="farm-btn" id="f_start">Start the farm</button>
+        <button class="farm-btn bad" id="f_kill">Switch every machine off</button>
+        <span class="hint" id="f_state"></span>
+      </div>
+      <pre class="farm-log hidden" id="farmLog"></pre>
+      <div class="lib" id="lib">
+        <div class="lib-h">Finished on the farm <small id="libSub"></small></div>
+        <div id="libRows"></div>
+      </div>
+    </div>
+  </div>
+  <div class="err hidden" id="err"></div>
+
+  <div class="api-warn hidden" id="apiWarn"></div>
+
+  <details class="opts" open>
+    <summary>Options</summary>
+    <div class="optbox">
+      <div class="feat-h">What goes into this video <small id="featCost"></small></div>
+      <div class="feats" id="feats"></div>
+      <div class="feat-note" id="featNote"></div>
+      <div class="feat-tip">Ticked = in this video. <b>Red</b> = an API key is missing (the line says which).
+        Want your own look, colours or a new style? Open this folder in Claude Code and describe it — README → <i>Make it yours</i>.</div>
+
+      <div class="opt-sec">
+        <div class="mix-h">Your own script <small>— optional. Paste a finished script and Frontier follows it word for
+          word; the length above no longer applies.</small></div>
+        <textarea id="o_script" rows="5" spellcheck="false"
+          placeholder="Leave empty and Frontier writes the script from your title and your channel's style — or paste your own here."></textarea>
+      </div>
+
+      <div class="opt-sec">
+        <div class="mix-h">Extra instructions <small>— optional. Anything this one video should do differently; the script
+          writer, the storyboard and the graphics all read it.</small></div>
+        <textarea id="o_extra" rows="3" spellcheck="true"
+          placeholder="e.g. Focus on the 1980s. Explain it for beginners. Use gold and navy in the graphics. No maps."></textarea>
+      </div>
+
+      <div class="charbox hidden" id="charBox">
+        <div class="mix-h">Your character <small>— the person in every picture. Pick one, or upload your own.</small></div>
+        <div class="chars" id="chars"></div>
+        <input type="file" id="charFile" accept="image/png,image/jpeg,image/webp" hidden>
+        <div class="charnote">The picture you pick goes to the image model as the reference for every single
+          still, through a public catbox.moe link — the image model only takes references as links. A full-body
+          drawing on a plain background works best.</div>
+        <div class="mix-h chardesc">The same person in words <small>— repeated in every picture prompt. Keep it
+          true to the picture; an uploaded character is described for you, and you can edit it.</small></div>
+        <textarea id="o_char" rows="5" spellcheck="false"
+          placeholder="THE MAIN CHARACTER is the woman from the reference image, and she is in EVERY frame: …"></textarea>
+      </div>
+
+      <div class="opt-sec">
+        <div class="mix-h">Output</div>
+        <label class="opt"><input type="checkbox" id="o_subs" checked>
+          <span>Burn in subtitles <small>— in your channel colour</small></span></label>
+        <label class="opt"><input type="checkbox" id="o_thumb" checked>
+          <span>Thumbnails</span>
+          <input class="num-in" type="number" id="o_thumbn" min="1" max="4" value="2"></label>
+        <label class="opt"><input type="checkbox" id="o_desc" checked>
+          <span>YouTube description <small>— description, chapters and tags, ready to paste</small></span>
+          <input class="num-in" type="number" id="o_chapters" min="0" max="20" value="8" title="how many chapters"></label>
+        <label class="opt"><input type="checkbox" id="o_sources">
+          <span>Look for sources <small>— real references; a link that does not answer is dropped</small></span>
+          <input class="num-in" type="number" id="o_sourcesn" min="3" max="10" value="5"></label>
+        <label class="opt"><input type="checkbox" id="o_force">
+          <span>Redo everything <small>— ignore anything already made for this title</small></span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- make it yours -->
+  <details class="opts tut">
+    <summary>Make it yours — a two-minute tutorial</summary>
+    <div class="optbox tutbox">
+      <p><b>Nothing here is locked.</b> Every channel is one file in <code>styles/</code>; every graphic, caption style,
+        footage source and voice is a setting or a small script you own. Open this folder in Claude Code and say what you want.</p>
+      <ul>
+        <li><b>Your own script.</b> Paste it into Options → <i>Your own script</i>. The video is as long as your script; the
+          length field is ignored.</li>
+        <li><b>Learn from the channels you admire.</b> Paste two or three of their scripts or transcripts into Claude Code and say
+          <i>“write our script prompt in this voice”</i>. Claude turns them into <code>prompts.outline</code> and
+          <code>prompts.script</code> of your style, and every video after that reads like them.</li>
+        <li><b>A new channel in a sentence.</b> <i>“Make a true-crime style from DOSSIER, darker, red accent, captions bigger.”</i>
+          Claude copies the style file, changes what you named, renders a preview and looks at it before it says done.</li>
+        <li><b>Anything else.</b> Fonts, colours, where the captions sit, which graphics the director may use, how much
+          stock versus YouTube footage, the music, the narrator — all in the style file or in Options.</li>
+        <li><b>See it first.</b> <code>samples/</code> holds one finished video per channel; <code>python kits.py preview &lt;kit&gt;</code>
+          renders every graphic of a look without spending anything.</li>
+      </ul>
+      <p class="tut-foot">README → <i>Make it yours</i> has the commands; <i>README-STYLES.md</i> explains every channel.</p>
+    </div>
+  </details>
+
+  <!-- running -->
+  <section class="run hidden" id="run">
+    <div class="run-top">
+      <span class="spin"></span><b id="runTitle">Working…</b>
+      <span class="el" id="runEl"></span>
+    </div>
+    <div class="bar"><i id="runBar"></i></div>
+    <div class="stages" id="stages"></div>
+    <div class="run-video hidden" id="runVideo"></div>
+    <details class="logbox"><summary>Details</summary><pre class="log" id="log"></pre></details>
+    <div id="queue"></div>
+  </section>
+
+  <!-- library -->
+  <section class="lib">
+    <h2>Your videos</h2>
+    <div class="cards" id="cards"></div>
+    <div class="lib-empty hidden" id="libEmpty">Nothing yet — your first video will land here.</div>
+  </section>
+
+  <footer>
+    <div class="updates">
+      <span class="txt">
+        <b>New templates, new animations, new features</b>
+        Frontier keeps getting built. Grab the latest version — and everything
+        that ships after it — from the Whop.
+      </span>
+      <a href="https://whop.com/frontierhq/frontier-access/" target="_blank" rel="noopener">
+        Get updates &rarr;
+      </a>
+    </div>
+    <div class="foot-row">
+      <span class="by">FRONTIER &middot; made by
+        <a href="https://x.com/primalrobin" target="_blank" rel="noopener">Primal Robin</a>
+      </span>
+      <a class="algrow" href="https://go.algrow.online/tool" target="_blank" rel="noopener">
+        <img src="/brand/algrow.png" alt="" onerror="this.remove()">
+        Powered by Algrow
+      </a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- a channel's sample, big and with sound -->
+<div class="lightbox hidden" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+  <div class="lb">
+    <div class="lb-top"><b id="lbTitle"></b><span>sample video</span>
+      <button class="lb-x" id="lbClose" type="button" aria-label="Close">&times;</button></div>
+    <video id="lbVideo" controls playsinline preload="auto"></video>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const api = (u, o) => fetch(u, o).then(r => r.json());
+
+let CH = null;                  // chosen channel
+let CHANNELS = {};              // name -> what /api/channels said about it
+let DLC = {};                   // which scene engines this Frontier has on disk
+let FEATURES = [];              // every switch Options can show (features.py)
+let CAPS = {base: {}, features: {}};   // which API keys are there, per switch
+let PRICES = {voice: {per_min: 0, note: ''}, features: {}, picture: 0.01};   // rough $ per minute (features.py)
+let MIN = 10;                   // chosen length
+let WATCH = null;               // slug being followed
+
+/* ── samples ────────────────────────────────────────────────────────────── */
+/* A channel whose style file has `look.sample` plays that video, muted, on its card while the card is
+   on screen — never for someone whose system asks for less motion. "Watch sample" opens it big, with sound. */
+const CALM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const SEEN = 'IntersectionObserver' in window
+  ? new IntersectionObserver(es => es.forEach(e => {
+      if(e.isIntersecting && !CALM && $('#lightbox').classList.contains('hidden')) e.target.play().catch(() => {});
+      else e.target.pause();
+    }), {threshold: 0.2})
+  : {observe: v => { if(!CALM) v.play().catch(() => {}); }, unobserve(){}, disconnect(){}};
+// under PRODUCTION a channel that also has a presenter shows its sample without the presenter's intro
+function sampleUrl(c){
+  return '/sample/' + encodeURIComponent(c.name) + (TAB === 'production' && c.plain_sample ? '?plain=1' : '');
+}
+function watchSample(n){
+  const c = CHANNELS[n] || {}, v = $('#lbVideo');
+  document.querySelectorAll('video.chref').forEach(x => x.pause());
+  $('#lbTitle').textContent = c.label || n;
+  v.src = sampleUrl(c);
+  $('#lightbox').classList.remove('hidden');
+  v.play().catch(() => {});
+  $('#lbClose').focus();
+}
+function closeSample(){
+  const v = $('#lbVideo');
+  v.pause(); v.removeAttribute('src'); v.load();
+  $('#lightbox').classList.add('hidden');
+  document.querySelectorAll('video.chref').forEach(x => { SEEN.unobserve(x); SEEN.observe(x); });
+}
+$('#lbClose').onclick = closeSample;
+$('#lightbox').onclick = e => { if(e.target === e.currentTarget) closeSample(); };
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && !$('#lightbox').classList.contains('hidden')) closeSample();
+});
+
+/* ── channels ───────────────────────────────────────────────────────────── */
+async function loadChannels(){
+  const {channels, dlc, features, caps, prices} = await api('/api/channels');
+  DLC = dlc || {};
+  FEATURES = features || [];
+  CAPS = caps || CAPS;
+  PRICES = prices || PRICES;
+  // what nothing can run without: a script writer and a voice
+  const base = Object.values(CAPS.base || {}).filter(x => !x.ok).map(x => x.why);
+  $('#apiWarn').classList.toggle('hidden', !base.length);
+  $('#apiWarn').innerHTML = base.map(esc).join('<br>');
+  const box = $('#channels');
+  if(!channels.length){
+    box.innerHTML = `<div class="ch-empty"><b>No channels yet</b>
+      Open this folder in Claude Code and tell it about your channel —
+      it writes the style file for you.</div>`;
+    $('#chHint').textContent = '';
+    return;
+  }
+  CHANNELS = {}; channels.forEach(c => CHANNELS[c.name] = c);
+  ALLCH = channels;
+  renderChannels();
+}
+/* ── the two studios: FRONTIER PRODUCTION and AI AVATAR ─────────────────── */
+/* A channel whose videos open with a presenter lives under AI AVATAR (styles.catalogue() says `tab`),
+   everything else under FRONTIER PRODUCTION. Each studio remembers its own channel. */
+let ALLCH = [];
+// the removed budget slider left whole-channel tick states behind (fr.feat.* / fr.budget.*): gone, once
+try{ Object.keys(localStorage).filter(k => /^fr\.(feat|budget)\./.test(k)).forEach(k => localStorage.removeItem(k)); }catch(e){}
+let TAB = (() => { try{ return localStorage.getItem('fr.tab') || 'production'; }catch(e){ return 'production'; } })();
+let CH_HIDE = (() => { try{ return localStorage.getItem('fr.chHide') === '1'; }catch(e){ return false; } })();
+function applyTab(){
+  document.querySelectorAll('#mainTabs button').forEach(b => b.classList.toggle('on', b.dataset.t === TAB));
+  $('#avStep').classList.toggle('hidden', TAB !== 'avatar');
+  $('#numTitle').textContent = TAB === 'avatar' ? '3' : '2';
+  $('#numLen').textContent = TAB === 'avatar' ? '4' : '3';
+}
+function setTab(t){
+  if(t === TAB) return;
+  TAB = t;
+  try{ localStorage.setItem('fr.tab', t); }catch(e){}
+  renderChannels();
+}
+function drawChBar(){
+  const c = CHANNELS[CH] || {};
+  $('#chBar').innerHTML = `<b>${esc(c.label || CH || '')}</b><span>${esc(c.tagline || '')}</span>`
+    + (c.cost ? `<span class="cost">${esc(c.cost)}</span>` : '');
+  $('#chBar').classList.toggle('hidden', !CH_HIDE);
+  $('#channels').classList.toggle('hidden', CH_HIDE);
+  $('#chToggle').textContent = CH_HIDE ? 'Show channels' : 'Hide channels';
+}
+function toggleChannels(hide){
+  CH_HIDE = hide;
+  try{ localStorage.setItem('fr.chHide', hide ? '1' : '0'); }catch(e){}
+  drawChBar();
+}
+function renderChannels(){
+  applyTab();
+  const box = $('#channels');
+  const channels = ALLCH.filter(c => ((c.tabs && c.tabs.length) ? c.tabs : [c.tab || 'production']).includes(TAB));
+  SEEN.disconnect();
+  if(!channels.length){
+    box.innerHTML = `<div class="ch-empty"><b>No channels here yet</b>
+      Open this folder in Claude Code and describe the channel you want — it writes the style file for you.</div>`;
+    $('#chHint').textContent = '';
+    return;
+  }
+  const refImg = c => c.reference ? `<img class="chref" src="/ref/${encodeURIComponent(c.name)}" alt="" onerror="this.remove()">` : '';
+  box.innerHTML = channels.map(c => `
+    <div class="ch" data-n="${esc(c.name)}" role="button" tabindex="0" aria-pressed="false"
+         title="${esc((c.points || []).join(' · ') || c.description || '')}">
+      ${c.sample ? `<div class="chmedia">
+        <video class="chref" src="${sampleUrl(c)}" muted loop playsinline preload="metadata"></video>
+        <button class="watch" type="button" data-n="${esc(c.name)}"><i></i>Watch sample</button>
+      </div>` : refImg(c)}
+      <b>${esc(c.label)}</b>
+      ${(c.points || []).length
+        ? `${c.tagline ? `<span class="tagline">${esc(c.tagline)}</span>` : ''}
+           <ul class="pts">${c.points.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`
+        : `<span>${esc(c.description || '')}</span>`}
+      ${c.cost ? `<span class="cost">${esc(c.cost)}</span>` : ''}
+      <span class="lang">${esc(c.language)}</span>
+    </div>`).join('');
+  box.querySelectorAll('.ch').forEach(b => {
+    b.onclick = () => pickChannel(b.dataset.n);
+    b.onkeydown = e => {
+      if(e.target !== b || (e.key !== 'Enter' && e.key !== ' ')) return;
+      e.preventDefault();
+      pickChannel(b.dataset.n);
+    };
+  });
+  box.querySelectorAll('.watch').forEach(w => w.onclick = e => { e.stopPropagation(); watchSample(w.dataset.n); });
+  box.querySelectorAll('video.chref').forEach(v => {
+    const c = CHANNELS[v.closest('.ch').dataset.n] || {};
+    // a sample that will not play gives its place back to the channel's picture
+    v.onerror = () => { v.closest('.chmedia').outerHTML = refImg(c); };
+    v.muted = true;
+    SEEN.observe(v);
+  });
+  let saved = '';
+  try{ saved = localStorage.getItem('fr.ch.' + TAB) || localStorage.getItem('fr.ch') || ''; }catch(e){}
+  if(channels.length) pickChannel(channels.some(c => c.name === saved) ? saved : channels[0].name);
+  $('#chHint').textContent = channels.length + (channels.length === 1 ? ' channel' : ' channels');
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest && e.target.closest('#mainTabs button');
+  if(t){ setTab(t.dataset.t); return; }
+  if(e.target.closest && e.target.closest('#chToggle')){ toggleChannels(!CH_HIDE); return; }
+  if(e.target.closest && e.target.closest('#chBar')){ toggleChannels(false); }
+});
+function pickChannel(n){
+  const btns = document.querySelectorAll('.ch');
+  if(![...btns].some(b => b.dataset.n === n)) n = btns[0]?.dataset.n;
+  CH = n;
+  btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.n === n)));
+  try{ localStorage.setItem('fr.ch', n); localStorage.setItem('fr.ch.' + TAB, n); }catch(e){}
+  drawChBar();
+  const c = CHANNELS[n] || {};
+  // The cast: shown only by channels built on a recurring character, and only
+  // pre-filled while you have not written your own.
+  const box = $('#charBox'), ta = $('#o_char');
+  box.classList.toggle('hidden', !c.character);
+  if(c.character){
+    let saved = '';
+    try{ saved = localStorage.getItem('fr.char.' + n) || ''; }catch(e){}
+    drawChars();
+    pickChar(CHARS.some(k => k.rel === saved) ? saved : (c.character_image || ''), !CHAR_TOUCHED);
+  }
+  drawFeatures();
+  applyOutput(c);
+  if(typeof syncFarm === 'function') syncFarm();      // 3D and FOLIO are made here: no Cloud render for them
+  loadAvatars();           // per channel: its narrator's sex decides which tab opens
+  if(typeof MIN !== 'undefined' && MIN) pickLen(MIN, true);
+}
+
+/* A channel may set its own Output ticks ("output" in its style file: burn_subs, desc, thumbnails, sources);
+   whatever it leaves out starts the way the page itself does. Picking a channel resets them to its defaults. */
+function applyOutput(c){
+  const o = (c || {}).output || {};
+  for(const [id, k] of [['#o_subs', 'burn_subs'], ['#o_desc', 'desc'], ['#o_thumb', 'thumbnails'], ['#o_sources', 'sources']]){
+    const el = $(id); if(el) el.checked = k in o ? !!o[k] : el.defaultChecked;
+  }
+}
+
+/* ── what goes into the video ───────────────────────────────────────────── */
+/* The channel says which switches it offers and which start ticked; your own ticks are remembered
+   per channel. A switch whose API key is missing is drawn in red, unticked, with the key to add. */
+function featState(){
+  try{ return JSON.parse(localStorage.getItem('fr.feat2.' + CH) || '{}') || {}; }catch(e){ return {}; }
+}
+function offeredOf(c){
+  const f = (c || {}).features || {};
+  const o = f.offered || FEATURES.filter(x => !x.explicit).map(x => x.key);   // 3D only where a channel offers it
+  return TAB === 'production' ? o.filter(k => k !== 'avatar') : o;
+}
+function featOn(k){
+  const c = CHANNELS[CH] || {}, f = c.features || {};
+  const offered = offeredOf(c);
+  if(!offered.includes(k)) return false;
+  if(!(CAPS.features[k] || {ok: true}).ok) return false;
+  const st = featState();
+  return k in st ? !!st[k] : (f.on || offered).includes(k);
+}
+function drawFeatures(){
+  const c = CHANNELS[CH] || {}, f = c.features || {};
+  const offered = offeredOf(c);
+  const list = FEATURES.filter(x => offered.includes(x.key));
+  $('#featCost').textContent = c.cost ? '— ' + c.label + ': ' + c.cost : '';
+  $('#feats').innerHTML = list.map(x => {
+    const cap = CAPS.features[x.key] || {ok: true};
+    const on = featOn(x.key);
+    const child = x.parent && offered.includes(x.parent);
+    const pr = (PRICES.features || {})[x.key] || {};
+    const perMin = x.key === 'ai_images' ? (c.pictures_per_min || 2.5) * (PRICES.picture || 0.01) : (pr.per_min || 0);
+    // The presenter is billed by the second of intro, so a per-minute figure is 0 and
+    // the switch would read "free" — which it is not. Show what it actually costs.
+    const flat = ((PRICES.flat || {})[x.key] || {}).per_second || 0;
+    const tag = flat > 0 ? `≈ $${(flat * (typeof avSecs === 'function' ? avSecs() : 8)).toFixed(2)} once`
+              : perMin > 0.0005 ? `≈ $${perMin < 0.1 ? perMin.toFixed(3) : perMin.toFixed(2)}/min` : 'free';
+    return `<label class="feat${on ? ' on' : ''}${cap.ok ? '' : ' missing'}${child ? ' child' : ''}" data-k="${x.key}">
+      <input type="checkbox" ${on ? 'checked' : ''} ${cap.ok ? '' : 'disabled'}>
+      <div><b>${esc(x.label)} <em class="price" title="${esc(pr.note || '')}">${tag}</em></b><span>${esc(x.hint)}</span>
+      ${cap.ok ? '' : `<div class="miss">${esc(cap.why)}</div>`}</div></label>`;
+  }).join('');
+  document.querySelectorAll('.feat input').forEach(inp => inp.onchange = e => {
+    const k = e.target.closest('.feat').dataset.k, st = featState();
+    st[k] = e.target.checked;
+    try{ localStorage.setItem('fr.feat2.' + CH, JSON.stringify(st)); }catch(err){}
+    drawFeatures();
+    drawAvatars();
+    updateEstimate();
+    if(typeof syncFarm === 'function') syncFarm();
+  });
+  // depth pop needs AI pictures to lift a subject from
+  const depth = document.querySelector('.feat[data-k="depth"]');
+  if(depth && offered.includes('ai_images') && !featOn('ai_images')){
+    depth.classList.add('missing');
+    depth.querySelector('input').disabled = true;
+    depth.querySelector('input').checked = false;
+  }
+  $('#featNote').textContent = c.options_note || '';
+}
+/* rough cost and render time for this video: the length (or the pasted script's length) times what
+   every ticked switch costs a minute with the services in .env, plus the voice */
+function updateEstimate(){
+  const c = CHANNELS[CH] || {};
+  const script = ($('#o_script') ? $('#o_script').value : '').trim();
+  const minutes = script ? Math.max(0.3, script.split(/\s+/).length / (c.wpm || 140)) : MIN;
+  let perMin = (PRICES.voice || {}).per_min || 0;
+  FEATURES.forEach(x => {
+    if(!featOn(x.key)) return;
+    if(x.key === 'depth' && !featOn('ai_images') && (c.features?.offered || []).includes('ai_images')) return;
+    perMin += x.key === 'ai_images' ? (c.pictures_per_min || 2.5) * (PRICES.picture || 0.01)
+                                    : (((PRICES.features || {})[x.key] || {}).per_min || 0);
+  });
+  // a story channel draws its pictures whatever the switches say
+  if(!(c.features?.offered || []).includes('ai_images') && c.pictures_per_min > 3) perMin += c.pictures_per_min * (PRICES.picture || 0.01);
+  const usd = perMin * minutes + avUsd(), rx = c.render_x || 1.6;
+  const money = usd < 0.1 ? 'under $0.10' : `about $${usd < 10 ? usd.toFixed(2) : Math.round(usd)}`;
+  // what the number is made of: one scary total tells you nothing, three line items tell you what to switch off
+  const parts = [];
+  FEATURES.forEach(x => {
+    if(!featOn(x.key)) return;
+    const per = x.key === 'ai_images' ? (c.pictures_per_min || 2.5) * (PRICES.picture || 0.01)
+                                      : (((PRICES.features || {})[x.key] || {}).per_min || 0);
+    if(per > 0) parts.push([x.label || x.key, per * minutes]);
+  });
+  if((PRICES.voice || {}).per_min) parts.push(['voice', PRICES.voice.per_min * minutes]);
+  if(avUsd() > 0) parts.push(['presenter', avUsd()]);
+  parts.sort((a, b) => b[1] - a[1]);
+  const top = parts.slice(0, 3).filter(p => p[1] >= 0.05)
+                   .map(p => `${String(p[0]).toLowerCase()} $${p[1].toFixed(2)}`).join(' · ');
+  $('#costHint').textContent = `about ${Math.max(4, Math.round(minutes * rx))} min to render · ${money} in API costs`
+    + (top ? ` (${top})` : '');
+  // the watcher is what makes a video expensive, and a free Gemini key takes it to nothing
+  const ytPer = ((PRICES.features || {}).youtube || {}).per_min || 0;
+  if(featOn('youtube') && ytPer >= 0.05){
+    const saved = (usd - (ytPer - 0.01) * minutes);
+    $('#costHint').textContent += ` — a free GEMINI_API_KEY makes it about $${Math.max(0.1, saved).toFixed(2)}`;
+  }
+  $('#costHint').title = `≈ $${perMin.toFixed(2)} per minute of video with the services in your .env — an estimate, `
+    + `your Algrow / WaveSpeed / kie dashboards have the real numbers`;
+}
+
+function featPayload(){
+  const out = {};
+  FEATURES.forEach(x => { out[x.key] = featOn(x.key) && !(x.key === 'depth' && (CHANNELS[CH]?.features?.offered || []).includes('ai_images') && !featOn('ai_images')); });
+  return out;
+}
+
+
+/* ── the AI presenter ───────────────────────────────────────────────────
+   The library comes from assets/avatars. A channel says which sex its narrator
+   is (voice.gender) and that tab opens first: a man's voice under a woman's face
+   reads as broken long before anyone works out why. Favourites are per browser
+   and float to the front, because in practice people reuse two or three faces. */
+
+let AVS = [], AV_PICK = '', AV_FIT = '', AV_TAB = 'fit', AV_PER_S = 0.0375, AV_MAX = 15;
+
+function avFavs(){
+  try{ return JSON.parse(localStorage.getItem('fr.avfav') || '[]') || []; }catch(e){ return []; }
+}
+function avToggleFav(id){
+  const f = avFavs(), i = f.indexOf(id);
+  if(i < 0) f.push(id); else f.splice(i, 1);
+  try{ localStorage.setItem('fr.avfav', JSON.stringify(f)); }catch(e){}
+  drawAvatars();
+}
+async function loadAvatars(){
+  try{
+    const d = await api('/api/avatars?style=' + encodeURIComponent(CH || ''));
+    AVS = d.avatars || [];
+    AV_FIT = d.gender || '';
+    AV_PER_S = d.per_second || AV_PER_S;
+    AV_MAX = (d.seconds || {}).max || AV_MAX;
+    AV_TAB = TAB === 'avatar' ? '' : (AV_FIT ? 'fit' : '');
+    try{ AV_PICK = localStorage.getItem('fr.avpick.' + CH) || ''; }catch(e){ AV_PICK = ''; }
+    avCountLoad();
+  }catch(e){ AVS = []; }
+  drawAvatars();
+}
+function avVisible(){
+  const fav = avFavs();
+  const want = AV_TAB === 'fit' ? AV_FIT : AV_TAB;
+  const rows = AVS.filter(a => !want || a.gender === want);
+  // favourites first, original order within each group
+  return rows.slice().sort((a, b) => (fav.includes(b.id) ? 1 : 0) - (fav.includes(a.id) ? 1 : 0));
+}
+function drawAvatars(){
+  const box = $('#avBox'); if(!box) return;
+  const on = featOn('avatar');
+  // in the AI AVATAR studio the library is always there to look through — with the keys missing it says so
+  const show = TAB === 'avatar' || on;
+  box.classList.toggle('hidden', !show);
+  if(!show) return;
+  const cap = (CAPS.features || {}).avatar || {ok: true};
+  $('#avKeys').innerHTML = cap.ok ? '' : esc(cap.why || 'The presenter needs KIE_API_KEY and WAVESPEED_API_KEY in .env.');
+  $('#avKeys').classList.toggle('hidden', !!cap.ok);
+  const tabs = [];
+  if(AV_FIT) tabs.push(['fit', AV_FIT === 'female' ? 'Suits this voice (women)' : 'Suits this voice (men)']);
+  tabs.push(['female', 'Women'], ['male', 'Men'], ['', 'Everyone']);
+  $('#avTabs').innerHTML = tabs.map(([g, l]) =>
+    `<button data-g="${g}" class="${AV_TAB === g ? 'on' : ''}">${esc(l)}</button>`).join('');
+  document.querySelectorAll('#avTabs button').forEach(b => b.onclick = () => {
+    AV_TAB = b.dataset.g; drawAvatars();
+  });
+  const rows = avVisible(), fav = avFavs();
+  if(!AV_PICK || !rows.some(a => a.id === AV_PICK)) AV_PICK = rows.length ? rows[0].id : '';
+  $('#avs').innerHTML = rows.map(a => `
+    <div class="av${a.id === AV_PICK ? ' on' : ''}" data-id="${esc(a.id)}" title="${esc(a.persona || '')}">
+      <img src="/api/avatars/${encodeURIComponent(a.id)}.png" alt="${esc(a.id)}" loading="lazy">
+      <button class="zoom" data-zoom="${esc(a.id)}" title="View full size" aria-label="View full size">⤢</button>
+      <button class="fav${fav.includes(a.id) ? ' on' : ''}" data-fav="${esc(a.id)}" title="Favourite">★</button>
+      <div class="nm">${esc(a.id)}</div>
+    </div>`).join('') || '<div class="avnote">No presenters in assets/avatars yet.</div>';
+  document.querySelectorAll('#avs .zoom').forEach(b => b.onclick = e => { e.stopPropagation(); avZoom(b.dataset.zoom); });
+  document.querySelectorAll('#avs .av').forEach(el => el.onclick = e => {
+    if(e.target.dataset.fav || e.target.dataset.zoom) return;
+    AV_PICK = el.dataset.id;
+    try{ localStorage.setItem('fr.avpick.' + CH, AV_PICK); }catch(err){}
+    drawAvatars();
+  });
+  document.querySelectorAll('#avs .fav').forEach(b => b.onclick = e => {
+    e.stopPropagation(); avToggleFav(b.dataset.fav);
+  });
+  drawAvTimes();
+  avCost();
+  drawAvBar();
+}
+/* the face grid folds away once a presenter is picked — open by default, the choice is remembered */
+let AV_HIDE = (() => { try{ return localStorage.getItem('fr.avHide') === '1'; }catch(e){ return false; } })();
+function drawAvBar(){
+  const bar = $('#avBar'); if(!bar) return;
+  const a = AVS.find(x => x.id === AV_PICK);
+  bar.innerHTML = a ? `<img src="/api/avatars/${encodeURIComponent(a.id)}.png" alt=""><b>${esc(a.id)}</b>`
+    + `<span>opens the video</span><span class="chg">Change</span>` : '';
+  bar.classList.toggle('hidden', !AV_HIDE || !a);
+  ['#avTabs', '#avs', '#avNote'].forEach(q => { const el = $(q); if(el) el.classList.toggle('hidden', AV_HIDE && !!a); });
+  const t = $('#avToggle'); if(t) t.textContent = AV_HIDE ? 'Show presenters' : 'Hide presenters';
+}
+function toggleAvatars(hide){
+  AV_HIDE = hide;
+  try{ localStorage.setItem('fr.avHide', hide ? '1' : '0'); }catch(e){}
+  drawAvBar();
+}
+document.addEventListener('click', e => {
+  if(e.target.closest && e.target.closest('#avToggle')){ toggleAvatars(!AV_HIDE); return; }
+  if(e.target.closest && e.target.closest('#avBar')){ toggleAvatars(false); }
+});
+document.addEventListener('input', e => {
+  if(e.target && e.target.id === 'avSec'){ avCost(); drawFeatures(); updateEstimate(); }
+});
+function avSecs(){ return Math.max(1, Math.min(+($('#avSec') || {}).value || 8, AV_MAX)); }
+let AV_COUNT = 1;
+function avCountLoad(){
+  try{ AV_COUNT = Math.max(1, Math.min(6, +(localStorage.getItem('fr.avcount.' + CH) || 1) || 1)); }catch(e){ AV_COUNT = 1; }
+}
+function drawAvTimes(){
+  const box = $('#avTimes'); if(!box) return;
+  box.innerHTML = [1, 2, 3, 4, 5, 6].map(n =>
+    `<button type="button" data-c="${n}" class="${n === AV_COUNT ? 'on' : ''}">${n === 1 ? 'Intro only' : n + '×'}</button>`).join(' ');
+  box.querySelectorAll('button').forEach(b => b.onclick = () => {
+    AV_COUNT = +b.dataset.c;
+    try{ localStorage.setItem('fr.avcount.' + CH, String(AV_COUNT)); }catch(e){}
+    drawAvTimes(); avCost(); drawFeatures(); updateEstimate();
+  });
+}
+function avUsd(){ return featOn('avatar') ? avSecs() * AV_PER_S * AV_COUNT : 0; }
+function avCost(){
+  const s = avSecs();
+  $('#avSecVal').textContent = s;
+  // the price of the intro itself, shown even before the keys are in (the estimate below counts it only when on)
+  $('#avCost').textContent = AV_COUNT > 1
+    ? `up to ≈ $${(s * AV_PER_S * AV_COUNT).toFixed(2)} for ${AV_COUNT} appearances — a short video fits fewer, and only those are paid for`
+    : `≈ $${(s * AV_PER_S).toFixed(2)} for the intro, once per video`;
+  const a = AVS.find(x => x.id === AV_PICK);
+  $('#avNote').textContent = a ? a.persona : '';
+  const v = $('#avVoice');
+  if(v) v.textContent = !AV_FIT ? '' : (a && a.gender && a.gender !== AV_FIT
+    ? `This channel speaks with a ${AV_FIT === 'female' ? "woman's" : "man's"} voice — pick a ${AV_FIT === 'female' ? 'woman' : 'man'} to match it, or ask Claude Code to switch the voice.`
+    : `This channel speaks with a ${AV_FIT === 'female' ? "woman's" : "man's"} voice.`);
+}
+
+/* the photo full size: look at a face properly before choosing it; arrows step through the ones on show */
+let AV_ZOOM = '';
+function avZoom(id){
+  AV_ZOOM = id;
+  const a = AVS.find(x => x.id === id); if(!a) return;
+  let lb = $('#avLb');
+  if(!lb){
+    lb = document.createElement('div'); lb.id = 'avLb'; lb.className = 'avlb';
+    lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
+    document.body.appendChild(lb);
+    lb.onclick = e => { if(e.target === lb) avZoomClose(); };
+  }
+  lb.innerHTML = `<div class="box">
+      <img src="/api/avatars/${encodeURIComponent(a.id)}.png" alt="${esc(a.id)}">
+      <div class="row"><b>${esc(a.id)}</b><p>${esc(a.persona || '')}</p>
+        <button class="nav" data-step="-1" aria-label="Previous">‹</button>
+        <button class="nav" data-step="1" aria-label="Next">›</button>
+        <button class="use">Use this presenter</button><button class="x">Close</button></div></div>`;
+  lb.classList.remove('hidden');
+  lb.querySelector('.x').onclick = avZoomClose;
+  lb.querySelector('.use').onclick = () => {
+    AV_PICK = id;
+    try{ localStorage.setItem('fr.avpick.' + CH, AV_PICK); }catch(err){}
+    avZoomClose(); drawAvatars();
+  };
+  lb.querySelectorAll('.nav').forEach(b => b.onclick = () => avZoomStep(+b.dataset.step));
+}
+function avZoomStep(d){
+  const rows = avVisible(), i = rows.findIndex(x => x.id === AV_ZOOM);
+  if(rows.length) avZoom(rows[(i + d + rows.length) % rows.length].id);
+}
+function avZoomClose(){ const lb = $('#avLb'); if(lb) lb.classList.add('hidden'); AV_ZOOM = ''; }
+document.addEventListener('keydown', e => {
+  const lb = $('#avLb'); if(!lb || lb.classList.contains('hidden')) return;
+  if(e.key === 'Escape') avZoomClose();
+  if(e.key === 'ArrowRight') avZoomStep(1);
+  if(e.key === 'ArrowLeft') avZoomStep(-1);
+});
+
+/* ── the character ──────────────────────────────────────────────────────── */
+let CHARS = [], CHAR_PICK = '';
+const CHAR_GENERIC = 'THE MAIN CHARACTER is the person from the reference image, and they are in EVERY frame — '
+  + 'the same face, hair, skin, build and clothes, drawn exactly this way.\n'
+  + 'In a close-up they are still there — their hand and sleeve holding the phone, their shoulder in the foreground.\n'
+  + 'Anyone else who returns in the story keeps the same face, hair and clothes every time.';
+async function loadChars(){
+  try{ CHARS = (await api('/api/characters')).characters || []; }catch(e){ CHARS = []; }
+}
+function drawChars(){
+  const own = (CHANNELS[CH] || {}).character_image || '';
+  const list = [...CHARS].sort((a, b) => (b.rel === own) - (a.rel === own) || b.mtime - a.mtime);
+  $('#chars').innerHTML = list.map(x => `
+    <button class="chr" type="button" data-rel="${esc(x.rel)}" aria-pressed="${x.rel === CHAR_PICK}" title="${esc(x.file)}">
+      <img src="${esc(x.src)}" alt="">
+      <span>${x.rel === own ? 'This channel&rsquo;s character' : esc(x.label)}</span>
+    </button>`).join('')
+    + `<button class="chr up" type="button" id="charUp"><b>+</b><span>Upload your own</span></button>`;
+  document.querySelectorAll('.chr[data-rel]').forEach(b => b.onclick = () => pickChar(b.dataset.rel, true));
+  $('#charUp').onclick = () => $('#charFile').click();
+}
+function pickChar(rel, fillWords){
+  const c = CHANNELS[CH] || {};
+  CHAR_PICK = rel;
+  if(fillWords){
+    // the words must describe the picture, so they follow the pick
+    const x = CHARS.find(k => k.rel === rel) || {};
+    $('#o_char').value = rel === c.character_image ? (c.character || '') : (x.text || CHAR_GENERIC);
+    CHAR_TOUCHED = rel !== c.character_image;
+  }
+  document.querySelectorAll('.chr[data-rel]').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.rel === rel)));
+  try{ localStorage.setItem('fr.char.' + CH, rel); }catch(e){}
+}
+$('#charFile').onchange = async e => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if(!f) return;
+  const upBtn = $('#charUp');
+  upBtn.classList.add('busy');
+  upBtn.querySelector('span').textContent = 'Reading your character…';
+  const fd = new FormData();
+  fd.append('file', f);
+  let r;
+  try{ r = await api('/api/characters', {method: 'POST', body: fd}); }
+  catch(err){ r = {error: 'The upload did not go through — is Frontier still running?'}; }
+  await loadChars();
+  drawChars();
+  if(r.error || !r.character) return fail(r.error || 'The upload did not go through.');
+  pickChar(r.character.rel, true);
+};
+
+/* ── length ─────────────────────────────────────────────────────────────── */
+const LENS = [5, 10, 20, 30];
+function buildLens(){
+  $('#lens').innerHTML =
+    LENS.map(m => `<button class="chip" data-m="${m}" aria-pressed="false">${m} min</button>`).join('')
+    + `<span class="chip" id="custom">other <input type="number" min="1" max="60" value="15"></span>`;
+  document.querySelectorAll('.chip[data-m]').forEach(b =>
+    b.onclick = () => pickLen(+b.dataset.m));
+  const inp = $('#custom input');
+  inp.oninput = () => pickLen(Math.max(1, Math.min(60, +inp.value || 1)), true);
+  inp.onclick = e => e.stopPropagation();
+  pickLen(+(localStorage.getItem('fr.min') || 10));
+}
+function pickLen(m, fromInput){
+  MIN = m;
+  document.querySelectorAll('.chip[data-m]').forEach(b =>
+    b.setAttribute('aria-pressed', String(+b.dataset.m === m)));
+  $('#custom').setAttribute('aria-pressed', String(!LENS.includes(m)));
+  if(!fromInput && !LENS.includes(m)) $('#custom input').value = m;
+  try{ localStorage.setItem('fr.min', m); }catch(e){}
+  // Rough, and said as rough — an estimate that pretends to be exact is worse
+  // than none. Renders are dominated by images and voice, both per-minute.
+  updateEstimate();
+}
+
+let CHAR_TOUCHED = false;
+$('#o_char').oninput = () => { CHAR_TOUCHED = true; };
+/* your own script: the length no longer applies */
+function scriptMode(){
+  const has = !!($('#o_script').value || '').trim();
+  $('#lens').classList.toggle('off', has);
+  $('#lenNote').classList.toggle('hidden', !has);
+}
+$('#o_script').oninput = () => { scriptMode(); updateEstimate(); };
+try{ $('#o_extra').value = localStorage.getItem('fr.extra') || ''; }catch(e){}
+$('#o_extra').oninput = e => { try{ localStorage.setItem('fr.extra', e.target.value); }catch(err){} };
+
+/* ── run ────────────────────────────────────────────────────────────────── */
+$('#go').onclick = async () => {
+  const title = $('#title').value.trim();
+  $('#err').classList.add('hidden');
+  if(!title) return fail('Give it a title first.');
+  if(!CH)    return fail('Pick a channel first.');
+
+  const steps = ['script', 'voiceover', 'images', 'pexels', 'video'];
+  if($('#o_thumb').checked) steps.push('thumbnail');
+
+  $('#go').disabled = true;
+  if(farmOn()){ await farmQueue(title, steps); $('#go').disabled = false; return; }
+  const r = await api('/api/run', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      title, minutes: MIN, style: CH, steps,
+      features:   featPayload(),
+      avatar_id: featOn('avatar') ? AV_PICK : '',
+      avatar_s:  featOn('avatar') ? avSecs() : 0,
+      avatar_count: featOn('avatar') ? AV_COUNT : 1,
+      script:     ($('#o_script').value || '').trim(),
+      extra:      ($('#o_extra').value || '').trim(),
+      burn_subs:  $('#o_subs').checked,
+      force:      $('#o_force').checked,
+      thumb_count:+$('#o_thumbn').value || 2,
+      character:  ($('#o_char').value || '').trim(),
+      character_image: $('#charBox').classList.contains('hidden') ? '' : CHAR_PICK,
+      desc:       $('#o_desc').checked,
+      chapters:   $('#o_desc').checked ? (+$('#o_chapters').value || 0) : 0,
+      sources:    ($('#o_desc').checked && $('#o_sources').checked) ? (+$('#o_sourcesn').value || 0) : 0,
+    })
+  });
+  $('#go').disabled = false;
+  if(r.error) return fail(r.error);
+  WATCH = r.queued[0].slug;
+  $('#run').classList.remove('hidden');
+  $('#runTitle').textContent = r.queued[0].title;
+  $('#log').textContent = '';
+  $('#stages').innerHTML = '';
+  showRunVideo(null);
+  $('#run').scrollIntoView({behavior:'smooth', block:'nearest'});
+};
+function fail(m){ const e = $('#err'); e.textContent = m; e.classList.remove('hidden'); }
+
+/* ── polling ────────────────────────────────────────────────────────────── */
+async function tick(){
+  try{
+    const q = await api('/api/queue');
+    const live = q.jobs.find(j => j.state === 'running');
+    if(live){
+      WATCH = live.slug;
+      $('#run').classList.remove('hidden');
+      $('#runTitle').textContent = live.title;
+      $('#runEl').textContent = fmt(live.elapsed);
+      $('#runBar').style.width = Math.round((live.progress || 0) * 100) + '%';
+    }
+    const rest = q.jobs.filter(j => j.state !== 'running').slice(0, 6);
+    $('#queue').innerHTML = rest.map(j => `
+      <div class="qrow ${j.state}"><span class="dot"></span>
+        <span class="t">${esc(j.title)}</span>
+        <span class="s">${j.state === 'error' ? esc(j.error || 'failed') : j.state}</span>
+      </div>`).join('');
+
+    if(WATCH){
+      const slug = WATCH;
+      const s = await api('/api/status/' + slug);
+      if(s.lines){
+        const el = $('#log');
+        const stick = el.scrollTop + el.clientHeight >= el.scrollHeight - 30;
+        el.innerHTML = s.lines.slice(-160).map(l => fmtLine(l, s.threed)).join('\n');
+        if(stick) el.scrollTop = el.scrollHeight;
+        drawStages(s.lines, s.done, s.error, s.threed);
+      }
+      // the progress view shows the finished video and nothing before it (no 3D previews, no pre-check renders)
+      showRunVideo(s.video ? slug : null);
+      if(s.done){
+        WATCH = null;
+        $('#run').querySelector('.spin').style.visibility = 'hidden';
+        $('#runBar').style.width = '100%';
+        loadLibrary();
+      }
+    }
+    if(!live && !WATCH) $('#run').querySelector('.spin').style.visibility = 'hidden';
+    else $('#run').querySelector('.spin').style.visibility = '';
+  }catch(e){}
+  setTimeout(tick, 1400);
+}
+/* ── the render as stages ─────────────────────────────────────────────────
+   Read off the same log lines the engine prints: each stage knows the lines that show it working and
+   the line that shows it finished. Stages that run side by side can be active together. */
+const STAGES = [
+  {k:'script',  label:'Script',              on:/Script \(Claude\)|outline|writing full script|tightening/i,
+   done:/^\s*script: \d+ words|cached: script/i},
+  {k:'voice',   label:'Voice',               on:/algrow voice|WaveSpeed voice|ai33|recording \d+ parts|voiceover/i,
+   done:/voiceover: audio|cached: audio\.mp3|voice: [\d.]+s/i},
+  {k:'footage', label:'Real footage',        on:/YouTube|usable shots|Pexels|real footage each/i,
+   done:/YouTube: \d+ clips|cached: \d+ YouTube|Pexels: downloading|footage: .*skipped/i},
+  {k:'edit',    label:'Edit plan',           on:/director/i, done:/director: \d+|  director: .* text labels/i},
+  {k:'scenes',  label:'Maps, pages, photos, collage', on:/maps:|headlines:|photofx:|vox:|collage|WaveSpeed: drawing/i,
+   done:/vox: \d+ collage|vox: no moment|=== 4\//},
+  {k:'graphics',label:'Graphics',            on:/docgfx|Graphics \(|motion: |designing .*graphics/i,
+   done:/docgfx: \d+ graphics|motion: \d+ scenes|=== 4\//},
+  {k:'render',  label:'Timeline & render',   on:/plan: |rendering \d+ segments|segments \d+\/\d+/i,
+   done:/segments (\d+)\/\1\b/},
+  {k:'sound',   label:'Sound, captions & labels', on:/^\s*sound:|^\s*subtitles:|text labels: \d+ lines/i, done:/^\s*subtitles:/i},
+  {k:'final',   label:'Final video',         on:/final render|named copy/i, done:/^=== DONE/},
+];
+/* A 3D video draws its own steps, each with its own line icon: the director, the preview stills, Claude checking
+   the shots (round N/3), the final render (K/N scenes) and the assembly. Only the finished video is ever shown. */
+const IC3 = {
+  script:  '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+  voice:   '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+  film:    '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/>',
+  chart:   '<path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/>',
+  clapper: '<rect x="3.5" y="10" width="17" height="10" rx="1.5"/><path d="M3.5 10l15.6-4.4 1 3.5M8.4 8.6l2.1 1.4M13.3 7.2l2.1 1.4"/>',
+  camera:  '<path d="M4 8h3.2l1.8-2.6h6l1.8 2.6H20v11H4z"/><circle cx="12" cy="13.2" r="3.4"/>',
+  eye:     '<path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+  cube:    '<path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><path d="M4 7.4l8 4.6 8-4.6M12 12v9.2"/>',
+  layers:  '<path d="M12 3.5l9 5-9 5-9-5z"/><path d="M3 13.5l9 5 9-5"/>',
+  wave:    '<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/>',
+  play:    '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/>',
+};
+const svg3 = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC3[k] || IC3.cube}</svg>`;
+const notIn3D = re => ({test: l => !/\b3D:/.test(l) && re.test(l)});
+const STAGES_3D = [
+  {k:'script',   ic:'script',  label:'Script',               seq:true, on:STAGES[0].on, done:STAGES[0].done},
+  {k:'voice',    ic:'voice',   label:'Voice',                seq:true, on:STAGES[1].on, done:STAGES[1].done},
+  {k:'footage',  ic:'film',    label:'Real footage',         on:STAGES[2].on, done:STAGES[2].done},
+  {k:'graphics', ic:'chart',   label:'Graphics & maps',      on:/docgfx|Graphics \(|motion: |designing .*graphics|maps:|headlines:/i,
+   done:/docgfx: \d+ graphics|motion: \d+ scenes|=== 3D scenes/},
+  {k:'director', ic:'clapper', label:'3D director',          seq:true, on:/\b3D: (moments|director)/, done:/\b3D: director — (\d+ scenes|cached)/},
+  {k:'previews', ic:'camera',  label:'3D previews',          seq:true, on:/\b3D: previews/, done:/\b3D: final render/},
+  {k:'review',   ic:'eye',     label:'Claude checks the shots', seq:true, on:/\b3D: review/,
+   done:/\b3D: final render|\b3D: review .*(signs off|cached)/, fracRe:/\b3D: review (\d+)\/(\d+)/},
+  {k:'r3d',      ic:'cube',    label:'3D final render',      seq:true, on:/\b3D: final render/,
+   done:/\b3D: assembly|\b3D: \d+ clips on the timeline|\b3D: skipped/, fracRe:/\b3D: final render (\d+)\/(\d+)/},
+  {k:'render',   ic:'layers',  label:'Assembly',             seq:true, on:/\b3D: assembly|plan: |rendering \d+ segments|segments \d+\/\d+/i,
+   done:/segments (\d+)\/\1\b/, fracRe:/segments (\d+)\/(\d+)/},
+  {k:'sound',    ic:'wave',    label:'Sound & captions',     seq:true, on:STAGES[7].on, done:STAGES[7].done},
+  {k:'final',    ic:'play',    label:'Final video',          seq:true, on:notIn3D(/final render|named copy|^\s*published:/i), done:/^=== DONE/},
+];
+const LOOP3D = ['previews', 'review'];     // they take turns round by round, so both stay lit until the final render
+function drawStages(lines, done, error, threed){
+  const list = threed ? STAGES_3D : STAGES;
+  const st = list.map(x => ({...x, first:-1, last:-1, fin:-1, note:'', fr:null}));
+  lines.forEach((l, i) => {
+    const txt = l.replace(/^=+\s*|\s*=+\s*(\[[\d:]+\])?\s*$/g, '').trim();
+    st.forEach(x => {
+      // a finished 3D step keeps the line that finished it, not a later warning that happens to match
+      if(x.on.test(l)){ if(x.first < 0) x.first = i; x.last = i; if(!/^===/.test(l) && !(threed && x.fin >= 0)) x.note = txt; }
+      if(x.done.test(l)){ x.fin = i; if(!/^===/.test(l) && (!x.seq || !st.some(y => y !== x && y.on.test(l)))) x.note = txt; }
+      if(x.fracRe){ const m = l.match(x.fracRe); if(m) x.fr = (+m[1]) / Math.max(1, +m[2]); }
+    });
+    const m = l.match(/segments (\d+)\/(\d+)/);
+    if(m && !threed){ const r = st.find(x => x.k === 'render'); r.fr = (+m[1]) / Math.max(1, +m[2]); }
+  });
+  const n = lines.length, lastStart = Math.max(...st.map(x => x.first));
+  // 3D: the sequential steps take turns (previews and review alternate round by round) — the one that spoke
+  // last is working, every earlier one is done
+  const cur = threed ? st.filter(x => x.seq && x.first >= 0).reduce((a, x) => (!a || x.last > a.last ? x : a), null) : null;
+  $('#stages').innerHTML = st.map((x, idx) => {
+    let cls = 'wait';
+    if(threed && x.seq){
+      if(done) cls = x.first >= 0 || x.fin >= 0 ? 'done' : 'skip';
+      else if(x === cur || (x.first >= 0 && LOOP3D.includes(x.k) && LOOP3D.includes(cur && cur.k))) cls = 'active';
+      else if(x.first >= 0) cls = 'done';
+    }else{
+      const later = st.slice(idx + 1).some(y => y.first >= 0 && y.k !== 'edit' && y.k !== 'scenes' && y.k !== 'footage')
+                    && ['script', 'render', 'sound'].includes(x.k);
+      if(x.fin >= 0 || done || later) cls = x.first >= 0 || x.fin >= 0 ? 'done' : (done ? 'skip' : 'wait');
+      else if(x.first >= 0) cls = (n - 1 - x.last) < 40 || x.last === lastStart ? 'active' : 'done';
+    }
+    if(error && cls === 'active') cls = !threed || x === cur ? 'error' : 'done';
+    const note = cls === 'wait' ? '' : esc((x.note || '').replace(/^3D:\s*/, '').slice(0, 120));
+    const fr = x.fr;
+    const mini = fr != null && (threed ? cls === 'active' : cls !== 'done') ? `<div class="mini"><i style="width:${Math.round(fr*100)}%"></i></div>` : '';
+    const ic = threed ? `<div class="ic">${svg3(x.ic)}</div>` : '<div class="ic"></div>';
+    return `<div class="stg ${cls}${threed ? ' ico' : ''}">${ic}<b>${x.label}</b><span>${note}</span>${mini}</div>`;
+  }).join('');
+}
+// in a 3D video's log every 3D step carries its stage's icon
+const IC3_LINE = [[/\b3D: (moments|director)/, 'clapper'], [/\b3D: previews/, 'camera'], [/\b3D: review/, 'eye'],
+                  [/\b3D: final render/, 'cube'], [/\b3D: (assembly|\d+ clips)/, 'layers'], [/\b3D:|=== 3D scenes/, 'cube']];
+const fmtLine = (l, threed) => {
+  if(/^(ERROR|Traceback)/.test(l)) return `<span class="e">${esc(l)}</span>`;
+  const hit = threed ? IC3_LINE.find(([re]) => re.test(l)) : null;
+  const ic = hit ? `<span class="i3">${svg3(hit[1])}</span>` : '';
+  return /^===/.test(l) ? `${ic}<b>${esc(l)}</b>` : ic + esc(l);
+};
+// the finished video in the progress view — shown once the whole job is done, never anything before it
+function showRunVideo(slug){
+  const box = $('#runVideo');
+  if(!slug){
+    if(box.dataset.slug){ box.innerHTML = ''; box.dataset.slug = ''; }
+    box.classList.add('hidden');
+    return;
+  }
+  if(box.dataset.slug !== slug){
+    box.innerHTML = `<video src="/f/video/${encodeURIComponent(slug)}" controls playsinline preload="metadata"></video>
+      <small>The finished video</small>`;
+    box.dataset.slug = slug;
+  }
+  box.classList.remove('hidden');
+}
+const fmt = s => s == null ? '' : `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+
+/* ── library ────────────────────────────────────────────────────────────── */
+async function loadLibrary(){
+  const {jobs, platform} = await api('/api/jobs');
+  const reveal = {mac: 'Open in Finder', windows: 'Open in File Explorer'}[platform] || 'Open folder';
+  $('#libEmpty').classList.toggle('hidden', jobs.length > 0);
+  $('#cards').innerHTML = jobs.map(j => `
+    <div class="card">
+      <video src="/f/video/${encodeURIComponent(j.slug)}" controls preload="metadata"
+        ${(j.thumbs||[]).length ? `poster="/f/thumb/${encodeURIComponent(j.slug)}/${encodeURIComponent(j.thumbs[0])}"` : ''}></video>
+      <div class="meta"><b>${esc(j.title)}</b>
+        <span>${esc(j.style)} &middot; ${(j.size/1048576).toFixed(0)} MB</span>
+        <div class="acts">
+          <button class="dl reveal" type="button" data-slug="${esc(j.slug)}">${reveal} &rsaquo;</button>
+          ${j.desc ? `<a class="dl" href="/f/desc/${encodeURIComponent(j.slug)}" target="_blank">Description, chapters &amp; tags &rsaquo;</a>` : ''}
+        </div>
+        ${(j.thumbs||[]).length ? `<div class="thumbs">${j.thumbs.map(t => `<a href="/f/thumb/${encodeURIComponent(j.slug)}/${encodeURIComponent(t)}" target="_blank" title="${esc(t)}"><img src="/f/thumb/${encodeURIComponent(j.slug)}/${encodeURIComponent(t)}" alt="thumbnail" loading="lazy"></a>`).join('')}</div>` : ''}
+        </div>
+    </div>`).join('');
+  // the folder opens on this computer, with the video selected
+  document.querySelectorAll('.reveal').forEach(b => b.onclick = async () => {
+    let r;
+    try{ r = await api('/api/reveal/' + encodeURIComponent(b.dataset.slug), {method: 'POST'}); }
+    catch(e){ r = {error: 'Frontier is not running.'}; }
+    if(r.error){ b.textContent = 'Could not open the folder'; b.title = r.error; }
+  });
+}
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"]/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+loadChars().then(loadChannels);
+buildLens();
+loadLibrary();
+tick();
+
+/* ── the render farm ─────────────────────────────────────────────────────
+   The same form, rendered somewhere else. Ticking the box turns Create into
+   "add to the farm queue": the script is still written here, by the Claude
+   Code signed in on this machine, and only that few kilobytes travels. */
+let FARM = {ready:false, state:'idle'};
+// the farm's machines have no graphics card and no Claude Code login: 3D scenes and FOLIO are made on this computer,
+// so Cloud render is not offered for them (your farm switch is kept for the other channels)
+function farmBlocked(){ try{ return (typeof featOn === 'function' && featOn('threed')) || CH === 'folio'; }catch(e){ return false; } }
+const farmOn = () => $('#f_on').checked && FARM.ready && !farmBlocked();
+
+function farmBody(){
+  const on = $('#f_on').checked && !farmBlocked();
+  $('#farmBody').classList.toggle('hidden', !on);
+  $('#go').textContent = (on && FARM.ready) ? 'Prepare it here, then render on the cloud' : 'Create video';
+}
+function syncFarm(){
+  try{
+    if(farmBlocked()) $('#farm').classList.add('hidden');
+    else if(FARM.fetched) $('#farm').classList.remove('hidden');
+    farmBody();
+  }catch(e){}
+}
+$('#f_on').onchange = () => { try{ localStorage.setItem('fr.farm', $('#f_on').checked ? '1':''); }catch(e){} farmBody(); farmPoll(); };
+
+async function farmQueue(title, steps){
+  const r = await api('/api/farm/queue', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      title, minutes: MIN, style: CH,
+      features: featPayload(),
+      avatar_id: featOn('avatar') ? AV_PICK : '',
+      avatar_s:  featOn('avatar') ? avSecs() : 0,
+      avatar_count: featOn('avatar') ? AV_COUNT : 1,
+      script: ($('#o_script').value || '').trim(),
+      extra:  ($('#o_extra').value  || '').trim(),
+      burn_subs: $('#o_subs').checked,
+      force: $('#o_force').checked,
+      thumb: $('#o_thumb').checked,
+      thumb_count: +$('#o_thumbn').value || 2,
+      character: ($('#o_char').value || '').trim(),
+    })
+  });
+  if(r.error) return fail(r.error);
+  if((r.problems||[]).length) fail(r.problems.join(' · '));
+  farmPoll();
+}
+
+async function farmPoll(){
+  let r;
+  try{ r = await api('/api/farm'); }catch(e){ return; }
+  if(!r) return;
+  FARM = r;
+  FARM.fetched = true;
+  $('#farm').classList.toggle('hidden', farmBlocked());
+  $('#farmWhy').textContent = r.ready
+    ? 'close the laptop — a rented machine makes the video instead'
+    : (r.why || 'not set up yet');
+  $('#f_on').disabled = !r.ready;
+  if(!r.ready){ $('#f_on').checked = false; }
+
+  // Not set up: show what is still to connect, in the order you would do it.
+  // A list of missing .env names helps nobody who has never done this.
+  $('#farmSetup').classList.toggle('hidden', !!r.ready || !(r.checks||[]).length);
+  if(!r.ready && (r.checks||[]).length){
+    $('#farmSetup').innerHTML = (r.checks||[]).map(c =>
+      '<div class="farm-step"><span class="lib-none"></span>' +
+      '<span class="farm-tick ' + (c.ok ? 'on">✓' : 'off">•') + '</span>' +
+      '<span><b>' + c.label + '</b>' +
+      (c.ok ? '' : '<span class="how">' + c.how + '<br><code>' + c.env + '</code> in .env</span>') +
+      '</span></div>'
+    ).join('') +
+    '<div class="farm-guide">Every step is walked through in <b>README-RENDER-FARM.md</b>. ' +
+    'Then run <b>python -m farm.farm check</b> — it tests the whole thing and rents nothing.</div>';
+  }
+
+  const jobs = r.jobs || [];
+  $('#farmQ').innerHTML = jobs.length
+    ? '<b>' + jobs.length + '</b> waiting: ' + jobs.map(j =>
+        (j.title||j.slug).slice(0,44) + (j.words ? ' <span style="color:var(--ok)">' + j.words + ' words</span>' : ' <span style="color:var(--bad)">no script</span>')
+      ).join(' · ')
+    : 'Nothing queued yet. Type a title above and press the button.';
+
+  const running = r.state === 'running';
+  $('#f_start').disabled = running || !jobs.length;
+  $('#f_start').textContent = running ? 'Rendering…' : ('Start the farm (' + Math.min(jobs.length, r.max_pods||5) + ' machines)');
+  $('#f_state').textContent = running
+    ? 'each machine switches itself off, and stops anyway after ' + (r.max_minutes||240) + ' min'
+    : (r.state === 'done' ? 'finished — the videos are below'
+       : (r.gpu ? r.gpu + ' · ' + (r.cloud||'') : ''));
+
+  // the first moment we know the farm is set up, show what is already in the
+  // bucket rather than waiting out the library's own timer
+  if(r.ready && !LIB_SEEN) libPoll();
+
+  const lines = r.lines || [];
+  $('#farmLog').classList.toggle('hidden', !lines.length);
+  if(lines.length){
+    const box = $('#farmLog');
+    const stuck = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+    box.textContent = lines.join('\n');
+    if(stuck) box.scrollTop = box.scrollHeight;
+  }
+  farmBody();
+}
+
+$('#f_start').onclick = async () => {
+  $('#f_start').disabled = true;
+  const r = await api('/api/farm/run', {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'});
+  if(r.error) fail(r.error);
+  farmPoll();
+};
+$('#f_kill').onclick = async () => {
+  if(!confirm('Switch every farm machine off now? Videos still rendering are lost.')) return;
+  const r = await api('/api/farm/kill', {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'});
+  if(r.error) fail(r.error);
+  else if((r.left||[]).length) fail('These would not stop — switch them off at runpod.io: ' + r.left.join(', '));
+  farmPoll();
+};
+
+try{ $('#f_on').checked = !!localStorage.getItem('fr.farm'); }catch(e){}
+farmPoll();
+setInterval(farmPoll, 5000);
+
+/* ── what the farm has finished ──────────────────────────────────────────
+   Read from the bucket, not from this computer: a pod uploads its video and
+   then deletes itself, so the bucket is the only thing that knows what
+   exists. Download goes straight from the bucket on a signed link — a
+   gigabyte has no reason to travel through Python on the way. */
+function mb(n){ return n >= 1073741824 ? (n/1073741824).toFixed(2)+' GB' : Math.round(n/1048576)+' MB'; }
+
+let LIB_SEEN = false;
+async function libPoll(){
+  if(!FARM.ready) return;
+  LIB_SEEN = true;
+  let r;
+  try{ r = await api('/api/farm/library'); }catch(e){ return; }
+  if(!r || r.error){ $('#libSub').textContent = r && r.error ? r.error : ''; return; }
+  const vids = r.videos || [];
+  $('#libSub').textContent = vids.length
+    ? vids.length + ' in ' + r.bucket + ' · ' + mb(r.total) + ' · downloading them is free'
+    : '';
+  if(!vids.length){
+    $('#libRows').innerHTML = '<div class="lib-none">Nothing yet. A pod uploads its video here the moment it finishes, then switches itself off.</div>';
+    return;
+  }
+  $('#libRows').innerHTML = vids.map(v => {
+    const when = (v.modified || '').replace('T',' ').slice(0,16);
+    const thumb = v.thumb
+      ? '<img class="lib-thumb" src="/api/farm/file/'+encodeURIComponent(v.slug)+'/'+encodeURIComponent(v.thumb)+'" alt="">'
+      : '<div class="lib-thumb"></div>';
+    const dl = v.video
+      ? '<a class="lib-btn" href="/api/farm/file/'+encodeURIComponent(v.slug)+'/'+encodeURIComponent(v.video)+'" download>Download</a>'
+      : '';
+    return '<div class="lib-row">' + thumb +
+      '<div class="lib-meta"><div class="lib-name">' + (v.video || v.slug) + '</div>' +
+      '<div class="lib-sub">' + mb(v.bytes) + ' · ' + v.files.length + ' files · ' + when +
+      (v.video ? '' : ' · <span style="color:var(--bad)">no video — the render failed</span>') +
+      '</div></div>' +
+      '<div class="lib-acts">' + dl +
+      '<button class="lib-btn" onclick="libFetch(\'' + v.slug + '\')">Save to output/</button>' +
+      '<button class="lib-btn warn" onclick="libForget(\'' + v.slug + '\')">Delete</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+async function libFetch(slug){
+  const r = await api('/api/farm/fetch/' + encodeURIComponent(slug), {method:'POST'});
+  if(r.error) return fail(r.error);
+  alert(r.fetched.length ? 'Saved ' + r.fetched.length + ' file(s) into ' + r.into : 'Already in ' + r.into);
+}
+
+async function libForget(slug){
+  if(!confirm('Delete ' + slug + ' from the bucket?\n\nThis does not touch anything already on this computer.')) return;
+  const r = await api('/api/farm/forget/' + encodeURIComponent(slug), {method:'POST'});
+  if(r.error) return fail(r.error);
+  libPoll();
+}
+
+setInterval(libPoll, 15000);
+libPoll();
+</script>
+</body>
+</html>

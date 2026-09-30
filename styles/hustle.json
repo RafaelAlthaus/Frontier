@@ -1,0 +1,172 @@
+{
+  "name": "hustle",
+  "order": 17,
+  "label": "HUSTLE — make-money & youth business",
+  "description": "Side hustles, online business and money explainers with the energy of the best young creators: footage on a dark glossy stage with a glow and a drop shadow, big two-to-four-word captions popping in the middle with the key word in red, DIFFICULTY LEVEL bars filling segment by segment, glossy 3D icons with one word, money raining over the footage, corner titles with a glossy blob logo, counters rolling up to the figure, one option versus another on scored bars, checklists ticked one by one. Fast cuts, punchy grade.",
+  "tagline": "Glossy black, glow, difficulty bars, money rain, counters.",
+  "points": [
+    "Footage on a glossy dark stage",
+    "Big pop captions, key word red",
+    "DIFFICULTY LEVEL bars",
+    "Glossy 3D icons, money rain",
+    "Counters and versus bars",
+    "Fast cuts, punchy grade"
+  ],
+  "script_craft": "teaching",
+  "cost": "about $0.15 a minute (voice + a drawn picture every 7 s + cutouts); YouTube watching is free on the Gemini tier",
+  "render_x": 3.2,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "VCgLBmBjldJmfphyB8sZ",
+    "voice_name": "Liam — Viral Short-Form Storyteller",
+    "wavespeed_voice": "Brian",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "stock",
+      "ai_images",
+      "depth",
+      "motion",
+      "objects",
+      "spotlight",
+      "headlines",
+      "sound"
+    ],
+    "on": [
+      "ai_images",
+      "youtube",
+      "motion",
+      "objects",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "ai_images"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "hustle",
+    "director": true,
+    "title_font": "'Poppins ExtraBold', Poppins, Arial, sans-serif",
+    "title_weight": "800",
+    "accent": [
+      "#E8232A",
+      "#FFFFFF",
+      "#FFD400",
+      "#2ED573",
+      "#F2892B"
+    ],
+    "warn": "#E8232A",
+    "good": "#2ED573",
+    "skins": [
+      "noir"
+    ],
+    "caption_accent": "&H2A23E8&",
+    "captions": {
+      "mode": "pop",
+      "font": "Poppins ExtraBold",
+      "size": 110,
+      "accent": "#E8232A",
+      "words": 4,
+      "y": 940,
+      "hold": 0.12
+    },
+    "footage_grade": "eq=contrast=1.12:saturation=1.15:gamma=0.98",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "stage",
+      "frame_every": 1,
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": false,
+      "dust_on_archive": false,
+      "framed_every": 0,
+      "tv_every": 0,
+      "pop_every": 0,
+      "ground": "bluegrid"
+    },
+    "photofx": {
+      "every_s": 30,
+      "gap_s": 3,
+      "draw_objects": false,
+      "ground": "kits/frames/gen_cork.jpg"
+    },
+    "sound": {
+      "sfx_db": -17,
+      "music_rel_db": -5,
+      "duck_db": -7,
+      "track": "gta/good for gta.mp3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 20,
+      "window_s": 30,
+      "candidates": 3,
+      "repeat": false,
+      "watcher": "gemini"
+    },
+    "options_note": "HUSTLE: footage on a glossy dark stage, big pop captions with the key word in red, difficulty bars, glossy icons, money rain, counters, versus bars, checklists. Stock footage is on by default for the lifestyle shots; YouTube footage for real products and creators.",
+    "reference": "styles/hustle.jpg",
+    "labels": {
+      "pos": "tc",
+      "font": "Poppins ExtraBold",
+      "sub_font": "Poppins SemiBold",
+      "size": 84,
+      "sub_size": 40,
+      "colour": "#FFD400",
+      "enter": "pop",
+      "upper": true
+    },
+    "character": "THE MAIN CHARACTER is the young man from the reference image, and he is in EVERY frame: early twenties, short dark hair, a simple flat cartoon face with small dark eyes, a plain white t-shirt, dark jeans, white sneakers. Always this exact man, drawn exactly this way. In a close-up he is still there — his hand on the laptop, his shoulder in the foreground. Anyone else who returns keeps the same face and clothes every time.",
+    "character_image": "characters/stories.png",
+    "still_suffix": " Flat 2D cartoon illustration, minimal and clean: the main character and at most ONE prop, big simple shapes, a plain single-colour background with lots of empty space, soft cel shading, one red and one yellow accent. Absolutely no text, no numbers, no bars, no user interface, no charts, no logos, no signs. 16:9.",
+    "scene_prompt": "You are the storyboard artist for a 2D make-money explainer on a faceless YouTube channel.\n\nCHANNEL: [INSERT CHANNEL HERE]\n\nBelow is the narration. Draw [INSERT COUNT HERE] consecutive frames, about one for every five or six\nseconds of narration, covering it from its first line to its last, so that each frame shows EXACTLY\nwhat the viewer is hearing at that moment.\n\nTHE MAIN CHARACTER is in every frame. The image model is handed a reference picture of them, so in\nevery prompt name them the way THE CAST below does (\"the man from the reference image\") and never give\nthem a different face, hair or clothes. In a close-up they are still there: their hand, their sleeve,\ntheir shoulder in the foreground.\n\nBE SPECIFIC — the frame shows the precise thing the line names:\n- A sum of money: a phone or bank screen showing that exact figure, big enough to read at a glance —\n  the phone fills most of the frame and the figure is the largest thing on it, e.g. a banking app\n  with \"-$480.00\" in red under \"Midas Auto Repair\", a thumb beside it.\n- A car: that exact make and model, seen from behind with the badge readable, and the number that\n  was spoken shown where it naturally lives — the year on a dealer sticker in the rear window, the\n  mileage on the odometer, the price on a windshield sign, the monthly payment on a phone.\n- A place and an hour: that place at that time — \"6:15 on a Saturday\" is the kitchen in early light\n  with the oven clock reading 6:15.\n- A bill, a letter, a message, a sign: its words and numbers spelled exactly as the narration says them.\n- Every figure sits on the thing it belongs to, exactly as the sentence says. In \"she leased a new\n  SUV, your repair cost two hundred\", the two hundred is on YOUR repair bill — never on her SUV.\n  Before you answer, check each figure you put in a frame against its sentence.\n- A named person: the same face and clothes every time they come back.\n\nBE A STORYTELLER, NOT A STOCK LIBRARY:\n- Frames follow each other like a comic. Set a place up, then use it: if the neighbour's truck\n  matters in the next line, it is already parked in the driveway, seen through the window over the\n  sink, in this one.\n- Vary the shot the way an editor would: the wide room, over the shoulder, close on the hands, the\n  other person's reaction, the object on its own with a hand reaching for it.\n- Every composition is new. Never repeat a frame, never reuse a layout two frames in a row.\n- Never illustrate an idea with a symbol (no scales, no arrows, no light bulbs, no piggy banks).\n  Show the real moment.\n- Describe the scene, not the art style — one flat 2D look is added to every prompt for you.\n\nReturn ONLY a JSON array of [INSERT COUNT HERE] objects, in narration order. Laid end to end, the\n\"text\" fields are the narration itself, with nothing skipped:\n\n  {\"text\": \"<the narration this frame covers, COPIED WORD FOR WORD from the script>\",\n   \"prompt\": \"<a complete image prompt: the shot, the main character from the reference image doing\n              what the line says, the specific objects and figures, the setting, the time of day,\n              the light>\"}\n\nSCRIPT:\n[INSERT SCRIPT HERE] Each frame shows ONE clear thing: one person, one action, one prop, on a plain background. NEVER describe any words, numbers, prices, buttons, badges, checkmarks, arrows, bars, labels, logos, app icons or screens with text in a picture — the video adds every figure and every label itself, in its own graphics. A phone or laptop shows a blank glowing screen.",
+    "placement": "story",
+    "zoom": "alternate",
+    "headlines": {
+      "marker": "#FFD400",
+      "every_s": 30,
+      "gap_s": 3
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.5,
+    "graphic_ratio": 0.4,
+    "graphic_dur_s": 5.0,
+    "graphic_max_s": 6.5,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": false,
+    "wpm": 165,
+    "cut_s": 2.6,
+    "hook_s": 60,
+    "scene_share_hook": 0.72,
+    "scene_share_body": 0.58,
+    "hook_notes": "This is a make-money explainer told with one 2D character: the first minute opens on a moneyrain (the figure the title promises) or a counter on the first sum, a headline with the REAL page of the first platform named (its url — etsy.com, upwork.com, fiverr.com, printify.com — photographed as it is), a bar (difficulty, risk or profit) on the first option rated, an icon3d with the key word of the first idea, and text labels for every figure.",
+    "body_notes": "After the hook: the 2D character's pictures carry it; a headline with the real page for every platform or tool named (give its url); a bar rating every option; a counter on every sum; a versus when two options are compared; a checklist for what is needed; an icon3d on the key word of each idea; a real object (a product, a device) only when one is named. Something new every 8 to 12 seconds.",
+    "photo_every_s": 7
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the head writer of a make-money and online-business channel — side hustles, freelancing, e-commerce, content, investing basics — that gives a young viewer a concrete plan, with real numbers and the honest catch.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan the episode in plain prose, as numbered beats of about one minute each.\n- Beat 1 is the hook: the concrete promise of the title (a figure, a timeframe), one real example that proves it is possible (a real creator, a real business, a real published figure), and the catch the viewer needs to hear.\n- Real numbers with a source or a stated assumption: startup costs, time to the first sale, what a real platform pays, real prices. Use only facts you are certain of; round and say \"around\" where they vary. Never promise income; say what is typical and what it takes.\n- Structure like a plan: if the title is a list (\"5 side hustles\"), one beat per item, each with: what it is in one line, what you need (2-5 items), startup cost, time to first money, a difficulty rating out of 10, the catch, one real example. Otherwise: the idea, the mechanism, the steps, the numbers, the catch.\n- Compare two options head to head at least once on 2-4 real criteria scored out of 10.\n- The last beat tells the viewer exactly what to do this week, in three steps, and returns to the figure of the hook.\nFor each beat, write the facts it states and the numbers on screen that carry them.",
+    "script": "Write the complete narration for this episode from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- A fast, friendly young narrator who has actually done this — direct, honest, a little cheeky, never hype. Short punchy sentences, the caption shows three or four words at a time, so every sentence must land. \"Difficulty: seven out of ten.\" \"Here's the catch.\"\n- The first words are the hook: the figure, the timeframe, the real example, the catch.\n- Say every number the way it is spoken (\"four thousand two hundred dollars\", \"seven out of ten\"), never digits or symbols. Rate every option's difficulty out loud.\n- Name real platforms, real tools, real creators and real prices; never invent a case study.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- A question the viewer wants answered every minute, answered at once.\n- Never say \"in this video\". End on the three steps for this week, back at the figure of the hook; then one short line asking viewers to subscribe."
+  },
+  "thumbnail": {
+    "brief": "A glossy dark ground with a soft white glow behind one big object: a stack of cash, a phone with a figure, a glossy 3D icon. Two to four words of headline in an extra-bold geometric sans, white, one word in red with a white glow, bottom-left or centred. A single bright accent (yellow or green). Energetic, clean, no clutter, no arrows.",
+    "accent": "#E8232A",
+    "note": "Send Claude five thumbnails from make-money channels you wish were yours and ask it to rewrite this brief."
+  }
+}

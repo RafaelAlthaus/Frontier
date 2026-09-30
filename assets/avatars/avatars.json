@@ -1,0 +1,253 @@
+[
+ {
+  "id": "anchor",
+  "gender": "male",
+  "niches": [
+   "news",
+   "geopolitics",
+   "politics",
+   "world"
+  ],
+  "file": "anchor.png",
+  "persona": "A 44-year-old man, short dark hair greying at the temples, clean-shaven, a few lines around the eyes, wearing a navy blazer over an open-collar white shirt, sitting upright at a desk with his hands loosely folded on it",
+  "room": "a small home office set up like a newsroom: a plain desk with a laptop and a microphone on a boom arm, a large world map on the wall behind him, a bookshelf with folders, a desk lamp, soft window light from the side"
+ },
+ {
+  "id": "maria",
+  "gender": "female",
+  "niches": [
+   "cooking",
+   "home",
+   "family"
+  ],
+  "file": "maria.png",
+  "persona": "A 62-year-old Mexican-American woman, curly grey hair, reading glasses pushed up on her head, small gold hoop earrings, deep laugh lines and visible pores, wearing a faded rose t-shirt",
+  "room": "a small lived-in Mexican home kitchen: orange wall, blue-and-white tiled counter, a stone molcajete, a comal on the stove, a dish rack still full, a paper-towel roll, a bowl of tomatoes, a round blue wall clock"
+ },
+ {
+  "id": "eleanor",
+  "gender": "female",
+  "niches": [
+   "cooking",
+   "baking",
+   "homemaking"
+  ],
+  "file": "eleanor.png",
+  "persona": "A 71-year-old white woman, white hair in a loose bun, freckled and sun-spotted skin, deep crow's feet, wearing a sage-green linen shirt under a cream apron, hands resting on the counter",
+  "room": "a bright modern kitchen with pale oak cabinets, white tile backsplash, a bowl of lemons, a crock of wooden spoons, a stainless fridge, a striped towel on the oven handle"
+ },
+ {
+  "id": "denise",
+  "gender": "female",
+  "niches": [
+   "finance",
+   "career",
+   "retirement"
+  ],
+  "file": "denise.png",
+  "persona": "A 54-year-old Black woman, short natural greying hair, reading glasses low on her nose, laugh lines, wearing a plain navy cardigan over a grey top",
+  "room": "a cluttered home office: a crowded bookshelf, a desk lamp, stacked paper files, a mug, a small potted plant, a framed family photo, beige wall"
+ },
+ {
+  "id": "priya",
+  "gender": "female",
+  "niches": [
+   "health",
+   "wellness",
+   "habits"
+  ],
+  "file": "priya.png",
+  "persona": "A 46-year-old South Asian woman, dark hair loosely tied back with strands loose, a small nose stud, tired but warm eyes, visible skin texture, wearing a plain mustard t-shirt",
+  "room": "a sunlit lived-in living room: a worn linen sofa, several trailing houseplants, a stack of books on the floor, a woven basket, a half-drunk cup of tea on a side table"
+ },
+ {
+  "id": "ruth",
+  "gender": "female",
+  "niches": [
+   "garden",
+   "homestead",
+   "frugal"
+  ],
+  "file": "ruth.png",
+  "persona": "A 66-year-old white woman, short grey windblown hair, weathered sun-damaged skin, no makeup, wearing a faded denim shirt with rolled sleeves and dirt on the cuffs",
+  "room": "a cluttered potting shed / greenhouse: seed trays, terracotta pots, a coiled hose, hand tools on hooks, condensation on the glass, bags of compost"
+ },
+ {
+  "id": "walter",
+  "gender": "male",
+  "niches": [
+   "finance",
+   "retirement",
+   "seniors"
+  ],
+  "file": "walter.png",
+  "persona": "A 68-year-old white man, thinning grey hair, deep forehead lines, grey stubble, reading glasses pushed up on his head, sun-damaged uneven skin, wearing a plain faded navy polo",
+  "room": "a modest American suburban kitchen: honey-oak cabinets, a white fridge covered in magnets and a child's drawing, a dish rack with plates in it, a paper-towel roll, a fruit bowl, a plaid curtain over the window"
+ },
+ {
+  "id": "marcus",
+  "gender": "male",
+  "niches": [
+   "bbq",
+   "food",
+   "craft"
+  ],
+  "file": "marcus.png",
+  "persona": "A 61-year-old Black man, short greying beard, a navy ball cap, deep smile lines, working hands, wearing a worn navy work shirt over a white tee",
+  "room": "an open barbecue shed: a big black steel smoker, neatly stacked split firewood, long-handled tools on the wall, daylight flooding in from the open side"
+ },
+ {
+  "id": "dale",
+  "gender": "male",
+  "niches": [
+   "prepper",
+   "outdoors",
+   "survival"
+  ],
+  "file": "dale.png",
+  "persona": "A 52-year-old white man, greying beard, camouflage ball cap, weathered skin, direct stare, wearing a camo jacket over a black tee",
+  "room": "a log-cabin den: stone fireplace, a US flag on the timber wall, a dark leather armchair, a lantern on the mantel, antlers above the door"
+ },
+ {
+  "id": "javier",
+  "gender": "male",
+  "niches": [
+   "cars",
+   "diy",
+   "trades"
+  ],
+  "file": "javier.png",
+  "persona": "A 45-year-old Hispanic man, close-cropped black hair going grey at the temples, a few days of stubble, a smear of grease on one forearm, wearing a grey work shirt with the sleeves pushed up",
+  "room": "a home garage workbench: sockets laid out on a pegboard, an open toolbox, a battered work light, oil stains on the concrete, a car half-visible behind him"
+ },
+ {
+  "id": "kenji",
+  "gender": "male",
+  "niches": [
+   "tech",
+   "diy",
+   "repair"
+  ],
+  "file": "kenji.png",
+  "persona": "A 55-year-old East Asian man, greying hair, thin wire-framed glasses, calm expression, visible skin texture, wearing a plain charcoal t-shirt",
+  "room": "a cluttered electronics workshop desk: a soldering iron in its stand, spools of wire, an opened-up laptop, a desk lamp throwing hard shadows, shelves of labelled parts boxes"
+ },
+ {
+  "id": "amara",
+  "gender": "female",
+  "niches": [
+   "finance",
+   "business",
+   "investing",
+   "career"
+  ],
+  "file": "amara.png",
+  "persona": "A 31-year-old Black woman of Nigerian-British descent, shoulder-length box braids pulled back, small gold stud earrings, warm brown skin with visible texture and a few freckles across her nose, wearing a charcoal blazer over a plain white t-shirt",
+  "room": "a small glass-walled office in a shared workspace: a laptop and a notebook on a plain desk, a pot plant, a wiped whiteboard with faint smudges behind her, city buildings soft through the window"
+ },
+ {
+  "id": "lina",
+  "gender": "female",
+  "niches": [
+   "health",
+   "medical",
+   "nursing",
+   "wellness"
+  ],
+  "file": "lina.png",
+  "persona": "A 29-year-old Filipina woman, straight black hair in a low ponytail, no makeup, tired but kind eyes, visible skin texture, wearing teal medical scrubs with a stethoscope around her neck",
+  "room": "a small clinic examination room: a paper-covered exam bed, a blood-pressure cuff on the wall, a box of gloves on the counter, a sink with a pump bottle, pale green walls"
+ },
+ {
+  "id": "freya",
+  "gender": "female",
+  "niches": [
+   "fitness",
+   "nutrition",
+   "health",
+   "habits"
+  ],
+  "file": "freya.png",
+  "persona": "A 26-year-old white Scandinavian woman, strawberry-blonde hair in a high ponytail with loose strands, flushed cheeks and a light sheen of sweat, freckles, visible skin texture, wearing a plain grey athletic t-shirt",
+  "room": "standing on the floor of a real neighbourhood gym: squat racks, a row of dumbbells on a rack, rubber floor mats, a chalk-dusted pull-up bar, a water bottle on a bench"
+ },
+ {
+  "id": "nadia",
+  "gender": "female",
+  "niches": [
+   "history",
+   "science",
+   "education",
+   "explainer"
+  ],
+  "file": "nadia.png",
+  "persona": "A 38-year-old Lebanese woman, dark wavy shoulder-length hair tucked behind one ear, thin gold-rimmed glasses, a few fine lines around the eyes, visible skin texture, wearing a rust-coloured knit sweater",
+  "room": "a quiet corner of an old public library: tall wooden shelves of books behind her, a reading table with an open atlas and a stack of books, a green banker's lamp"
+ },
+ {
+  "id": "arjun",
+  "gender": "male",
+  "niches": [
+   "tech",
+   "gadgets",
+   "reviews",
+   "ai"
+  ],
+  "file": "arjun.png",
+  "persona": "A 32-year-old Indian man, short neat black hair, a trimmed beard, dark eyes, visible skin texture, wearing a plain olive-green crew-neck t-shirt",
+  "room": "a home desk set up for reviewing gadgets: two phones and a small camera on the desk, a mechanical keyboard, a desk microphone on an arm at the edge of frame, a monitor glowing behind him, a pegboard of cables"
+ },
+ {
+  "id": "tunde",
+  "gender": "male",
+  "niches": [
+   "food",
+   "cooking",
+   "recipes",
+   "restaurant"
+  ],
+  "file": "tunde.png",
+  "persona": "A 36-year-old Nigerian man, very short black hair, a neat full beard, broad shoulders, visible skin texture, wearing white chef's whites with the sleeves pushed up and a kitchen towel over one shoulder",
+  "room": "standing in a working restaurant kitchen after service: stainless-steel counters, hanging pans, a stack of clean plates, a pass with heat lamps, a white tiled wall"
+ },
+ {
+  "id": "jun",
+  "gender": "male",
+  "niches": [
+   "gaming",
+   "esports",
+   "internet",
+   "tech"
+  ],
+  "file": "jun.png",
+  "persona": "A 23-year-old Korean-American man, black hair with a grown-out fade and a fringe, a thin silver chain, visible skin texture and a couple of blemishes, wearing a black hoodie with over-ear headphones around his neck",
+  "room": "his bedroom streaming setup: a gaming chair, a desk with a keyboard and mouse, soft purple and blue LED strips on the wall behind him, a shelf of small figurines, the corner of an unmade bed"
+ },
+ {
+  "id": "liam",
+  "gender": "male",
+  "niches": [
+   "travel",
+   "outdoors",
+   "adventure",
+   "geography"
+  ],
+  "file": "liam.png",
+  "persona": "A 34-year-old white Australian man, sun-bleached messy light-brown hair, stubble, a sunburnt nose, squint lines from the sun, visible skin texture, wearing a faded red hiking shirt with a backpack strap over one shoulder",
+  "room": "standing on a mountain trail: a rocky path, low scrubby bushes, a wide valley and distant ridges behind him under a few clouds"
+ },
+ {
+  "id": "kiran",
+  "gender": "male",
+  "niches": [
+   "ai",
+   "tech",
+   "news",
+   "briefing",
+   "updates"
+  ],
+  "persona": "A 34-year-old man with light olive skin, short dark brown hair pushed back and slightly uneven, a few days of stubble rather than a shaped beard, tired skin with visible pores, a small mole on his left cheek, faint shine on his forehead and nose, one eyebrow sitting slightly higher than the other, wearing a charcoal grey long-sleeve henley in a visible waffle knit with a short buttoned placket at the centre of the chest and the sleeves pushed up, sitting behind a white desk with both hands resting on it",
+  "room": "a warm modern home studio at night: a charcoal wall directly behind him holding two simple framed prints, a wooden bookshelf filling the left of the frame, a lit table lamp with a cream shade glowing warm on the left, a beige three-seat sofa with cushions on the right, a deep blue curtain in the right corner, a large black broadcast microphone on a black boom arm reaching in from the right and sitting just below his chin",
+  "prompt": "A frame paused out of a YouTube video. A 34-year-old man with light olive skin, short dark brown hair pushed back and slightly uneven, a few days of stubble rather than a shaped beard, tired skin with visible pores, a small mole on his left cheek, faint shine on his forehead and nose, one eyebrow sitting slightly higher than the other, wearing a charcoal grey long-sleeve henley in a visible waffle knit with a short buttoned placket at the centre of the chest and the sleeves pushed up, sitting behind a white desk with both hands resting on it. He is sitting in a warm modern home studio at night: a charcoal wall directly behind him holding two simple framed prints, a wooden bookshelf filling the left of the frame, a lit table lamp with a cream shade glowing warm on the left, a beige three-seat sofa with cushions on the right, a deep blue curtain in the right corner, a large black broadcast microphone on a black boom arm reaching in from the right and sitting just below his chin. One soft key light from the front left at face height and nothing else on him: the warm table lamp and the blue curtain light belong to the ROOM and must not touch his face or edge. No coloured rim light on the man, no blue edge on his shoulders, no halo. The back wall two stops darker than his face. Moderate depth of field: the bookshelf and sofa soft but readable. Medium shot from the chest up with the desk edge visible along the bottom and space above his head, viewpoint at his eye level, 50mm look with no wide-angle distortion, subject centred but a few pixels off dead centre, mouth open mid-word. The shot is clear in front of him: NO camera, NO tripod, NO phone, NO laptop, NO monitor and NO clutter between him and the viewer, nothing standing on the desk at all. The ONLY object reaching into frame is the black broadcast microphone on its boom arm, entering from the right edge at chest height. Eyes wide open and clearly focused straight down the lens, both irises fully visible, alert and engaged. NOT blinking, NOT half-closed eyes, NOT looking down, NOT drowsy. This is a single frame paused out of an ordinary 4K YouTube video, not a photograph and not a render: slight motion blur on one hand, mild video compression in the dark areas of the wall, a faint focus miss so his ear is softer than his eyes, flat ungraded colour straight from the camera. Real unretouched skin: pores, uneven tone, redness around the nose, fine lines under the eyes, individual stray hairs out of place. NOT CGI, NOT a 3D render, NOT an AI portrait, NOT airbrushed, NOT glossy, NOT symmetrical, NOT a webcam, NOT a stock photo, NOT a headshot against a seamless backdrop, NOT teal-and-orange grading, NOT a magazine model, NOT perfect skin. No readable text, letters, numbers, logos or brand names anywhere — book spines, screens and labels are blank or soft. His chest and shirt are COMPLETELY plain: no print, no logo, no badge, no lettering.  Both hands still and flat on the desk, fingers relaxed and complete."
+ }
+]

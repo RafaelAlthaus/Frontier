@@ -1,0 +1,176 @@
+{
+  "name": "pulse",
+  "order": 19,
+  "label": "PULSE — the weekly AI briefing",
+  "description": "This week's AI news, edited like a launch film. A presenter opens every video and comes back through it; each update arrives on the company's own official logo, its real benchmark chart, its real launch post and real screen recordings of the thing working. Big hairline type on near-black, one sentence at a time on white when something needs thinking about, numbers that count up, and a chapter counter that tells you which of the twelve updates you are on.",
+  "tagline": "Twelve updates, twelve chapters: official logos, real benchmarks, real posts, a presenter who comes back.",
+  "points": [
+    "A consistent AI presenter opens the video and returns every 40-60 seconds",
+    "Official company logos, fetched for whoever the news names",
+    "Real benchmark charts: bars grow, numbers count up, the subject's bar lights orange",
+    "Real launch posts and screen recordings of the product actually running",
+    "A chapter counter (04/12) so a viewer always knows where they are",
+    "Fast cuts, blur-in type with overshoot, motion blur on everything that moves"
+  ],
+  "script_craft": "teaching",
+  "cost": "about $0.25 a minute for footage, pages and graphics, plus the ai33 voice, plus about $0.23 per presenter appearance on kie Kling",
+  "render_x": 4.0,
+  "language": "English",
+  "voice": {
+    "provider": "ai33",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "yl2ZDV1MzN4HbQJbMihG",
+    "voice_name": "Alex — Upbeat, Energetic and Clear",
+    "wavespeed_voice": "Brian",
+    "gender": "male",
+    "speed": 1.1
+  },
+  "features": {
+    "offered": [
+      "youtube",
+      "motion",
+      "spotlight",
+      "headlines",
+      "sound",
+      "avatar"
+    ],
+    "on": [
+      "youtube",
+      "motion",
+      "spotlight",
+      "headlines",
+      "sound",
+      "avatar"
+    ],
+    "prefer": "youtube"
+  },
+  "look": {
+    "graphics": "kit",
+    "kit": "pulse",
+    "director": true,
+    "title_font": "'Inter', Helvetica, Arial, sans-serif",
+    "title_weight": "700",
+    "accent": [
+      "#FF6D24",
+      "#0D0D0D",
+      "#E58CA3",
+      "#BEF242",
+      "#FFFFFF"
+    ],
+    "warn": "#FF6D24",
+    "good": "#BEF242",
+    "skins": [
+      "pulse"
+    ],
+    "caption_accent": "&H246DFF&",
+    "captions": {
+      "font": "Inter SemiBold",
+      "size": 52,
+      "upper": false,
+      "karaoke": false,
+      "box": true,
+      "outline": 0.4,
+      "outline_colour": "&H30000000&",
+      "shadow": 0.0,
+      "line_chars": 44,
+      "margin_v": 118,
+      "mute_under_frames": true
+    },
+    "footage_grade": "eq=contrast=1.08:saturation=0.94:gamma=1.02",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "cinema": {
+      "frame": "deck",
+      "frame_every": 2,
+      "chapter_cards": false,
+      "title_card": false,
+      "year_cards": false,
+      "labels": true,
+      "zoom": 1.06
+    },
+    "headlines": {
+      "marker": "#FF6D24",
+      "every_s": 16,
+      "gap_s": 2,
+      "max": 14,
+      "smooth": true,
+      "allow_domains": [
+        "x.com",
+        "twitter.com"
+      ]
+    },
+    "photofx": {
+      "every_s": 34,
+      "gap_s": 3,
+      "keyline": ""
+    },
+    "sound": {
+      "sfx_db": -14,
+      "music_rel_db": -8,
+      "duck_db": -8,
+      "track": "documentary/Documentary 1.mp3"
+    },
+    "youtube": {
+      "hook_s": 60,
+      "hook_window_s": 14,
+      "window_s": 22,
+      "candidates": 3,
+      "repeat": false,
+      "watcher": "gemini",
+      "sources": [
+        "youtube"
+      ],
+      "archive_watch": 0
+    },
+    "labels": {
+      "pos": "tl",
+      "font": "Inter SemiBold",
+      "sub_font": "Space Mono",
+      "size": 40,
+      "sub_size": 24,
+      "colour": "#FFFFFF",
+      "box": "#0D0D0DCC",
+      "rule": "#BEF242",
+      "enter": "wipe",
+      "upper": false
+    },
+    "avatar": {
+      "id": "kiran",
+      "seconds": 6,
+      "count": 8,
+      "provider": "kling-standard",
+      "logos": true
+    },
+    "footage_taste": "real footage only, and the FIRST choice is always the company's own material: its launch or announcement video, its keynote, its product demo, a screen recording of the actual interface. Then the company's offices, its data centres, and the people who run it on stage or in an interview. NEVER stock footage and never the security-and-AI cliches: no hooded figure at a keyboard, no green code raining down a screen, no glowing brain, no blue circuit board, no robot hand, no anonymous mask. A story about a breach is illustrated by the company, the product or the report — not by a 'hacker'.",
+    "options_note": "PULSE: an AI presenter opens and returns through the video; official company logos; real benchmark charts with the subject's bar lit; real launch posts; screen recordings of the product; a chapter counter per update."
+  },
+  "pacing": {
+    "graphic_every_min": 5.04,
+    "graphic_ratio": 0.72,
+    "graphic_dur_s": 4.2,
+    "graphic_max_s": 7.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": true,
+    "wpm": 185,
+    "cut_s": 2.1,
+    "hook_s": 60,
+    "scene_share_hook": 0.92,
+    "scene_share_body": 0.84,
+    "hook_notes": "The first sixty seconds are four stacked teasers, one per headline update, and nothing else. Open on the single biggest story with a person or a company, not with a greeting. Every teaser is: who did it, what it is, and the one number or claim that makes it worth watching — then move on mid-thought to the next. Graphics in the hook: a SNAP (the company's leader, flash, their mark) the first time each company's launch is named; a PRICECUT or TALLY on the first price; a BENCH or LEADERBOARD on the first benchmark result; a POST for a real launch post; a BOARD where a sentence turns on itself ('because', 'but'); a BREAKOUT for a security or containment story; a PICKER for 'it is already in <product>'. Something on screen for EVERY sentence. The HAND of the week's cards goes on the line that counts the updates ('four of this week's twelve'); a RACE on 'I put A and B on the same task'. Close the hook with how many updates there are in total, the note that timestamps are in the description, and one line on what is at the end of the video.",
+    "body_notes": "One update per section, sixty to ninety seconds each. Every section opens with a FLIP (the split-flap counter turning to its number, then the company's mark and the model's name), then what launched, then the real numbers. Inside a section: a BENCH for a benchmark table, a LEADERBOARD for a published ranking the model climbed, a TALLY for the one figure the section turns on, a PRICECUT for a price that fell, a SPEC for launch figures, a VERSUS when two models are compared, a CONTEXT for a context-window claim, a POST for the real announcement, a QUOTE for words someone really said (verbatim), a HUD when a named person is on screen, a CHAT when the narration says a model was asked something (the pipeline runs the prompt on that model and shows its real reply), a RACE for a head-to-head the video settles later, a PICKER for 'now in <product>', a TIMELINE for a sequence of dates, a BREAKOUT for a security story, an ANNOT or BOARD when the section turns on an argument, a BIGLINE for the one-sentence verdict. Screen recordings of the product running carry any 'here is what it does' passage. Something new every 8 to 12 seconds; never two graphics of the same type in a row. A subscribe ask once, around two thirds through, no longer than one sentence.",
+    "same_tool_penalty": 0.3
+  },
+  "prompts": {
+    "outline": "Plan a weekly AI-news episode on: [INSERT TITLE HERE]\n\nSTRUCTURE\n- A hook of four teasers, one per headline update. Each names the company and the single claim that makes it matter.\n- Then one section per update, the biggest first. Say how many updates there are in total.\n- For each update give: the company, the exact product name, the date it launched, the real numbers (benchmark scores, price, latency, context length, parameter count), what it actually does that is new, and one concrete example of it in use.\n- End with a short hands-on section on the single most interesting launch: what it is for, and what happened when it was tried.\n\nRULES\n- Every figure must be real and checkable. If a number is not known, say what is known instead — never invent a benchmark score, a price or a date.\n- Name the benchmark whenever a score is quoted (GDPval, SWE-bench, MMLU, LMArena).\n- Prefer what a thing DOES over what it scores.\n- No hype adjectives: no 'game-changing', 'revolutionary', 'insane', 'mind-blowing'.",
+    "script": "Write the complete narration for this weekly AI briefing from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- Talking straight to one person who follows AI but has been busy for a week. Confident, quick, never breathless.\n- Short sentences. Present tense for what launched, past tense for how it got here.\n- The first sentence is the biggest story, and it names a company or a person. Never open with a greeting or with 'in this video'.\n- Every claim is attributed: 'xAI says', 'according to the model card', 'on the GDPval benchmark'. Quote real posts briefly and exactly; never invent a quote.\n- Numbers are the point: give the real ones and say them the way they are read aloud ('a hundred times faster', 'forty-two dollars per billion tokens'), never as digits or symbols.\n- Say the full product name the first time ('Grok four point seven', 'Qwen image two point one'), then the short one.\n- Move between updates with a hard turn: 'Meanwhile', 'Next', 'Now'. Never summarise what was just said.\n- Explain a technical idea in one sentence, in plain words, then move on. If it needs two, it belongs in the hands-on section.\n- One subscribe line, around two thirds through, and one mention of the community link. Nothing else promotional.\n- Plain spoken text only: no headings, no bullet points, no stage directions, no emoji.\n\nLENGTH\n- [INSERT MINUTES HERE] minutes at a hundred and sixty-eight words a minute."
+  }
+}

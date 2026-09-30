@@ -1,0 +1,121 @@
+{
+  "name": "modern-homes",
+  "order": 5,
+  "label": "Modern Homes",
+  "description": "Practical home advice told by a person on camera, framed in a rounded card over warm paper, with big serif titles that land one line at a time. Products, cleaning, repairs and what is quietly wasting your money.",
+  "tagline": "Plain home advice from someone who has actually done it.",
+  "points": [
+    "A presenter in a rounded card",
+    "Big serif titles on warm paper",
+    "Real products and real methods",
+    "A picture every ten seconds"
+  ],
+  "script_craft": "story",
+  "cost": "about $0.09 a minute with pictures only, $0.11 with everything on",
+  "render_x": 2.2,
+  "language": "English",
+  "voice": {
+    "provider": "algrow",
+    "engine": "elevenlabs",
+    "model": "eleven_multilingual_v2",
+    "chunk_chars": 900,
+    "voice_id": "MFZUKuGQUsGJPQjTS4wC",
+    "voice_name": "Jon — Warm & Grounded Storyteller",
+    "wavespeed_voice": "Brian",
+    "note": "A public ElevenLabs voice, so this channel renders out of the box. Swapping it means swapping \"gender\" too — the presenter list is filtered by it.",
+    "gender": "male"
+  },
+  "features": {
+    "offered": [
+      "ai_images",
+      "depth",
+      "motion",
+      "headlines",
+      "spotlight",
+      "objects",
+      "sound",
+      "avatar",
+      "stock",
+      "youtube"
+    ],
+    "on": [
+      "ai_images",
+      "depth",
+      "sound",
+      "avatar",
+      "objects"
+    ],
+    "prefer": "ai_images"
+  },
+  "look": {
+    "graphics": "documentary",
+    "title_font": "'EB Garamond', Georgia, serif",
+    "title_weight": 700,
+    "accent": [
+      "#C0503C",
+      "#2B2320",
+      "#8A7E6D",
+      "#D8A24A"
+    ],
+    "warn": "#C0503C",
+    "good": "#6F8F6A",
+    "skins": [
+      "paper"
+    ],
+    "caption_accent": "&H3C50C0&",
+    "captions": {
+      "font": "Montserrat ExtraBold",
+      "size": 74,
+      "upper": false,
+      "karaoke": false,
+      "box": true,
+      "outline": 0.42,
+      "outline_colour": "&H2E12100E",
+      "shadow": 0.0,
+      "line_chars": 28,
+      "margin_v": 62
+    },
+    "footage_grade": "eq=contrast=1.02:saturation=1.02:gamma=1.02",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "encode": {
+      "preset": "medium",
+      "tune": "film",
+      "crf": 19
+    },
+    "options_note": "This look puts the presenter in a rounded card over warm paper with the title underneath, so the presenter is ticked by default. Generated clips are off — real product pictures and graphics do the work.",
+    "photofx": {
+      "every_s": 18,
+      "gap_s": 3
+    },
+    "director": true,
+    "scene_prompt": "You are the art director for a home-advice YouTube video.\n\nCHANNEL: [INSERT CHANNEL HERE]\n\nBelow is the full spoken SCRIPT. Design [INSERT COUNT HERE] photographs that carry this video.\n\nTHE HARD RULE: EACH CATEGORY BELOW MAY BE USED AT MOST ONCE.\nThere are more categories than you have scenes, so some go unused — that is correct. Pick the ones\nthis particular script actually needs, then write one scene for each. Two scenes from the same\ncategory is a failed set, however different the camera angle is.\n\n 1. THE PROBLEM ITSELF — close enough to read the texture, nobody in frame.\n 2. THE ROOM — wide, lit like a real morning, showing how ordinary the place is.\n 3. THE PRESENTER GETTING IT WRONG — mid-effort, straining, the method that does not work.\n 4. THE PRESENTER GETTING IT RIGHT — calm, deliberate, the method that does.\n 5. THE PRODUCT WHERE IT LIVES — the cupboard under the sink, the supermarket shelf, a cluttered counter.\n 6. THE CAUSE — the tap, the drip, the vent, the pipe, the thing upstream of the problem.\n 7. THE AFTERMATH — the ruined cloth, the scratched surface, the bin, the receipt.\n 8. THE SAME PROBLEM ELSEWHERE — another room, another surface, the kettle, a window.\n 9. A HAND DEMONSTRATING — one gesture that proves a point, no face.\n10. THE RESULT — clean, undramatic, believable, and clearly the same room as scene 2.\n\nBefore you answer, list to yourself which category each scene uses. If any number appears twice,\nthrow that scene away and take an unused category instead.\n\nALSO\n- Each scene illustrates a MOMENT the narrator actually reaches, in the script's order.\n- No text, letters, numbers, labels or packaging writing anywhere in frame.\n- Vary the distance as well — wide, middle, close — but distance is not variety on its own.\n- Ordinary homes. Worn grout, mismatched towels, a cluttered shelf. Never a showroom.\n\nReturn ONLY a JSON array of [INSERT COUNT HERE] objects:\n\n  {\"text\": \"<the line of narration this scene belongs to>\",\n   \"prompt\": \"<a complete image-generation prompt>\"}\n\nSCRIPT:\n[INSERT SCRIPT HERE]",
+    "still_suffix": " Photorealistic photograph taken on a full-frame camera, 35mm, natural window light, true-to-life colour, sharp where it matters and softly out of focus behind, real surface texture — limescale, worn grout, fingerprints, water marks. It must be indistinguishable from a photograph someone took in their own house. No illustration, no 3D render, no CGI, no stylisation, no filmic grain, no colour grade, no text, no watermark, no logo.",
+    "placement": "story"
+  },
+  "pacing": {
+    "graphic_every_min": 1.2,
+    "graphic_ratio": 0.4,
+    "graphic_dur_s": 5.5,
+    "graphic_max_s": 8.0,
+    "cold_open_s": 0,
+    "white_fade": 0.0,
+    "punch": true,
+    "wpm": 145,
+    "photo_every_s": 10
+  },
+  "stock_queries": [],
+  "prompts": {
+    "outline": "You are the writer of a home-advice YouTube channel: practical, unhurried, and about things people already own.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 8 minutes, 12 minutes]\n\nPlan the video in plain prose, as numbered beats of about one minute each.\n- Beat 1 points at something in the viewer's own home and asks them to look at it right now. This is spoken to camera by the presenter.\n- Name real, specific things: materials, product categories, tools, rooms, surfaces, price ranges. A picture is drawn every ten seconds, so each beat needs several things to look at.\n- Somewhere early, correct a common belief: the thing everyone does that makes it worse.\n- Work through it in order: what is happening, why the usual fix fails, what to do instead, what it costs.\n- The last beat lands one thing to do this week.\nFor each beat, write the beat number, one line on what happens, and the concrete things the edit can show.",
+    "script": "Write the complete narration from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nHOW IT SOUNDS\n- Someone who has done this themselves, telling a neighbour. Unhurried, plain, no salesmanship.\n- The FIRST TWO SENTENCES are spoken on camera: point at something in the viewer's home, then ask the question they will answer in their head. No greeting, no channel name.\n- Every sentence carries something concrete: a surface, a product type, a number, a step, a time.\n- Real methods only. No invented studies. Round prices and say 'about'.\n- Plain spoken text only: no headings, no stage directions, no speaker labels, no lists.\n- Write numbers the way they are read aloud ('about twelve dollars', 'ten minutes'), never digits or symbols.\n- Never say 'in this video'. End on the one thing to do this week, then one short line asking viewers to subscribe."
+  },
+  "thumbnail": {
+    "brief": "The presenter in a rounded card at the top over warm cream paper, with a short chunky serif title beneath in terracotta red. Everyday, domestic, no studio look.",
+    "accent": "#C0503C"
+  },
+  "tabs": [
+    "production",
+    "avatar"
+  ]
+}
