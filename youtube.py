@@ -574,7 +574,8 @@ fade or title card.
   official trailer, an in-game cutscene); graphic/animation = other things made on a computer; drama = acted or
   reconstructed; screen = a phone or computer screen recording.
 - text: small = a channel logo or date stamp in a corner; lower_third = a name caption; large = titles,
-  subtitles or captions over the picture; watermark = a stock library's translucent logo or web address laid
+  subtitles or captions over the picture — any line of subtitles at all counts as large, however small the
+  letters, and so does a shot where they come and go; watermark = a stock library's translucent logo or web address laid
   over the picture anywhere (footageforpro.com, Pond5, Shutterstock, Getty) — look for it in every shot.
 - quality: 5 = sharp, steady, well exposed; 1 = unwatchable."""
 

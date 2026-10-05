@@ -515,8 +515,8 @@ def monitor(seg: Path, dst: Path, dur: float, n: int, cfg: dict, start: float) -
           f"[2:v]format=gray[m];[p][m]alphamerge[pm];[1:v]{GROUND_IN}[g];[g][pm]overlay={x0}:{y0}[g1];"
           f"[g1][3:v]overlay=0:0,"
           f"drawtext=fontfile='{lab_font}':text='{_dt(label)}':fontsize={fs}:fontcolor={lab_c}{glow}:x={x0 + 30}:y={y0 + 26},"
-          f"drawtext=fontfile='{_font('SpaceMono-Bold.ttf')}':text='{_dt(tc)}':fontsize={max(20, fs - 6)}:fontcolor={tc_c}{glow}:"
-          f"x={x1 - tc_w}:y={y0 + 28},"
+          + (f"drawtext=fontfile='{_font('SpaceMono-Bold.ttf')}':text='{_dt(tc)}':fontsize={max(20, fs - 6)}:fontcolor={tc_c}{glow}:"
+             f"x={x1 - tc_w}:y={y0 + 28}," if cfg.get("monitor_timecode", True) is not False else "") +
           f"format=yuv420p[v]")
     return _run(["ffmpeg", "-y", "-v", "error", "-i", str(seg), "-loop", "1", "-i", str(bg), "-loop", "1", "-i", str(mask),
                  "-loop", "1", "-i", str(scan), "-filter_complex", fc, "-map", "[v]"], dst, dur)

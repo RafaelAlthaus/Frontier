@@ -974,8 +974,17 @@ function applyOutput(c){
 /* ── what goes into the video ───────────────────────────────────────────── */
 /* The channel says which switches it offers and which start ticked; your own ticks are remembered
    per channel. A switch whose API key is missing is drawn in red, unticked, with the key to add. */
+// your own ticks are kept only while the channel's defaults stay the same: when a channel's file starts different
+// switches ticked, what you ticked against the old defaults is let go and the new defaults show
+function featSig(){
+  const f = (CHANNELS[CH] || {}).features || {};
+  return JSON.stringify([(f.on || []).slice().sort(), (f.offered || []).slice().sort()]);
+}
 function featState(){
-  try{ return JSON.parse(localStorage.getItem('fr.feat2.' + CH) || '{}') || {}; }catch(e){ return {}; }
+  try{
+    const st = JSON.parse(localStorage.getItem('fr.feat2.' + CH) || '{}') || {};
+    return st._sig === featSig() ? st : {};
+  }catch(e){ return {}; }
 }
 function offeredOf(c){
   const f = (c || {}).features || {};
@@ -1014,6 +1023,7 @@ function drawFeatures(){
   document.querySelectorAll('.feat input').forEach(inp => inp.onchange = e => {
     const k = e.target.closest('.feat').dataset.k, st = featState();
     st[k] = e.target.checked;
+    st._sig = featSig();
     try{ localStorage.setItem('fr.feat2.' + CH, JSON.stringify(st)); }catch(err){}
     drawFeatures();
     drawAvatars();
@@ -1523,6 +1533,7 @@ const IC3_LINE = [[/\b3D: (moments|director)/, 'clapper'], [/\b3D: previews/, 'c
                   [/\b3D: final render/, 'cube'], [/\b3D: (assembly|\d+ clips)/, 'layers'], [/\b3D:|=== 3D scenes/, 'cube']];
 const fmtLine = (l, threed) => {
   if(/^(ERROR|Traceback)/.test(l)) return `<span class="e">${esc(l)}</span>`;
+  if(/^\s*⚠/.test(l)) return `<span class="e">${esc(l)}</span>`;          // a warning the viewer would see in the video
   const hit = threed ? IC3_LINE.find(([re]) => re.test(l)) : null;
   const ic = hit ? `<span class="i3">${svg3(hit[1])}</span>` : '';
   return /^===/.test(l) ? `${ic}<b>${esc(l)}</b>` : ic + esc(l);

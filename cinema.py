@@ -1245,8 +1245,8 @@ def _treat(mv, plan: list, segs: list, job: Path, style: str, cfg: dict) -> list
         name = Path(str(e[1])).name
         kind = kinds.get(name)
         if kind is None:
-            if not frame_kind:
-                continue
+            if not frame_kind or cfg.get("frame_stock") is False:
+                continue                    # look.cinema.frame_stock false: stock never wears the ARCHIVE plate
             kind = ""                       # stock or AI footage: no shot log, still framed by the kit
         n_foot += 1
         archive = kind in ("archive", "still")

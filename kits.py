@@ -540,9 +540,22 @@ KITS["deep2"] = dict(KITS["deep"], **{
     "prompt": KITS["deep"]["prompt"].replace("- graphic — a DEEP graphic", "- graphic — a DEEP-V2 graphic")
     .replace("stencil = a stencilled date, place or name over the footage", "stencil = a date, place or name in glowing gold over black")
     .replace("cutaway = a cross-section silhouette", "cutaway = a vintage cross-section drawing")
+    .replace("(shape: submarine | ship | plane | rocket | building | tunnel)",
+             "(shape: submarine | ship | plane | jet — a supersonic delta-wing jet | airship | rocket | capsule — a space "
+             "capsule | building | tunnel; always the one that matches the machine)")
+    .replace('"figures": 9, "red": 2, "note": "two divers in the bell"}',
+             '"figures": 9, "red": 2, "note": "two divers in the bell"}\n'
+             '  {"tool": "graphic", "cue": 11, "words": "...", "type": "cutaway", "shape": "plane", "label": "TU-144", '
+             '"figures": 0, "parts": [{"label": "canards", "at": 0.15}, {"label": "braking parachute", "at": 0.92}], '
+             '"note": "how it landed"}')
+    .replace("with the\n  crew as glowing figures and the ones the story follows in red;",
+             "with the\n  crew as pictograms and the ones the story follows in red. Crew ONLY when the narration is about the people "
+             "aboard (who flew, who died, where they sat); for a part of the machine (engines, intakes, wings, a valve) give "
+             "\"figures\": 0 and \"parts\": 1-4 named parts, each \"at\" 0-1 along the machine (0 = nose/top);")
     .replace("sonar = contacts on a sweeping screen", "sonar = contacts on an amber radar screen")
     .replace("readout = a classified file of 3-5 real facts", "readout = a lamp-lit console readout of 3-5 real facts "
-             "(classification = the lit sign on top: TOP SECRET, WORLD RECORD, CLASSIFIED, FAILURE...)"),
+             "(no classification: DEEP-V2 has no sign on its readouts)")
+    .replace(', "classification": "TOP SECRET"', ''),
 })
 
 CAPTIONED =("newsbar", "label", "moneyrain", "corner", "lower", "mosaic")     # scenes over sharp footage: captions may stay

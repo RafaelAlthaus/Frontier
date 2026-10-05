@@ -661,6 +661,14 @@ def plan(engine, srt: Path, job: Path, style: str, title: str = "") -> dict:
             todo.remove(x)
             lost.append(x)
             dropped.append(f"map@{_stamp(x['_t'])} (a short video opens on real footage)")
+    # pacing.footage_open_s: the video opens on real footage — no graphic, map, card or photo scene starts in its
+    # first seconds; what such a scene would have said becomes a text label over the footage instead
+    open_s = float(pace.get("footage_open_s") or 0)
+    if open_s > 0:
+        for x in [x for x in todo if x["_t"] < open_s]:
+            todo.remove(x)
+            lost.append(x)
+            dropped.append(f"{x['tool']}@{_stamp(x['_t'])} (the opening is real footage)")
     while todo:
         it = max(todo, key=lambda x: (worth(x), -x["_t"]))
         todo.remove(it)

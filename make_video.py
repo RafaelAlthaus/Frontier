@@ -771,8 +771,23 @@ def _grade_vf() -> str:
     return ("," + _GRADE) if _GRADE else ""
 
 
+_LOG_FILE: list = [None]      # this job's log.txt — every line the render prints, kept beside its files
+
+
+def _log_line(text: str) -> None:
+    f = _LOG_FILE[0]
+    if f is None:
+        return
+    try:
+        with open(f, "a", encoding="utf-8") as fh:
+            fh.write(text + "\n")
+    except OSError:
+        pass
+
+
 def log(msg: str) -> None:
     print(f"  {msg}", flush=True)
+    _log_line(f"  {msg}")
     if _SINK:
         _SINK(f"  {msg}")
 
@@ -787,6 +802,7 @@ def step(msg: str) -> None:
     el = int(now - _T0[0])
     stamp = f"  [{el // 60}:{el % 60:02d}]" if el else ""
     print(f"\n=== {msg} ==={stamp}", flush=True)
+    _log_line(f"=== {msg} ==={stamp}")
     if _SINK:
         _SINK(f"=== {msg} ==={stamp}")
 
@@ -1553,6 +1569,80 @@ def _factchecked(job: Path, script: str, style: str, title: str, force: bool = F
     return fixed
 
 
+READ_ALOUD_PROMPT = """You are the story editor of a documentary channel. Below is a narration that will be read aloud
+by a voice actor. It has already been fact-checked. Edit it so it is easy and gripping to LISTEN to, without changing
+what it says.
+
+THE RULES
+- Every fact stays true and in its order. Never add a fact, a name, a number, a quote or a detail. Never change one.
+- You MAY drop a number or a name a listener would not remember and the story does not need (a measurement, a second
+  date, a part number, an acronym). Keep the numbers that carry the story. Aim for no more than one number every
+  forty words, and round what is left ("about eighty kilos", not "eighty-three point six kilograms").
+- Short spoken sentences: most under eighteen words, none over twenty-eight. One idea per sentence. Split long ones;
+  untangle stacked dashes, parentheses and clauses inside clauses.
+- A person is introduced once, with who they are; after that their name or "he"/"she". An organisation is named by
+  what it is ("Korolev's design bureau"), not by its acronym.
+- Smooth the joins: each paragraph should lead into the next — a turn, a consequence, a question — so the story never
+  jumps without the listener knowing why.
+- Keep the opening moment and the last image exactly where they are. Keep the narrator's voice and tense.
+- Numbers and dates stay written out as they are spoken ("nineteen fifty-seven").
+- Lines that start with "## " or "[[" are not narration: keep each one exactly as it is, in its place.
+- About the same length: between [MIN] and [MAX] words.
+
+Return ONLY the edited narration — no notes, no headings, nothing before or after it.
+
+NARRATION:
+"""
+
+
+def _read_aloud(job: Path, script: str, style: str) -> str:
+    """The script after a story editor's pass (style "script_edit": true): the same facts in the same order, said the
+    way a listener follows them — shorter sentences, fewer numbers and names nobody keeps, joins that lead on. Run
+    once, after the fact check and before the voice; script.before-edit.txt keeps what it was given. Anything that
+    comes back too short, too long, or without its marker lines keeps the script as it was."""
+    if not (STYLE_INFO.get(style) or {}).get("script_edit"):
+        return script
+    voiced = (job / "audio.mp3").exists() or any(job.glob("audio_p*.mp3"))
+    done = job / "script.edited"
+    if voiced or done.exists() or (job / "script.pasted").exists():
+        return script
+    paras = [x for x in re.split(r"\n\s*\n", script.strip()) if x.strip()]
+    # long scripts are edited in parts of a few paragraphs, so nothing comes back cut off
+    parts, cur = [], []
+    for para in paras:
+        if cur and sum(len(x.split()) for x in cur) + len(para.split()) > 1100:
+            parts.append(cur)
+            cur = []
+        cur.append(para)
+    if cur:
+        parts.append(cur)
+    log(f"Claude: story edit — the script read as a listener hears it ({len(parts)} part(s))...")
+    out = []
+    for chunk in parts:
+        text = "\n\n".join(chunk)
+        n = len(text.split())
+        try:
+            got = _clean_script(claude(_lang_prompt(READ_ALOUD_PROMPT.replace("[MIN]", str(int(n * 0.8)))
+                                                    .replace("[MAX]", str(int(n * 1.08))), style) + text,
+                                       SCRIPT_BODY_MODEL, max_tokens=8000, provider=SCRIPT_PROVIDER))
+        except _ClaudeError as e:
+            log(f"  story edit: kept as written ({str(e)[:80]})")
+            return script
+        markers = [x for x in text.splitlines() if x.strip().startswith(("## ", "[["))]
+        ok = (not _looks_like_refusal(got) and n * 0.72 <= len(got.split()) <= n * 1.15
+              and all(m.strip() in got for m in markers))
+        if not ok:
+            log(f"  story edit: a part came back {len(got.split())} words for {n} — that part kept as written")
+            got = text
+        out.append(got.strip())
+    edited = "\n\n".join(out)
+    (job / "script.before-edit.txt").write_text(script, encoding="utf-8")
+    (job / "script.txt").write_text(edited, encoding="utf-8")
+    done.write_text("1", encoding="utf-8")
+    log(f"  story edit: {len(script.split())} -> {len(edited.split())} words")
+    return edited
+
+
 def _claude_code_vision(prompt: str, image_paths: list) -> str:
     """Vision through the CLI: it opens the pictures itself with the Read tool.
 
@@ -1893,7 +1983,7 @@ def generate_script(title: str, minutes: int, job: Path, force: bool, style: str
         if not _looks_like_refusal(cached) and (len(cached.split()) >= _min_words
                                                 or (job / "script.pasted").exists()):
             log(f"cached: {script_path.name}")
-            return _script_chapters(job, _factchecked(job, cached, style, title, force))
+            return _script_chapters(job, _read_aloud(job, _factchecked(job, cached, style, title, force), style))
         # A poisoned cache (an old refusal or a too-short stub) must not be reused —
         # regenerate, and invalidate the downstream artifacts it contaminated.
         log("the cached script was a refusal or too short — regenerating, and clearing the old audio/subtitles/images…")
@@ -1960,7 +2050,7 @@ def generate_script(title: str, minutes: int, job: Path, force: bool, style: str
         log("Claude: writing the script part by part...")
         script = _avoid_words(_script_in_parts(outline, minutes, target_words, wpm, style, craft_s, job, title), style)
         script_path.write_text(script, encoding="utf-8")
-        script = _factchecked(job, script, style, title, force)
+        script = _read_aloud(job, _factchecked(job, script, style, title, force), style)
         script = _script_chapters(job, script)
         wc = len(script.split())
         log(f"script: {wc} words (~{wc/wpm:.1f} min spoken, target {minutes} min)")
@@ -2021,7 +2111,7 @@ def generate_script(title: str, minutes: int, job: Path, force: bool, style: str
     script = _avoid_words(script, style)
     script = _restore_markers(outline, script, style)
     script_path.write_text(script, encoding="utf-8")
-    script = _factchecked(job, script, style, title, force)
+    script = _read_aloud(job, _factchecked(job, script, style, title, force), style)
     script = _script_chapters(job, script)
     wc = len(script.split())
     log(f"script: {wc} words (~{wc/wpm:.1f} min spoken, target {minutes} min)")
@@ -3446,15 +3536,17 @@ def generate_astrology_scene_items(script: str, job: Path, force: bool, count: i
         # the prompt plus the line of narration it belongs to. Models drift
         # between the two whatever the prompt asks for, and a scene pool is too
         # expensive to throw away over a formatting preference.
+        reuse = False
         if isinstance(it, str):
             pr, txt = it.strip(), ""
         elif isinstance(it, dict):
             pr = str(it.get("prompt") or it.get("scene") or it.get("image") or "").strip()
             txt = str(it.get("text") or it.get("line") or "")
+            reuse = it.get("reuse") is True
         else:
             continue
         if pr:
-            norm.append({"text": txt, "prompt": pr + style_suffix})
+            norm.append({"text": txt, "prompt": pr + style_suffix, **({"reuse": True} if reuse else {})})
     if not norm:
         sys.exit(f"{style}: Claude returned no scenes")
     base = list(norm)  # pad by cycling if Claude returned fewer than asked
@@ -3486,7 +3578,10 @@ def generate_astrology_visuals(script: str, job: Path, force: bool,
 
     # The pool was fixed at 45 regardless of runtime, so a 5-minute video paid the
     # same image bill as a 25-minute one. Roughly two stills per minute, capped.
-    photo_n = (max(1, min(ASTRO_STILL_POOL, int(round((minutes or 20) * _mix_stills_per_min()))))
+    # pacing.stills_per_min: the channel's own number (a footage-first channel only needs pictures where no real
+    # footage fits, and each is shown once — drawing the mix's full count paid for pictures nobody saw)
+    per_min = float(((STYLE_INFO.get(style) or {}).get("pacing") or {}).get("stills_per_min") or 0) or _mix_stills_per_min()
+    photo_n = (max(1, min(ASTRO_STILL_POOL, int(round((minutes or 20) * per_min))))
                if minutes else ASTRO_STILL_POOL)
     photo_n = max(photo_n, min(ASTRO_STILL_POOL, int(min_stills or 0)))
     every = STYLE_PHOTO_EVERY.get(style)
@@ -3584,6 +3679,11 @@ def generate_astrology_visuals(script: str, job: Path, force: bool,
                 vpaths[i], vurls[i] = path, url
 
     missing = sum(1 for p in photos if not p)
+    if missing and not every:
+        # a documentary carries on: its slots take real footage instead — but the viewer-facing gap is said out loud
+        why = out_of_credits[0].split(" — ")[0] if out_of_credits else "see the lines above"
+        log(f"⚠ {missing} of {len(photos)} pictures could not be drawn ({why}) — the video uses real footage "
+            f"in their place")
     if every and missing and (out_of_credits or missing > max(1, int(len(photos) * 0.34))):
         # A story with holes is not a story: a line would lose its picture and the
         # one before would hold over words it was never drawn for. Stop before the
@@ -3975,7 +4075,7 @@ def fetch_footage(script: str, job: Path, force: bool, style: str = "", title: s
             log(f"YouTube footage failed, continuing without it: {str(e)[:160]}")
             rows = []
     if not rows:
-        return stock
+        return _inspect_footage(job, [], list(stock), style, title, script)[1]
     tf = job / "broll_tags.json"
     tags = {}
     if stock and tf.exists():
@@ -3990,7 +4090,193 @@ def fetch_footage(script: str, job: Path, force: bool, style: str = "", title: s
     tf.write_text(json.dumps(tags, indent=1), encoding="utf-8")
     (job / "footage_seconds.json").write_text(
         json.dumps({Path(r["path"]).name: float(r["dur"]) for r in rows}, indent=1), encoding="utf-8")
-    return [Path(r["path"]) for r in rows] + list(stock)
+    real, stock = _inspect_footage(job, [Path(r["path"]) for r in rows], list(stock), style, title, script)
+    return real + stock
+
+
+FOOTAGE_TEXT_PROMPT = """Each numbered row is ONE video clip: three frames, from its start, middle and end.
+For every clip, is there text burned into the picture in any frame — subtitles or captions (spoken words written
+over the picture), a title, a caption box, a caption bar? A small channel logo in a corner does not count.
+When there is, say where it sits: "top_pct" = how far down the frame the text's highest letters start, and
+"bottom_pct" = how far down its lowest letters end, both as a percentage of the frame's height (0 = top edge,
+100 = bottom edge), over all the frames together. Look at the frame, not at the picture inside it: black bars count.
+
+Return ONLY a JSON array, one object per clip:
+[{"n": 1, "text": false}, {"n": 2, "text": true, "top_pct": 84, "bottom_pct": 93}, ...]"""
+
+FOOTAGE_FIT_PROMPT = """These numbered frames are stock clips a documentary could show.
+THE DOCUMENTARY: [INSERT TITLE HERE]
+WHAT IT TELLS: [INSERT STORY HERE]
+
+For every frame, could it play in this documentary without looking wrong? Say no to anything visibly from
+another time than the story (modern aircraft, cars, ships, phones, screens, clothing, signs and logos in a story
+set decades ago), anything about another subject or place than the story, and anything with a readable brand.
+Neutral atmosphere that fits the era (clouds, sea, night sky, fire, smoke, an old building) is welcome.
+
+Return ONLY a JSON array: [{"n": 1, "ok": true, "why": "a few words"}, ...]"""
+
+
+def _inspect_footage(job: Path, real: list, stock: list, style: str, title: str, script: str) -> tuple:
+    """(real clips, stock clips) after Claude has looked at them (look.footage_check in the style file):
+    "subtitles": true — every real clip's three frames are checked for burned-in subtitles and captions; text only
+    in the bottom (or top) band is cropped away, text over the picture drops the clip. "stock": true — every stock
+    clip's middle frame is checked against the story's era and subject, and a clip that looks wrong is dropped.
+    Verdicts are kept in footage_check.json, so a clip is looked at once. A check that fails keeps the clips."""
+    cfg = ((STYLE_INFO.get(style) or {}).get("look") or {}).get("footage_check") or {}
+    if not cfg or not (real or stock):
+        return real, stock
+    cache_f = job / "footage_check.json"
+    try:
+        seen = json.loads(cache_f.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        seen = {}
+    tmp = job / "_check"
+    tmp.mkdir(exist_ok=True)
+
+    def frame(clip: Path, at: float, out: Path) -> bool:
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", f"{max(0.0, at):.2f}", "-i", str(clip), "-frames:v", "1",
+                        "-vf", "scale=426:240:force_original_aspect_ratio=decrease,pad=426:240:(ow-iw)/2:(oh-ih)/2",
+                        str(out)], capture_output=True)
+        return out.exists() and out.stat().st_size > 500
+
+    def sheet(cells: list, out: Path, per_row: int) -> Path:
+        # cells = [(number, [frame paths])]: one numbered row per clip (per_row frames), or a numbered grid
+        from PIL import Image, ImageDraw, ImageFont
+        w, h, pad = 426, 240, 34
+        cols = per_row if per_row > 1 else 3
+        rows = len(cells) if per_row > 1 else (len(cells) + 2) // 3
+        img = Image.new("RGB", (cols * w + (pad if per_row > 1 else 0), rows * (h + (0 if per_row > 1 else pad))), "black")
+        d = ImageDraw.Draw(img)
+        try:
+            font = ImageFont.truetype(str(FONT_DIR / "Inter-Bold.ttf"), 26)
+        except OSError:
+            font = ImageFont.load_default()
+        for k, (num, frames) in enumerate(cells):
+            if per_row > 1:
+                y = k * h
+                d.text((4, y + 6), str(num), fill="yellow", font=font)
+                for j, f in enumerate(frames):
+                    img.paste(Image.open(f).convert("RGB").resize((w, h)), (pad + j * w, y))
+            else:
+                x, y = (k % 3) * w, (k // 3) * (h + pad)
+                d.text((x + 6, y + 2), str(num), fill="yellow", font=font)
+                img.paste(Image.open(frames[0]).convert("RGB").resize((w, h)), (x, y + pad))
+        img.save(out, quality=88)
+        return out
+
+    def ask(prompt: str, img: Path) -> list:
+        try:
+            raw = claude_vision(prompt, [img], model=UTILITY_MODEL, max_tokens=1500)
+            m = re.search(r"\[.*\]", raw or "", re.S)
+            return json.loads(m.group(0)) if m else []
+        except Exception as e:                              # noqa: BLE001 - a failed look keeps the footage
+            log(f"  footage check: Claude could not look this time ({str(e)[:80]}) — these clips are kept")
+            return []
+
+    # C — burned-in subtitles and captions on the real clips: text only in the bottom (or top) quarter is cropped
+    # away and the rest enlarged back to the frame; text anywhere else drops the clip. A cropped clip is looked at
+    # once more, and dropped when any text is still there.
+    def look_text(clips: list) -> dict:
+        found = {}
+        for i in range(0, len(clips), 6):
+            batch, cells = clips[i:i + 6], []
+            for k, c in enumerate(batch):
+                d = _video_dur(c) or 3.0
+                fr = [tmp / f"{c.stem}_{j}.jpg" for j in range(3)]
+                if all(frame(c, d * q, f) for q, f in zip((0.12, 0.5, 0.88), fr)):
+                    cells.append((k + 1, fr))
+            if not cells:
+                continue
+            for row in ask(FOOTAGE_TEXT_PROMPT, sheet(cells, tmp / f"text_{i // 6}.jpg", 3)):
+                try:
+                    c = batch[int(row.get("n")) - 1]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                if row.get("text") is True:
+                    try:
+                        found[c.name] = (float(row.get("top_pct")), float(row.get("bottom_pct")))
+                    except (TypeError, ValueError):
+                        found[c.name] = (0.0, 100.0)
+                else:
+                    found[c.name] = None
+        return found
+
+    if cfg.get("subtitles") and real:
+        todo = [c for c in real if c.name not in seen]
+        for name, box in look_text(todo).items():
+            seen[name] = {"text": "none"} if box is None else {"text": "found", "top": box[0], "bottom": box[1]}
+        cropped, keep, dropped = [], [], 0
+        for c in real:
+            v = seen.get(c.name) or {"text": "none"}
+            if v.get("text") == "dropped":
+                dropped += 1
+                continue
+            if v.get("text") != "found" or v.get("cropped"):
+                keep.append(c)
+                continue
+            top, bot = float(v.get("top", 0)), float(v.get("bottom", 100))
+            if top >= 74.0:                           # a band at the bottom: keep everything above it
+                h, y = (top - 3.0) / 100.0, "0"
+            elif bot <= 26.0:                         # a band at the top: keep everything below it
+                h, y = 1.0 - (bot + 3.0) / 100.0, f"ih*{(bot + 3.0) / 100.0:.3f}"
+            else:
+                seen[c.name]["text"] = "dropped"
+                dropped += 1
+                continue
+            tmp_c = c.with_suffix(".crop.mp4")
+            r_ = subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(c), "-an", "-vf",
+                                 f"crop=iw*{h:.3f}:ih*{h:.3f}:(iw-iw*{h:.3f})/2:{y},scale={VIDEO_W}:{VIDEO_H}:flags=lanczos,setsar=1",
+                                 "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p", str(tmp_c)],
+                                capture_output=True)
+            if r_.returncode == 0 and tmp_c.exists() and tmp_c.stat().st_size > 2000:
+                tmp_c.replace(c)
+                seen[c.name]["cropped"] = True
+                cropped.append(c)
+                keep.append(c)
+            else:
+                tmp_c.unlink(missing_ok=True)
+                seen[c.name]["text"] = "dropped"
+                dropped += 1
+        if cropped:
+            still = {n for n, box in look_text(cropped).items() if box is not None}
+            for c in cropped:
+                if c.name in still:
+                    seen[c.name]["text"] = "dropped"
+                    keep.remove(c)
+                    dropped += 1
+            cropped = [c for c in cropped if c.name not in still]
+        if cropped or dropped:
+            log(f"footage check: {len(cropped)} real clip(s) had subtitles or captions cropped away, {dropped} with text "
+                f"over the picture left out")
+        real = keep
+
+    # B — stock clips against the story's era and subject
+    if cfg.get("stock") and stock:
+        todo = [Path(c) for c in stock if Path(c).name not in seen]
+        story = " ".join((script or "").split()[:140])
+        for i in range(0, len(todo), 9):
+            batch, cells = todo[i:i + 9], []
+            for k, c in enumerate(batch):
+                f = tmp / f"{c.stem}_m.jpg"
+                if frame(c, (_video_dur(c) or 4.0) * 0.4, f):
+                    cells.append((k + 1, [f]))
+            if not cells:
+                continue
+            got = ask(FOOTAGE_FIT_PROMPT.replace("[INSERT TITLE HERE]", title or "").replace("[INSERT STORY HERE]", story),
+                      sheet(cells, tmp / f"stock_{i // 9}.jpg", 1))
+            for row in got:
+                try:
+                    c = batch[int(row.get("n")) - 1]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                seen[c.name] = {"ok": row.get("ok") is not False, "why": str(row.get("why") or "")[:80]}
+        before = len(stock)
+        stock = [c for c in stock if (seen.get(Path(c).name) or {}).get("ok", True)]
+        if before - len(stock):
+            log(f"footage check: {before - len(stock)} of {before} stock clip(s) left out — they did not fit the story")
+    cache_f.write_text(json.dumps(seen, indent=1), encoding="utf-8")
+    shutil.rmtree(tmp, ignore_errors=True)
+    return real, stock
 
 
 def _directed(style: str) -> bool:
@@ -4257,6 +4543,33 @@ def _find_tokens(stream: tuple, want: list, est: float, lo: float, hi: float, en
         if best is None or key > best[0]:
             best = (key, t)
     return round(best[1], 2) if best else None
+
+
+def _still_lines(job: Path, photos: list) -> tuple:
+    """({still path: second its words are spoken}, {names of reusable stills}). Each AI still was drawn for one
+    line of narration (astro_scenes.json, scene_NN.jpg = item NN); a line the subtitles cannot find keeps its
+    place in the script's order. Reusable stills are the ones the art director marked "reuse"."""
+    try:
+        items = json.loads((job / "astro_scenes.json").read_text(encoding="utf-8"))
+        cues = _parse_srt_full((job / "subs.srt").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}, set()
+    if not cues or not isinstance(items, list) or not items:
+        return {}, set()
+    stream, total = _spoken_stream(cues), cues[-1][1]
+    out, reuse = {}, set()
+    for p in photos:
+        m = re.search(r"scene_(\d+)", Path(str(p)).name)
+        if not p or not m or int(m.group(1)) >= len(items) or not isinstance(items[int(m.group(1))], dict):
+            continue
+        i = int(m.group(1))
+        it = items[i]
+        if it.get("reuse"):
+            reuse.add(Path(str(p)).name)
+        est = total * (i + 0.5) / len(items)
+        t = _find_line(stream, str(it.get("text") or ""), est)
+        out[p] = t if t is not None else est
+    return out, reuse
 
 
 def _footage_lines(job: Path) -> dict:
@@ -8254,7 +8567,7 @@ def _build_astro_motion_plan(job: Path, total: float, photos: list, ai_clips: li
     _cut = float((((STYLE_INFO.get(style) or {}).get("pacing") or {}).get("cut_s") or 0) or 0)
     slot_max = min(YT_SLOT_MAX, _cut * 1.5) if _cut else YT_SLOT_MAX
 
-    def _take_by_sentence(cur_t: float, m: int):
+    def _take_by_sentence(cur_t: float, m: int, fresh_only: bool = False):
         """A YouTube shot for the sentence being spoken. Shots were chosen sentence by sentence, so a
         shot plays while its sentence is spoken; a sentence nothing was found for borrows from the
         sentences just spoken in this stretch of footage — a sentence the scene before already showed
@@ -8288,7 +8601,8 @@ def _build_astro_motion_plan(job: Path, total: float, photos: list, ai_clips: li
             latest = max(line_at[name(c)] for c in past)
             return take(min((c for c in past if line_at[name(c)] == latest), key=name))
         # 3. shots with no sentence of their own, found for this stretch
-        loose = [c for c in unused if name(c) not in line_at and tag_of.get(name(c), -9) == m]
+        loose = [c for c in unused if name(c) not in line_at and tag_of.get(name(c), -9) == m
+                 and (not fresh_only or name(c) in yt_len)]
         if loose:
             return take(min(loose, key=name))
         # 4. an unseen shot of the sentence about to be spoken: a few seconds early beats an old one
@@ -8312,6 +8626,8 @@ def _build_astro_motion_plan(job: Path, total: float, photos: list, ai_clips: li
         if spare:
             return take(min(spare, key=lambda c: (line_at[name(c)], name(c))))
 
+        if fresh_only:
+            return None                         # only an unseen real shot was asked for
         def again(c):
             if c in unused:
                 unused.remove(c)
@@ -8427,8 +8743,70 @@ def _build_astro_motion_plan(job: Path, total: float, photos: list, ai_clips: li
     spent = {"photo": 0.0, "video": 0.0}
     want_ai, want_st = _MIX[0], _MIX[1]
 
+    # pacing.footage_first: a slot takes an unseen real shot of the words being spoken whenever there is one, and
+    # an AI still only where no real footage fits — the shares above then only decide what fills the rest.
+    # pacing.stills_once: a still is shown once, on the words it was drawn for (astro_scenes.json "text"); only
+    # the stills the art director marked reusable ("reuse": neutral atmosphere, nobody in particular) come back.
+    _pc = (STYLE_INFO.get(style) or {}).get("pacing") or {}
+    footage_first = bool(_pc.get("footage_first")) and bool(yt_len)
+    stills_once = bool(_pc.get("stills_once")) and not no_stills
+    still_at, reusable = _still_lines(job, photos) if (footage_first or stills_once) and not no_stills else ({}, set())
+    shown_still: dict = {}                  # still -> when it was last on screen
+    shown_n: dict = {}                      # still -> how many times it has been on screen
+
+    def pick_still(cur_t: float, anywhere: bool = False):
+        fresh = [p_ for p_ in photos if p_ and p_ not in shown_still and p_ in still_at
+                 and (anywhere or cur_t - 20.0 <= still_at[p_] <= cur_t + 8.0)]
+        if fresh:
+            return min(fresh, key=lambda p_: (abs(still_at[p_] - cur_t), p_))
+        # a plate fits anywhere, but not everywhere: at most twice in a video, two minutes apart
+        spare = [p_ for p_ in photos if p_ and Path(p_).name in reusable and shown_n.get(p_, 0) < 2
+                 and cur_t - shown_still.get(p_, -1e9) > 120.0]
+        if spare:
+            return min(spare, key=lambda p_: (shown_still.get(p_, -1e9), p_))
+        return None
+
+    def photo_entry(p_, cur_t: float):
+        shown_still[p_] = cur_t
+        shown_n[p_] = shown_n.get(p_, 0) + 1
+        spent["photo"] += ASTRO_PHOTO_SLOT
+        return ("photo", p_, False, ASTRO_PHOTO_SLOT)
+
+    def real_entry(clip, cur_t: float):
+        last_use[clip] = cur_t
+        real = Path(clip).name in yt_len
+        slot = max(YT_SLOT_MIN, min(slot_max, yt_len[Path(clip).name])) if real else ASTRO_VIDEO_SLOT
+        spent["video"] += slot
+        return ("video", clip, leak_on and not real, slot)
+
+    def footage_first_entry(cur_t: float):
+        nonlocal no_repeat
+        m = int(cur_t * clock // win_s)
+        clip = _take_by_sentence(cur_t, m, fresh_only=True) if line_at else None
+        if clip:
+            return real_entry(clip, cur_t)
+        p_ = pick_still(cur_t)
+        if p_:
+            return photo_entry(p_, cur_t)
+        if pexels_clips:
+            # nothing unseen fits: a real shot of what was just said, shown again from later in it and closer — even
+            # on a channel that otherwise never replays a shot (look.youtube.repeat false), because the other way out
+            # is a painting from another part of the story
+            keep, no_repeat = no_repeat, False
+            try:
+                clip = take_pex(cur_t)
+            finally:
+                no_repeat = keep
+            if clip:
+                return real_entry(clip, cur_t)
+        return None
+
     def gap_entry(g: int, cur_t: float = 0.0):
         nonlocal vi
+        if footage_first:
+            e_ = footage_first_entry(cur_t)
+            if e_ is not None:
+                return e_
         done = spent["photo"] + spent["video"]
         tgt = want_ai + want_st
         need_ai = (want_ai / tgt if tgt else 0.5) - (spent["photo"] / done if done else 0.0)
@@ -8452,6 +8830,19 @@ def _build_astro_motion_plan(job: Path, total: float, photos: list, ai_clips: li
         if (no_repeat and not no_stills and not photo_bag.bag and plan and plan[-1][0] == "photo"
                 and float(plan[-1][3]) < 2 * ASTRO_PHOTO_SLOT):
             return None                     # every still is on screen once: the one before holds longer instead
+        if stills_once:
+            # never a still out of its place: the unseen one nearest its own words, else a reusable one, else the
+            # one shown longest ago (only when nothing else at all is left)
+            p_ = pick_still(cur_t, anywhere=True)
+            if p_ is None and pexels_clips:
+                clip = take_pex(cur_t)
+                if clip:
+                    return real_entry(clip, cur_t)
+            if p_ is None:
+                p_ = min((x for x in photos if x), key=lambda x: (shown_n.get(x, 0), shown_still.get(x, -1e9), x),
+                         default=None)
+            if p_:
+                return photo_entry(p_, cur_t)
         spent["photo"] += ASTRO_PHOTO_SLOT
         return ("photo", photo_bag.take(), False, ASTRO_PHOTO_SLOT)
 
@@ -9003,6 +9394,9 @@ def run_pipeline(title: str, minutes: int = 20, force: bool = False,
     try:
         job = job_dir(title, style)
         job.mkdir(parents=True, exist_ok=True)
+        # the whole run is written to log.txt too: a failure (a refused picture, an empty balance) can be read later
+        _LOG_FILE[0] = job / "log.txt"
+        _log_line(f"\n##### {time.strftime('%Y-%m-%d %H:%M:%S')} — {title} ({style}, {minutes} min)")
         _unpublish(job, title)
         (job / "title.txt").write_text(f"{title}\n{minutes} minutes\n", encoding="utf-8")
         # recorded so a later re-render knows which narrator this job was for

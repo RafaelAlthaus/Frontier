@@ -90,9 +90,15 @@ function build(){
       plane:{path:'M120,560 C200,490 400,460 700,460 L1560,460 C1700,460 1780,520 1780,560 C1780,600 1700,660 1560,660 L700,660 C400,660 200,630 120,560 Z M1380,460 L1620,260 L1700,260 L1560,460',decks:[[300,560,1600,560]],spots:Array.from({length:14},(_,i)=>[420+i*82,i%2?548:648])},
       rocket:{path:'M960,90 C1090,230 1140,430 1140,900 L780,900 C780,430 830,230 960,90 Z M780,900 L700,1020 L820,900 M1140,900 L1220,1020 L1100,900',decks:[[780,400,1140,400],[780,600,1140,600],[780,800,1140,800]],spots:[[900,388],[1020,388],[900,588],[1020,588],[900,788],[1020,788]]},
       building:{path:'M560,120 L1360,120 L1360,1000 L560,1000 Z',decks:Array.from({length:6},(_,i)=>[560,240+i*130,1360,240+i*130]),spots:Array.from({length:14},(_,i)=>[640+(i%7)*110,368+Math.floor(i/7)*390])},
+      airship:{path:'M140,560 C140,455 430,410 960,410 C1490,410 1780,470 1780,560 C1780,650 1490,710 960,710 C430,710 140,665 140,560 Z M1600,445 L1750,330 L1800,330 L1720,470 M1600,675 L1750,790 L1800,790 L1720,650 M700,708 L740,770 L1060,770 L1100,708',decks:[[220,560,1700,560]],spots:[[400,548],[560,548],[720,548],[880,548],[1040,548],[1200,548],[1360,548],[780,758],[880,758],[980,758]]},
+      jet:{path:'M60,560 L250,528 C420,510 620,505 820,505 L1620,505 C1700,505 1765,522 1790,545 L1790,585 L250,585 Z M1320,505 L1600,320 L1690,320 L1650,505 M640,585 L1480,585 L1560,660 L860,660 Z',decks:[[300,548,1700,548]],spots:Array.from({length:12},(_,i)=>[420+i*100,575])},
+      capsule:{path:'M760,375 L1160,375 L1310,850 C1190,905 730,905 610,850 Z M850,375 L850,300 L1070,300 L1070,375',decks:[[690,640,1230,640]],spots:[[880,620],[1040,620],[960,830]]},
       tunnel:{path:'M60,440 L1860,440 L1860,680 L60,680 Z',decks:[[60,560,1860,560]],spots:Array.from({length:14},(_,i)=>[180+i*120,i%2?548:668])}};
     const key=(S.shape||'submarine').toLowerCase(), sh=shapes[key]||shapes.submarine;
-    const nF=Math.max(1,Math.min(14,Number(S.figures)||8)), nR=Math.max(0,Math.min(nF,Number(S.red)||1));
+    // parts: [{label, at 0-1 along the machine}] — a technical moment names parts, not people: no crew then
+    const partsL=(Array.isArray(S.parts)?S.parts:[]).filter(q=>q&&String(q.label||'').trim()).slice(0,4);
+    const figN=Number(S.figures), nF=Math.max(0,Math.min(14,Number.isFinite(figN)?figN:(partsL.length?0:8))),
+          nR=Math.max(0,Math.min(nF,Number.isFinite(Number(S.red))?Number(S.red):(nF?1:0)));
     const fs=key==='rocket'?62:key==='building'?70:78;
     scene.innerHTML=`<canvas id="gp" class="full"></canvas>
       <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;left:0;top:0">
@@ -127,6 +133,19 @@ function build(){
         g.innerHTML=`<line x1="${x+w*.4}" y1="${y-fs*.8}" x2="${cx-16}" y2="${cy+12}" stroke="${GOLD}" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="22" fill="#140E07" stroke="${GOLD}" stroke-width="3"/>
           <text x="${cx}" y="${cy+11}" text-anchor="middle" font-family="Kit Term" font-size="34" fill="${GOLD}">${n}</text>`; parts.calls.appendChild(g); call=g}
       parts.figs.push({el,red,i,call})}
+    // a numbered ring on each named part, a leader down (or across) to its name in the drafting hand
+    parts.pts=partsL.map((q,k)=>{const at=Math.max(.04,Math.min(.96,Number(q.at)||((k+1)/(partsL.length+1))));
+      const px=vertical?bb.x+bb.width/2:bb.x+bb.width*at, py=vertical?bb.y+bb.height*at:((sh.decks[0]||[])[1]||bb.y+bb.height*.52);   // on the body's centre line, not the fin's
+      const lx=vertical?bb.x+bb.width+90:Math.max(140,Math.min(1340,px-40)), ly=vertical?py:dy+74+(k%2)*64;
+      const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('opacity','0');
+      g.innerHTML=`<line x1="${px}" y1="${py+(vertical?0:24)}" x2="${vertical?lx-12:px}" y2="${vertical?ly:ly-40}" stroke="${GOLD}" stroke-width="2"/>
+        <circle cx="${px}" cy="${py}" r="24" fill="#140E07" stroke="${GOLD}" stroke-width="3" style="filter:drop-shadow(0 0 8px rgba(232,112,26,.8))"/>
+        <text x="${px}" y="${py+11}" text-anchor="middle" font-family="Kit Term" font-size="36" fill="${GOLD}">${n+k+1}</text>`;
+      parts.calls.appendChild(g);
+      const lab=document.createElement('div'); lab.className='term';
+      lab.style.cssText=`position:absolute;left:${lx}px;top:${ly-(vertical?24:34)}px;font-size:46px;color:${HOT};white-space:nowrap;opacity:0;text-shadow:0 0 12px rgba(232,112,26,.6)`;
+      lab.textContent=(n+k+1)+'  '+String(q.label).toUpperCase(); document.getElementById('figs').appendChild(lab);
+      return {g,lab,k}});
   }
   if(t==='sonar'){
     blackGround();
@@ -147,14 +166,13 @@ function build(){
         ${[[26,26],[1414,26],[26,894],[1414,894]].map(([x,y])=>`<div class="abs" style="left:${x}px;top:${y}px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#7A6040,#2A1E10);box-shadow:inset 0 0 0 2px #120C06"></div>`).join('')}
         <div class="abs" style="left:70px;top:44px;width:1320px;height:74px;border-radius:40px;background:#0E0905;box-shadow:inset 0 3px 10px rgba(0,0,0,.8)"></div>
         ${Array.from({length:nb},(_,i)=>bulbHTML('b'+i,112+i*112,81,22)).join('')}
-        <div id="tt" class="bold" style="position:absolute;left:78px;top:160px;width:900px;font-size:82px;line-height:1.04;color:${GOLD}"></div>
-        <div id="cls" class="black" style="position:absolute;right:70px;top:162px;font-size:50px;letter-spacing:.1em;padding:14px 30px;border:4px solid ${EMB};border-radius:10px;color:${EMB};background:#120B05">${esc((S.classification||'TOP SECRET').toUpperCase())}</div>
+        <div id="tt" class="bold" style="position:absolute;left:78px;top:160px;width:1300px;font-size:82px;line-height:1.04;color:${GOLD}"></div>
         <div id="scr" class="abs" style="left:70px;top:350px;width:1320px;height:540px;border-radius:44px/60px;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#231606 0%,#120B04 60%,#070402 100%);
           box-shadow:inset 0 0 70px rgba(0,0,0,.95),0 0 0 10px #0D0905,0 0 0 13px #3E2E18">
           <div id="rows" style="position:absolute;left:66px;top:50px;width:1190px"></div><div class="scan" style="opacity:.7"></div>
           <div id="flk" class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(255,190,70,.07),rgba(0,0,0,0) 70%)"></div></div></div>`;
-    parts={doc:document.getElementById('doc'),cls:document.getElementById('cls'),tt:document.getElementById('tt'),flk:document.getElementById('flk'),bulbs:Array.from({length:nb},(_,i)=>document.getElementById('b'+i)),rows:[]};
-    {const ttl=String(S.title||'').toUpperCase(), cx=document.createElement('canvas').getContext('2d'); let fz=82; while(fz>46){cx.font=`800 ${fz}px 'Kit Bold'`; if(cx.measureText(ttl+'_').width<=860)break; fz-=2} cx.font=`800 ${fz}px 'Kit Bold'`; const one=cx.measureText(ttl+'_').width<=860; parts.tt.style.fontSize=(one?fz:58)+'px'; parts.tt.style.whiteSpace=one?'nowrap':'normal'; parts.tt.style.width=one?'auto':'860px'} parts.tt.style.textShadow=halo(.75);
+    parts={doc:document.getElementById('doc'),tt:document.getElementById('tt'),flk:document.getElementById('flk'),bulbs:Array.from({length:nb},(_,i)=>document.getElementById('b'+i)),rows:[]};
+    {const ttl=String(S.title||'').toUpperCase(), cx=document.createElement('canvas').getContext('2d'); let fz=82; while(fz>46){cx.font=`800 ${fz}px 'Kit Bold'`; if(cx.measureText(ttl+'_').width<=1300)break; fz-=2} cx.font=`800 ${fz}px 'Kit Bold'`; const one=cx.measureText(ttl+'_').width<=1300; parts.tt.style.fontSize=(one?fz:58)+'px'; parts.tt.style.whiteSpace=one?'nowrap':'normal'; parts.tt.style.width=one?'auto':'1300px'} parts.tt.style.textShadow=halo(.75);
     (S.rows||[]).slice(0,5).forEach(r=>{const el=document.createElement('div'); el.className='term';
       el.style.cssText=`font-size:62px;line-height:1.28;display:flex;gap:40px;margin-bottom:14px;border-bottom:2px dotted rgba(234,184,26,.22);padding-bottom:6px;opacity:0`;
       el.innerHTML=`<span style="color:${GLOW};min-width:380px;text-shadow:0 0 12px rgba(232,112,26,.6)">${esc(String(r.k||'').toUpperCase())}</span><span class="v" style="color:${HOT};text-shadow:0 0 14px rgba(234,184,26,.75)"></span>`;
@@ -206,6 +224,7 @@ function frame(t){
     parts.decks.forEach(d=>d.setAttribute('opacity',String(seg(t,1.3,1.7)*out)));
     parts.figs.forEach(f=>{const on=seg(t,1.6+f.i*.08,1.75+f.i*.08); f.el.style.opacity=on*out;
       if(f.call)f.call.setAttribute('opacity',String(eo3(seg(t,2.6+f.i*.05,2.9+f.i*.05))*out))});
+    (parts.pts||[]).forEach(q=>{const a=2.0+q.k*.4; q.g.setAttribute('opacity',String(eo3(seg(t,a,a+.3))*out)); q.lab.style.opacity=eo3(seg(t,a+.2,a+.55))*out});
     lit(parts.lab,warm(t,.25,3)*.85); parts.lab.style.opacity=(t>.25?1:0)*out; parts.nt.style.opacity=eo3(seg(t,2.6,3.0))*out;
     parts.tb.style.opacity=eo3(seg(t,2.0,2.5))*.9*out;
     scene.style.transform=`scale(${1+0.04*eio3(seg(t,0,D))})`;
@@ -236,8 +255,6 @@ function frame(t){
     const nb=parts.bulbs.length; parts.bulbs.forEach((b,i)=>{const on=warm(t,.35+i*.07,i%7); const chase=t>1.6?((Math.floor(t*4)+i)%3===0?.45:1):1; bulb(b,on*chase)});
     parts.tt.innerHTML=typed(String(S.title||'').toUpperCase(),seg(t,.5,1.5)*String(S.title||'').length+.99,'_');
     // the lit sign: dark glass until its lamp catches, then gold on a warm glow
-    const s=warm(t,1.25,3); parts.cls.style.color=mix(EMB,HOT,s); parts.cls.style.borderColor=mix(EMB,GOLD,s); parts.cls.style.textShadow=halo(s);
-    parts.cls.style.background=`rgba(${Math.round(18+80*s)},${Math.round(11+36*s)},5,1)`; parts.cls.style.boxShadow=s>0?`0 0 ${30*s}px rgba(232,112,26,${.6*s}),inset 0 0 ${24*s}px rgba(255,200,80,${.35*s})`:'none';
     let t0=1.6; parts.rows.forEach(r=>{r.el.style.opacity=(t>=t0?1:0)*out; r.v.innerHTML=typed(r.text,seg(t,t0,t0+.55)*r.text.length+.99,'█'); t0+=.62});
     parts.flk.style.opacity=.75+.25*Math.sin(t*50);
   }
