@@ -684,6 +684,15 @@ footer a.algrow img{height:20px;width:20px;display:block}
           placeholder="THE MAIN CHARACTER is the woman from the reference image, and she is in EVERY frame: …"></textarea>
       </div>
 
+      <div class="charbox hidden" id="guideBox">
+        <div class="mix-h">Guide photo <small>— the person shown on the right over the stock shots. Pick one, upload
+          your own, or choose none.</small></div>
+        <div class="chars" id="guides"></div>
+        <input type="file" id="guideFile" accept="image/png,image/jpeg,image/webp" hidden>
+        <div class="charnote">Cut out on your computer, for free: a photo on a plain backdrop (white, grey, one colour)
+          comes out cleanest; a busy backdrop fades into the shot instead. Use a photo you have the right to use.</div>
+      </div>
+
       <div class="opt-sec">
         <div class="mix-h">Output</div>
         <label class="opt"><input type="checkbox" id="o_subs" checked>
@@ -947,6 +956,14 @@ function pickChannel(n){
   const c = CHANNELS[n] || {};
   // The cast: shown only by channels built on a recurring character, and only
   // pre-filled while you have not written your own.
+  // the guide photo: shown only by channels with look.guide
+  $('#guideBox').classList.toggle('hidden', !c.guide);
+  if(c.guide){
+    let savedG = null;
+    try{ savedG = localStorage.getItem('fr.guide.' + n); }catch(e){}
+    drawGuides();
+    pickGuide(savedG !== null && (savedG === '' || GUIDES.some(k => k.rel === savedG)) ? savedG : (c.guide_image || ''));
+  }
   const box = $('#charBox'), ta = $('#o_char');
   box.classList.toggle('hidden', !c.character);
   if(c.character){
@@ -1311,6 +1328,48 @@ $('#charFile').onchange = async e => {
   pickChar(r.character.rel, true);
 };
 
+/* ── the guide photo ────────────────────────────────────────────────────── */
+let GUIDES = [], GUIDE_PICK = '';
+async function loadGuides(){
+  try{ GUIDES = (await api('/api/guides')).guides || []; }catch(e){ GUIDES = []; }
+}
+function drawGuides(){
+  const list = [...GUIDES].sort((a, b) => b.mtime - a.mtime);
+  $('#guides').innerHTML =
+    `<button class="chr" type="button" data-grel="" aria-pressed="${GUIDE_PICK === ''}"><b>&times;</b><span>No guide</span></button>`
+    + list.map(x => `
+    <button class="chr" type="button" data-grel="${esc(x.rel)}" aria-pressed="${x.rel === GUIDE_PICK}" title="${esc(x.file)}">
+      <img src="${esc(x.src)}" alt="">
+      <span>${esc(x.label)}</span>
+    </button>`).join('')
+    + `<button class="chr up" type="button" id="guideUp"><b>+</b><span>Upload a photo</span></button>`;
+  document.querySelectorAll('.chr[data-grel]').forEach(b => b.onclick = () => pickGuide(b.dataset.grel));
+  $('#guideUp').onclick = () => $('#guideFile').click();
+}
+function pickGuide(rel){
+  GUIDE_PICK = rel || '';
+  document.querySelectorAll('.chr[data-grel]').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.grel === GUIDE_PICK)));
+  try{ localStorage.setItem('fr.guide.' + CH, GUIDE_PICK); }catch(e){}
+}
+$('#guideFile').onchange = async e => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if(!f) return;
+  const upBtn = $('#guideUp');
+  upBtn.classList.add('busy');
+  upBtn.querySelector('span').textContent = 'Cutting out…';
+  const fd = new FormData();
+  fd.append('file', f);
+  let r;
+  try{ r = await api('/api/guides', {method: 'POST', body: fd}); }
+  catch(err){ r = {error: 'The upload did not go through — is Frontier still running?'}; }
+  await loadGuides();
+  drawGuides();
+  if(r.error || !r.guide) return fail(r.error || 'The upload did not go through.');
+  pickGuide(r.guide.rel);
+};
+
 /* ── length ─────────────────────────────────────────────────────────────── */
 const LENS = [5, 10, 20, 30];
 function buildLens(){
@@ -1375,6 +1434,7 @@ $('#go').onclick = async () => {
       thumb_count:+$('#o_thumbn').value || 2,
       character:  ($('#o_char').value || '').trim(),
       character_image: $('#charBox').classList.contains('hidden') ? '' : CHAR_PICK,
+      guide_image: $('#guideBox').classList.contains('hidden') ? '' : GUIDE_PICK,
       desc:       $('#o_desc').checked,
       chapters:   $('#o_desc').checked ? (+$('#o_chapters').value || 0) : 0,
       sources:    ($('#o_desc').checked && $('#o_sources').checked) ? (+$('#o_sourcesn').value || 0) : 0,
@@ -1587,7 +1647,7 @@ function esc(s){
     c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
 
-loadChars().then(loadChannels);
+Promise.all([loadChars(), loadGuides()]).then(loadChannels);
 buildLens();
 loadLibrary();
 tick();

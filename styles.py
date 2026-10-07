@@ -110,6 +110,10 @@ def apply_to_engine(make_video, motion) -> list:
         skins = look.get("skins") or []
         if skins:
             motion.STYLE_SKINS[name] = list(skins)
+        if look.get("cutouts"):
+            motion.STYLE_CUTOUT_POOL[name] = [str(x) for x in look["cutouts"]]
+        else:
+            motion.STYLE_CUTOUT_POOL.pop(name, None)
         if look.get("caption_accent"):
             make_video.CHANNEL_ACCENT[name] = look["caption_accent"]
         if look.get("footage_grade"):
@@ -277,6 +281,10 @@ def catalogue() -> list:
              # the channel's own character picture (a path under assets/), and
              # whether it is a pictures-only channel — Options hides the sliders then
              "character_image": ((s.get("look") or {}).get("character_image") or ""),
+             # a guide photo laid over the stock shots (look.guide, guide.py): Options shows the photo picker
+             "guide": bool((s.get("look") or {}).get("guide")),
+             "guide_image": (((s.get("look") or {}).get("guide") or {}).get("image") or "")
+             if isinstance((s.get("look") or {}).get("guide"), dict) else "",
              "graphics": (s.get("pacing") or {}).get("graphics") is not False,
              "photo_every_s": (s.get("pacing") or {}).get("photo_every_s") or None,
              "options_note": ((s.get("look") or {}).get("options_note") or ""),

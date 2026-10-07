@@ -1,0 +1,190 @@
+{
+  "name": "luz",
+  "order": 41,
+  "label": "LUZ — calm Spanish spirituality",
+  "description": "Calm, warm Spanish-language spiritual videos about the zodiac signs, God, the soul and everything in between, narrated by a calm, firm Latin American voice speaking directly to the viewer. Bright and peaceful: warm ivory, soft gold and dawn rose, never dark. The pictures are free stock footage and photos of the sky and the cosmos, constellations and zodiac imagery, sunrise light, clouds and light rays, candles, hands in prayer, churches and temples, water, forests, flowers and gentle nature. Soft motion graphics on ivory paper, real web pages highlighted, a guide photo on the right over some shots, a quiet ambient music bed.",
+  "tagline": "Calm light: ivory, gold and dawn rose — the sky, faith and the signs.",
+  "points": [
+    "Free stock footage and photos (Pexels + Pixabay)",
+    "Soft motion graphics on ivory paper",
+    "Real web pages, highlighted",
+    "A guide photo on the right",
+    "Spanish narration, burned-in captions"
+  ],
+  "cost": "voice only — about $0.10 per 1,000 characters on WaveSpeed; everything else free",
+  "language": "Spanish",
+  "voice": {
+    "provider": "wavespeed",
+    "wavespeed_voice": "J3JSkWXJwqClE1dIxQM9",
+    "wavespeed_stability": 0.7,
+    "wavespeed_similarity": 0.85,
+    "gender": "male",
+    "voice_name": "Diego — Narrative, Clear, Soft (ElevenLabs library)",
+    "note": "Diego (ElevenLabs library ID) on WaveSpeed's ElevenLabs multilingual v2: one steady narrator, the whole script in one request up to ~9,000 characters. v3 (eleven-v3/timing) slid into other speakers part by part.",
+    "wavespeed_chunk_chars": 9000,
+    "plain_quotes": true,
+    "wavespeed_model": "elevenlabs/multilingual-v2"
+  },
+  "features": {
+    "offered": [
+      "stock",
+      "motion",
+      "headlines",
+      "sound"
+    ],
+    "on": [
+      "stock",
+      "motion",
+      "headlines",
+      "sound"
+    ],
+    "prefer": "stock"
+  },
+  "look": {
+    "title_font": "'Poppins Extra Bold', Poppins, Montserrat, sans-serif",
+    "title_weight": "800",
+    "accent": [
+      "#C8A24E",
+      "#D49A88",
+      "#E3B5A4",
+      "#A8843A",
+      "#E8CFA0"
+    ],
+    "warn": "#C98472",
+    "good": "#B8913F",
+    "skins": [
+      "luz"
+    ],
+    "ground": "textures/luz_ground.png",
+    "people_dir": "",
+    "dust": false,
+    "vignette": false,
+    "leak": false,
+    "factcheck": false,
+    "footage_grade": "eq=brightness=0.035:contrast=0.93:saturation=0.9:gamma=1.04,colorbalance=rs=0.04:gs=0.01:bs=-0.04:rh=0.02:bh=-0.02",
+    "captions": {
+      "font": "Poppins Bold",
+      "size": 84,
+      "upper": false,
+      "karaoke": true,
+      "outline": 0.6,
+      "outline_colour": "&H00202C3A",
+      "shadow": 1.2,
+      "line_chars": 34,
+      "margin_v": 150
+    },
+    "caption_accent": "&H7AC2E2&",
+    "stock_photos": 1.5,
+    "footage_check": {
+      "stock": true
+    },
+    "footage_taste": "Bright, calm and luminous — never dark, gloomy or horror. The night sky, galaxies, nebulae, the moon and the stars, constellations and zodiac imagery, the sun rising, golden light through clouds and trees, light rays, candles and lamps, hands in prayer, churches, temples and cathedrals, open books and old scripture, water, waves, rivers, forests, meadows, flowers, birds in flight, a person in quiet reflection seen from behind. No logos, no text on screen, no crowds, no cities at night, no technology.",
+    "headlines": {
+      "press": false,
+      "real_only": true,
+      "lang": "es"
+    },
+    "cinema": {
+      "frame": "stage",
+      "ground": "luz",
+      "frame_every": 3,
+      "pop_every": 1000000
+    },
+    "guide": {
+      "every": 2,
+      "min_s": 3.0,
+      "start_s": 4.0,
+      "height": 0.9,
+      "margin": -15,
+      "bottom": -15
+    },
+    "sound": {
+      "sfx_db": -20,
+      "music_rel_db": -9,
+      "duck_db": -6,
+      "track": "fluidscape-loop"
+    },
+    "options_note": "Free stock footage and photos from Pexels and Pixabay, motion graphics, real web pages and sound design. The only paid step is the voice. No fact check, no YouTube footage, no AI images, no thumbnails.",
+    "cutouts": [
+      "moon",
+      "vintage_moon_on_hand",
+      "star",
+      "collage_bird_dove",
+      "open_book",
+      "holy_bible",
+      "church",
+      "key",
+      "eye",
+      "heart",
+      "cloud",
+      "diamond",
+      "ancient_pilar",
+      "hand_watering_can"
+    ],
+    "punch": {
+      "bar": "#F7F1E6",
+      "alpha": 0.94,
+      "ink": "#4A3B2C",
+      "font": "Poppins ExtraBold",
+      "upper": false
+    }
+  },
+  "pacing": {
+    "graphic_every_min": 0.6,
+    "graphic_ratio": 0.3,
+    "graphic_dur_s": 6.0,
+    "graphic_max_s": 9.0,
+    "white_fade": 0.3,
+    "mix": [
+      22,
+      50,
+      28
+    ]
+  },
+  "output": {
+    "burn_subs": true,
+    "desc": true,
+    "thumbnails": false,
+    "sources": false
+  },
+  "description_footer": [
+    "Música: \"Fluidscape\" — Kevin MacLeod (incompetech.com)",
+    "Licencia: Creative Commons: By Attribution 4.0 — http://creativecommons.org/licenses/by/4.0/"
+  ],
+  "stock_queries": [
+    "night sky stars timelapse",
+    "milky way galaxy",
+    "nebula space",
+    "full moon clouds",
+    "constellation stars",
+    "zodiac astrology",
+    "sunrise golden light",
+    "sun rays through clouds",
+    "light rays forest",
+    "golden hour field",
+    "candle flame",
+    "hands praying",
+    "church interior light",
+    "cathedral stained glass",
+    "temple sunrise",
+    "open bible",
+    "old book pages",
+    "calm ocean waves",
+    "river flowing",
+    "waterfall slow motion",
+    "misty forest morning",
+    "flower blooming",
+    "white roses",
+    "meadow wind",
+    "birds flying sky",
+    "dove flying",
+    "clouds timelapse",
+    "mountain sunrise",
+    "woman meditating sunrise",
+    "man silhouette sunset"
+  ],
+  "prompts": {
+    "outline": "You plan a calm, warm spiritual YouTube video in Spanish about the zodiac signs, God, the soul and everything in between. The narrator is the channel itself: a calm, firm voice speaking directly to the viewer as \"tú\", like a wise friend who has walked this road. Never present the narrator as a real, named person, and never put words in the mouth of a real person.\n\nTITLE: [INSERT TITLE HERE]\nLENGTH: [INSERT LENGTH — e.g., 15 minutes, 20 minutes, 25 minutes]\n\nPlan it in plain prose:\n1. THE OPENING (first 30 seconds): speak straight to the viewer's moment — what they are feeling or living right now that brought them to this video — and promise what they will understand by the end.\n2. FIVE TO EIGHT MOVEMENTS in order, each one idea: what it is, what it means for the viewer's life, one concrete example from ordinary life (a kitchen at dawn, a message not answered, an envelope of savings).\n3. For each movement, two or three things worth showing on screen as a short list or a few cards (a checklist of signs, three moments, a step) — short labels of two to five words.\n4. A gentle turn about two-thirds in: what has been hard becomes what was preparing them.\n5. THE CLOSING: a calm blessing or reflection and one simple thing to do today. No request to subscribe.\nStay warm and hopeful. Astrology and faith are spoken of as meaning and guidance, never as guaranteed predictions of money, health or other people's actions.",
+    "script": "Write the complete Spanish narration from the plan below.\n\nTHE PLAN:\n[INSERT OUTLINE HERE]\n\nLENGTH: [INSERT TARGET LENGTH]\n\nHOW IT SOUNDS\n- Neutral Latin American Spanish, addressed to \"tú\". Calm, warm, unhurried, but firm: the voice of someone sure of what they say.\n- Connected sentences that flow into each other, like a person speaking to one friend; join them with \"y\", \"porque\", \"cuando\", \"por eso\", \"aunque\". Paragraphs of three to five sentences. No one-line paragraphs, no lists read aloud.\n- Concrete images from ordinary life rather than abstractions.\n- The narrator is the channel: never claim to be a real, named person, never quote a real person unless the plan gives the exact source.\n- Speak of the signs and of God as meaning, comfort and guidance — never promise money, health or what another person will do.\n- Plain spoken text only: no headings, no stage directions, no emojis. Separate movements with a blank line.\n- End on a calm blessing or reflection, never a request to subscribe."
+  }
+}

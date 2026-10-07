@@ -69,7 +69,7 @@ def scene(tpl: str, style: str, seconds: float, title: str, subtitle: str, label
     if tpl == "pillars":
         sc["cutout_names"] = motion.pick_cutouts(["ancient_pilar"] * 3, 3, 1, strict=True)
     elif tpl in ("collage", "scatter", "opener"):
-        got = motion.pick_cutouts(sc.get("cutouts") or [], {"collage": 3, "scatter": 8, "opener": 6}[tpl], 1)
+        got = motion.pick_cutouts(sc.get("cutouts") or [], {"collage": 3, "scatter": 8, "opener": 6}[tpl], 1, style=style)
         if got:
             sc["cutout_names"] = got
     return sc

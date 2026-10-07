@@ -65,6 +65,7 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 AI33_API_KEY = os.environ.get("AI33_API_KEY", "")
 KIE_API_KEY = os.environ.get("KIE_API_KEY", "")
 PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY", "")
+PIXABAY_API_KEY = os.environ.get("PIXABAY_API_KEY", "")   # free stock video + photos next to Pexels
 
 # No default voice: a voice belongs to a channel, and shipping one would put
 # somebody else's narrator on every buyer's first video. Set it per channel
@@ -331,6 +332,31 @@ def set_character_image(rel: str = "") -> None:
     run, like the cast text, so one video's character never leaks into the next."""
     global _CHARACTER_IMAGE
     _CHARACTER_IMAGE = (rel or "").strip().replace("\\", "/")
+
+
+_GUIDE_IMAGE = ""     # this job's guide photo (Options), a path under assets/ — see guide.py
+
+
+def set_guide_image(rel: str = "") -> None:
+    """This job's guide photo, overriding the channel's look.guide.image. Reset on every run."""
+    global _GUIDE_IMAGE
+    _GUIDE_IMAGE = (rel or "").strip().replace("\\", "/")
+
+
+def guide_image_path(style: str):
+    """The guide photo laid over the stock shots (look.guide): the one picked in Options, else the channel's own.
+    None when the channel has no guide or there is no photo."""
+    import guide
+    cfg = guide.settings(STYLE_INFO.get(style) or {})
+    if not cfg:
+        return None
+    for rel in (_GUIDE_IMAGE, cfg.get("image") or ""):
+        rel = str(rel).strip().replace("\\", "/")
+        if rel and ".." not in rel.split("/"):
+            p = HERE / "assets" / rel
+            if p.is_file():
+                return p
+    return None
 
 
 def character_image_path(style: str):
@@ -613,7 +639,8 @@ def _features_mix(style: str, f: dict) -> tuple:
     """The visual mix these switches allow: the channel's own shares, with the switched-off sources
     given to what is left. YouTube footage and stock footage share the footage slots."""
     ai, st, gf = STYLE_MIX.get(style) or MIX_DEFAULT
-    ai = ai if f.get("ai_images") else 0.0
+    stock_photos = f.get("stock") and ((STYLE_INFO.get(style) or {}).get("look") or {}).get("stock_photos")
+    ai = ai if (f.get("ai_images") or stock_photos) else 0.0     # look.stock_photos fill the photo slots
     st = st if (f.get("stock") or f.get("youtube")) else 0.0
     gf = gf if f.get("motion") else 0.0
     if ai + st + gf <= 1:
@@ -1600,8 +1627,11 @@ def _read_aloud(job: Path, script: str, style: str) -> str:
     way a listener follows them — shorter sentences, fewer numbers and names nobody keeps, joins that lead on. Run
     once, after the fact check and before the voice; script.before-edit.txt keeps what it was given. Anything that
     comes back too short, too long, or without its marker lines keeps the script as it was."""
-    if not (STYLE_INFO.get(style) or {}).get("script_edit"):
+    edit_cfg = (STYLE_INFO.get(style) or {}).get("script_edit")
+    if not edit_cfg:
         return script
+    # a style may carry its own editor rules: "script_edit": {"prompt": "... [MIN] ... [MAX] ... NARRATION:\n"}
+    edit_prompt = (edit_cfg.get("prompt") if isinstance(edit_cfg, dict) else None) or READ_ALOUD_PROMPT
     voiced = (job / "audio.mp3").exists() or any(job.glob("audio_p*.mp3"))
     done = job / "script.edited"
     if voiced or done.exists() or (job / "script.pasted").exists():
@@ -1622,7 +1652,7 @@ def _read_aloud(job: Path, script: str, style: str) -> str:
         text = "\n\n".join(chunk)
         n = len(text.split())
         try:
-            got = _clean_script(claude(_lang_prompt(READ_ALOUD_PROMPT.replace("[MIN]", str(int(n * 0.8)))
+            got = _clean_script(claude(_lang_prompt(edit_prompt.replace("[MIN]", str(int(n * 0.8)))
                                                     .replace("[MAX]", str(int(n * 1.08))), style) + text,
                                        SCRIPT_BODY_MODEL, max_tokens=8000, provider=SCRIPT_PROVIDER))
         except _ClaudeError as e:
@@ -2392,13 +2422,31 @@ def generate_voiceover(script: str, job: Path, force: bool, avatar_min: float = 
         # `voice.wavespeed_voice` (or WAVESPEED_VOICE in .env), a deep narrator by default.
         import wavespeed
         v = (STYLE_INFO.get(style) or {}).get("voice") or {}
+        ws_model = v.get("wavespeed_model") or "elevenlabs/eleven-v3/timing"
+        if not ws_model.endswith("/timing"):
+            # no timings come back (multilingual v2, MiniMax): whisper times the subtitles, and its spelling is put
+            # right from the words the voice was given ("esta" -> "está", names)
+            mp3_w, srt_w = wavespeed.voiceover(sys.modules[__name__], script, job,
+                                               {"voice_id": v.get("wavespeed_voice") or os.environ.get("WAVESPEED_VOICE") or "Brian",
+                                                "model": ws_model,
+                                                **{k: v[f"wavespeed_{k}"] for k in ("stability", "similarity", "chunk_chars")
+                                                   if v.get(f"wavespeed_{k}") is not None},
+                                                "gender": v.get("gender") or "", "plain_quotes": bool(v.get("plain_quotes"))},
+                                               force)
+            fixed = _script_words_into_srt(srt_w, wavespeed._speakable(script, bool(v.get("plain_quotes"))))
+            if fixed:
+                log(f"  subtitles: {fixed} words respelled from the script")
+            return mp3_w, srt_w
         return wavespeed.voiceover(sys.modules[__name__], script, job,
                                    {"voice_id": v.get("wavespeed_voice") or os.environ.get("WAVESPEED_VOICE") or "Brian",
                                     "model": v.get("wavespeed_model") or "elevenlabs/eleven-v3/timing",
                                     # the channel's own WaveSpeed read: steadier (wavespeed_stability, 0-1) and the
                                     # size of each separately recorded part (wavespeed_chunk_chars)
                                     **{k: v[f"wavespeed_{k}"] for k in ("stability", "similarity", "chunk_chars")
-                                       if v.get(f"wavespeed_{k}") is not None}}, force)
+                                       if v.get(f"wavespeed_{k}") is not None},
+                                    # the speaker check's expected range, and quotes read as narration
+                                    "gender": v.get("gender") or "", "plain_quotes": bool(v.get("plain_quotes"))},
+                                   force)
     voice_id = STYLE_VOICE.get(style) or (ALGROW_VOICE_ID if provider == "algrow"
                                           else AI33_VOICE_ID)
     if not voice_id:
@@ -3935,7 +3983,7 @@ def fetch_astro_pexels_videos(job: Path, force: bool, n: int, style: str = "") -
     manifest = job / "astro_pexels.json"
     if manifest.exists() and not force:
         return [Path(p) for p in json.loads(manifest.read_text(encoding="utf-8")) if Path(p).exists()]
-    if not PEXELS_API_KEY:
+    if not (PEXELS_API_KEY or PIXABAY_API_KEY):
         return []
 
     order = _load_used_pexels_order()
@@ -3953,13 +4001,8 @@ def fetch_astro_pexels_videos(job: Path, force: bool, n: int, style: str = "") -
         try:
             for row in json.loads(mq.read_text(encoding="utf-8")):
                 got = 0
-                data = _pexels_get("https://api.pexels.com/videos/search",
-                                   {"query": row.get("q", ""), "per_page": 10,
-                                    "orientation": "landscape"})
-                for v in data.get("videos", []):
-                    vid = v.get("id")
-                    link = _pick_video_file(v) if vid and vid not in seen else None
-                    if not link:
+                for vid, link in _stock_videos(row.get("q", ""), 10):
+                    if vid in seen:
                         continue
                     seen.add(vid)
                     if vid in used:
@@ -3980,15 +4023,8 @@ def fetch_astro_pexels_videos(job: Path, force: bool, n: int, style: str = "") -
         # per_page was 6, which — after the used-ID filter — often left a pool far
         # smaller than asked for, and a small pool is exactly what makes the same
         # clips come round again.
-        data = _pexels_get("https://api.pexels.com/videos/search",
-                           {"query": q, "per_page": 20, "orientation": "landscape",
-                            "page": random.randint(1, 4)})
-        for v in data.get("videos", []):
-            vid = v.get("id")
-            if not vid or vid in seen:
-                continue
-            link = _pick_video_file(v)
-            if not link:
+        for vid, link in _stock_videos(q, 20, random.randint(1, 4)):
+            if vid in seen:
                 continue
             seen.add(vid)
             if vid in used:
@@ -4662,6 +4698,129 @@ def _pick_video_file(video: dict) -> str:
     return pick["link"]
 
 
+PIXABAY_ID_BASE = 10 ** 10    # Pixabay ids share the used-id registry with Pexels' (ints), kept apart by this offset
+
+
+def _pixabay_get(url: str, params: dict) -> dict:
+    """Pixabay's free API (PIXABAY_API_KEY). Empty on any failure, like _pexels_get."""
+    if not PIXABAY_API_KEY:
+        return {}
+    try:
+        r = requests.get(url, params={"key": PIXABAY_API_KEY, "safesearch": "true", **params}, timeout=30)
+        if r.status_code != 200:
+            return {}
+        return r.json()
+    except (requests.RequestException, ValueError):
+        return {}
+
+
+def _pixabay_videos(query: str, per_page: int = 10, page: int = 1) -> list:
+    """[(id, mp4 link)] for a Pixabay video search: the largest rendition not above VIDEO_W, none under 1280 wide."""
+    data = _pixabay_get("https://pixabay.com/api/videos/",
+                        {"q": (query or "")[:100], "per_page": max(3, min(200, per_page)),
+                         "page": max(1, min(2, page)), "video_type": "film"})
+    out = []
+    for h in data.get("hits") or []:
+        files = [f for f in (h.get("videos") or {}).values() if isinstance(f, dict) and f.get("url")]
+        if not files or not h.get("id"):
+            continue
+        le = [f for f in files if (f.get("width") or 0) <= VIDEO_W]
+        pick = max(le, key=lambda f: f.get("width") or 0) if le else min(files, key=lambda f: f.get("width") or 0)
+        if (pick.get("width") or 0) >= 1280:
+            out.append((PIXABAY_ID_BASE + int(h["id"]), pick["url"]))
+    return out
+
+
+def _stock_videos(query: str, per_page: int = 10, page: int = 1):
+    """(id, mp4 link) for one stock search: Pexels first, then Pixabay. A generator, so a caller that has what it
+    needs from Pexels never sends the Pixabay request."""
+    if PEXELS_API_KEY:
+        data = _pexels_get("https://api.pexels.com/videos/search",
+                           {"query": query, "per_page": per_page, "orientation": "landscape", "page": page})
+        for v in data.get("videos", []):
+            vid = v.get("id")
+            link = _pick_video_file(v) if vid else ""
+            if link:
+                yield vid, link
+    yield from _pixabay_videos(query, per_page, page)
+
+
+def _stock_photo_links(query: str, per_page: int = 8) -> list:
+    """[(id, jpg link)] for one photo search: Pexels (large2x, ~1900 px) first, then Pixabay (largeImageURL)."""
+    out = []
+    if PEXELS_API_KEY:
+        for p in _pexels_get("https://api.pexels.com/v1/search",
+                             {"query": query, "per_page": per_page, "orientation": "landscape"}).get("photos", []):
+            link = (p.get("src") or {}).get("large2x") or (p.get("src") or {}).get("large")
+            if p.get("id") and link:
+                out.append((p["id"], link))
+    for h in _pixabay_get("https://pixabay.com/api/",
+                          {"q": (query or "")[:100], "image_type": "photo", "orientation": "horizontal",
+                           "min_width": 1600, "per_page": max(3, per_page)}).get("hits") or []:
+        if h.get("id") and h.get("largeImageURL"):
+            out.append((PIXABAY_ID_BASE + int(h["id"]), h["largeImageURL"]))
+    return out
+
+
+def fetch_stock_photos(job: Path, force: bool, style: str = "", minutes: int = 0) -> list:
+    """look.stock_photos (photos per minute of video): free stock PHOTOS from Pexels and Pixabay for the photo slots
+    of a channel that draws no AI pictures. job/stock_photos/sp_NN.jpg, cached in stock_photos.json. The narration's
+    own searches (broll_queries.json) come first, then the channel's stock_queries."""
+    per_min = float(((STYLE_INFO.get(style) or {}).get("look") or {}).get("stock_photos") or 0)
+    if per_min <= 0 or not feature("stock") or not (PEXELS_API_KEY or PIXABAY_API_KEY):
+        return []
+    out_dir = job / "stock_photos"
+    out_dir.mkdir(exist_ok=True)
+    manifest = job / "stock_photos.json"
+    if manifest.exists() and not force:
+        got = [Path(p) for p in json.loads(manifest.read_text(encoding="utf-8")) if Path(p).exists()]
+        if got:
+            log(f"cached: {len(got)} stock photos")
+            return got
+    n = max(4, min(60, int(round((minutes or 10) * per_min))))
+    queries = []
+    try:
+        queries = [r.get("q") for r in json.loads((job / "broll_queries.json").read_text(encoding="utf-8"))
+                   if r.get("q")]
+    except (OSError, ValueError, AttributeError):
+        pass
+    extra = list(STYLE_PEXELS_QUERIES.get(style, ASTRO_PEXELS_QUERIES))
+    random.shuffle(extra)
+    # narration searches and channel searches take turns, so the photos follow the words and still vary
+    order = [q for pair in zip(queries[::2], extra) for q in pair] + queries[1::2] + extra[len(queries[::2]):]
+    picks, seen = [], set()
+    for q in order:
+        for pid, link in _stock_photo_links(q, 6)[:2]:
+            if pid not in seen:
+                seen.add(pid)
+                picks.append(link)
+                break
+        if len(picks) >= n:
+            break
+
+    def dl(i: int, link: str):
+        d = out_dir / f"sp_{i:02d}.jpg"
+        try:
+            _download(link, d)
+            from PIL import Image
+            with Image.open(d) as im:
+                if min(im.size) < 600:
+                    raise ValueError("too small")
+            return d
+        except Exception:                                   # noqa: BLE001
+            d.unlink(missing_ok=True)
+            return None
+
+    res = []
+    if picks:
+        log(f"stock photos: downloading {len(picks)} (Pexels/Pixabay)...")
+        with ThreadPoolExecutor(max_workers=DL_WORKERS) as ex:
+            res = list(ex.map(dl, range(len(picks)), picks))
+    out = [r for r in res if r]
+    manifest.write_text(json.dumps([str(p) for p in out]), encoding="utf-8")
+    return out
+
+
 PEXELS_USED_FILE = HERE / "pexels_used.json"  # global registry of Pexels IDs already used
 
 
@@ -5016,6 +5175,18 @@ def _render_photo_segment(image: Path, dur: float, out: Path, zoom_total: float 
                     str(out)], check=True, capture_output=True)
 
 
+_STILL_EXT = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+
+
+def _looped_in(src) -> list:
+    """ffmpeg input args that repeat `src` for as long as the output asks. A video loops with -stream_loop; a STILL
+    must be -loop 1 at the frame rate — -stream_loop -1 on a JPEG never let a highlight bar over a stock photo reach
+    its -t, and the render sat there until the 10-minute timeout killed the whole video."""
+    if Path(str(src)).suffix.lower() in _STILL_EXT:
+        return ["-loop", "1", "-framerate", str(FPS), "-i", str(src)]
+    return ["-stream_loop", "-1", "-i", str(src)]
+
+
 def _render_video_segment(src: Path, dur: float, out: Path, leak=False,
                           white_fade: float = 0.0, aged: bool = False,
                           framed: str = "", idx: int = 0, drift: bool = True, grade: bool = True) -> None:
@@ -5058,7 +5229,7 @@ def _render_video_segment(src: Path, dur: float, out: Path, leak=False,
         fc = (f"[0:v]{scale}{_grade_vf() if grade else ''},format=gbrp[base];"
               f"[1:v]{scale},{pad},{_LEAK_DIM},format=gbrp[lk];"
               f"[base][lk]blend=all_mode=screen:shortest=1,format=yuv420p[v]")
-        subprocess.run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(src),
+        subprocess.run(["ffmpeg", "-y", *_looped_in(src),
                         *leak_in, "-t", f"{dur:.3f}", "-an",
                         "-filter_complex", fc, "-map", "[v]",
                         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
@@ -5070,13 +5241,13 @@ def _render_video_segment(src: Path, dur: float, out: Path, leak=False,
     fr_ins, fr_chain, fr_lab = _framed_filter(framed, dur, idx) if framed else ([], "", "")
     if fr_lab:
         fc = f"[0:v]{vf}[shot0];" + fr_chain.replace("[0:v]", "[shot0]")
-        subprocess.run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(src), *fr_ins,
+        subprocess.run(["ffmpeg", "-y", *_looped_in(src), *fr_ins,
                         "-t", f"{dur:.3f}", "-an", "-filter_complex", fc, "-map", fr_lab,
                         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                         "-pix_fmt", "yuv420p", "-color_range", "tv", "-threads", FFMPEG_THREADS,
                         "-r", str(FPS), str(out)], check=True, capture_output=True)
         return
-    subprocess.run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(src), "-t", f"{dur:.3f}", "-an",
+    subprocess.run(["ffmpeg", "-y", *_looped_in(src), "-t", f"{dur:.3f}", "-an",
                     "-vf", vf, "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                     "-pix_fmt", "yuv420p", "-color_range", "tv", "-r", str(FPS), str(out)],
                    check=True, capture_output=True)
@@ -5621,7 +5792,7 @@ def _render_cardtext_segment(src: Path, dur: float, out: Path, line: str) -> Non
         f"[zoomed]subtitles={ass.name}{_FONTSDIR},format=yuv420p[v]"
     )
     subprocess.run(
-        ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(src.resolve()),
+        ["ffmpeg", "-y", *_looped_in(src.resolve()),
          "-loop", "1", "-i", str(bg.resolve()), "-loop", "1", "-i", str(mask.resolve()),
          "-filter_complex", fc, "-map", "[v]", "-t", f"{dur:.3f}", "-an",
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
@@ -5855,7 +6026,7 @@ def _render_slit_segment(src: Path, dur: float, out: Path, line: str) -> None:
         f"[t1][b2]overlay=0:'{y_bot}',subtitles={ass.name}{_FONTSDIR},format=yuv420p[v]"
     )
     subprocess.run(
-        ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(src.resolve()),
+        ["ffmpeg", "-y", *_looped_in(src.resolve()),
          "-f", "lavfi", "-i", f"color=black:s={VIDEO_W // 2}x{half}:r={FPS}",
          "-f", "lavfi", "-i", f"color=black:s={VIDEO_W // 2}x{half}:r={FPS}",
          "-filter_complex", fc, "-map", "[v]", "-t", f"{dur:.3f}", "-an",
@@ -5870,20 +6041,68 @@ HL_ALPHA = float(os.environ.get("HL_ALPHA", "0.80"))   # marker, not paint
 HL_SWEEP = float(os.environ.get("HL_SWEEP", "0.38"))
 
 
-def _render_highlight_segment(src: Path, dur: float, out: Path, line: str) -> None:
+_LIBASS_SCALE: dict = {}
+
+
+def _libass_scale(font: str) -> float:
+    """How large libass draws `font` against PIL at the same size: libass sizes a face by its OS/2 usWinAscent +
+    usWinDescent, PIL by the em. Poppins comes out at 0.57 of PIL's width, Inter at 0.83 — so a size fitted with PIL
+    drew Poppins at half the width it was fitted for. Read from the font file (OS/2 and head tables); 0.83 if not."""
+    if font in _LIBASS_SCALE:
+        return _LIBASS_SCALE[font]
+    r = 0.83
+    try:
+        import struct
+        data = Path(_font_file(font)).read_bytes()
+        n = struct.unpack(">H", data[4:6])[0]
+        tab = {data[12 + 16 * i:16 + 16 * i].decode("latin1"): struct.unpack(">II", data[20 + 16 * i:28 + 16 * i])[0]
+               for i in range(n)}
+        upm = struct.unpack(">H", data[tab["head"] + 18:tab["head"] + 20])[0]
+        wa, wd = struct.unpack(">HH", data[tab["OS/2"] + 74:tab["OS/2"] + 78])
+        if upm and wa + wd:
+            r = upm / float(wa + wd)
+    except (OSError, KeyError, TypeError, struct.error, ValueError):
+        pass
+    _LIBASS_SCALE[font] = r
+    return r
+
+
+def _hex_ass(hexcol: str) -> str:
+    """"#RRGGBB" as an ASS colour (&H00BBGGRR&)."""
+    h = hexcol.strip().lstrip("#")
+    return f"&H00{h[4:6]}{h[2:4]}{h[0:2]}&".upper()
+
+
+def _render_highlight_segment(src: Path, dur: float, out: Path, line: str, style: str = "") -> None:
     """A marker stripe wipes across the frame and black caps type onto it.
+    look.punch re-skins it per channel: {"bar": "#F7F1E6", "alpha": 0.92, "ink": "#4A3B2C", "font": "Poppins ExtraBold",
+    "upper": false} — anything left out keeps the yellow marker and black caps.
 
     The footage behind is washed out — desaturated and lifted — so it reads as
     paper rather than video, which is what lets a flat highlighter colour sit on
     top without fighting it.
     """
     ass = out.with_suffix(".ass")
+    pc = ((STYLE_INFO.get(style) or {}).get("look") or {}).get("punch") or {}
+    font = str(pc.get("font") or HL_FONT)
+    bar_hex = str(pc.get("bar") or "").strip()
+    bar_hex = bar_hex[1:] if bar_hex.startswith("#") else bar_hex[2:] if bar_hex.lower().startswith("0x") else bar_hex
+    bar_col = ("0x" + bar_hex) if bar_hex else HL_YELLOW
+    alpha = float(pc.get("alpha") or HL_ALPHA)
+    ink = _hex_ass(str(pc["ink"])) if pc.get("ink") else "&H00101010&"
+    text = line.upper() if pc.get("upper", True) else line
     # ONE line, always: a wrapped second row hangs below the stripe. The size is
     # measured against the real font rather than guessed from a letter count.
     bar_w = VIDEO_W - 160
-    hsz = _fit_one_line(line.upper(), HL_FONT, bar_w - 120, 168, 72)
-    _typed_ass(line.upper(), dur, ass, font=HL_FONT, size=hsz,
-               colour="&H00101010&", start=HL_SWEEP * 0.5, align=5,
+    hsz = _fit_one_line(text, font, bar_w - 120, 168, 72)
+    em = hsz                                 # the size the line is drawn at, as PIL measured it
+    if pc.get("font"):
+        # a channel's own face is drawn at the size it was fitted for (see _libass_scale); the default Inter
+        # keeps its long-tuned size
+        em = _fit_one_line(text, font, bar_w - 120, 120, 52)
+        hsz = int(round(em / _libass_scale(font)))
+    _typed_ass(text, dur, ass, font=font, size=hsz,
+               colour=ink, start=HL_SWEEP * 0.5, align=5,
                margin_v=0, outline=0, shadow=0, per_word=0.12)
     # Same reason as the slit: drawbox geometry is fixed at init, so the stripe
     # is a plate slid in with overlay, whose x IS re-evaluated every frame.
@@ -5892,8 +6111,8 @@ def _render_highlight_segment(src: Path, dur: float, out: Path, line: str) -> No
     # THE DISCOMFORT" is 2097px at 72px on a 1640px line — and a stripe built
     # for one row then left the second row hanging off the yellow. So the row
     # count is measured too, and the stripe is built to hold it.
-    hl_lines = _line_count(line.upper(), HL_FONT, hsz, bar_w - 120)
-    bar_h = int(hsz * (1.2 * hl_lines + 0.14))
+    hl_lines = _line_count(text, font, em, bar_w - 120)
+    bar_h = int((em / 0.83 if pc.get("font") else hsz) * (1.2 * hl_lines + 0.14))
     bar_y = VIDEO_H // 2 - bar_h // 2
     x_expr = f"{80 - bar_w}+{bar_w}*pow(min(1\\,t/{HL_SWEEP}),0.6)"
     fc = (
@@ -5906,8 +6125,8 @@ def _render_highlight_segment(src: Path, dur: float, out: Path, line: str) -> No
         f"subtitles={ass.name}{_FONTSDIR},format=yuv420p[v]"
     )
     subprocess.run(
-        ["ffmpeg", "-y", "-stream_loop", "-1", "-i", str(src.resolve()),
-         "-f", "lavfi", "-i", f"color={HL_YELLOW}@{HL_ALPHA}:s={bar_w}x{bar_h}:r={FPS},"
+        ["ffmpeg", "-y", *_looped_in(src.resolve()),
+         "-f", "lavfi", "-i", f"color={bar_col}@{alpha}:s={bar_w}x{bar_h}:r={FPS},"
                                 f"format=yuva420p",
          "-filter_complex", fc, "-map", "[v]", "-t", f"{dur:.3f}", "-an",
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
@@ -5987,7 +6206,8 @@ def _render_astro_segments(plan: list, job: Path, force: bool, zoom_total: float
         leak = "in" if leak else ("out" if idx in leak_out else False)
         aged, framed = look(idx, kind)
         seg = seg_dir / f"seg_{idx:03d}.mp4"
-        if seg.exists() and not force and not _newer(Path(str(path)), seg):
+        # a segment left empty by a render that was killed (a timeout, a crash) is drawn again, never stitched in
+        if seg.exists() and seg.stat().st_size > 1000 and not force and not _newer(Path(str(path)), seg):
             return seg
         if idx in depth_slots and _depth_segment(depth_mod, Path(path), float(dur), seg, job, idx, style,
                                                  white_fade):
@@ -6016,10 +6236,11 @@ def _render_astro_segments(plan: list, job: Path, force: bool, zoom_total: float
                 wf = 0.0 if kind == "motion" else white_fade   # scenes fade themselves
                 if kind in PUNCH_KINDS:
                     line = punch_lines.get(str(idx)) or punch_lines.get(idx) or ""
-                    {"card": _render_cardtext_segment,
-                     "slit": _render_slit_segment,
-                     "hl": _render_highlight_segment}[kind](
-                        Path(path), float(dur), seg, line)
+                    if kind == "hl":
+                        _render_highlight_segment(Path(path), float(dur), seg, line, style)
+                    else:
+                        {"card": _render_cardtext_segment,
+                         "slit": _render_slit_segment}[kind](Path(path), float(dur), seg, line)
                     return seg
                 if kind == "video" and Path(path).name in real_len and not leak:
                     _render_footage_segment(Path(path), float(dur), seg, real_len[Path(path).name], style,
@@ -6437,6 +6658,15 @@ def _final_mux(job: Path, mp3: Path, srt: Path, burn_subs: bool, add_qr: bool = 
         inputs += ["-loop", "1", "-i", str(lines_png)]      # bounded by -t below, like the QR
         lines_idx = idx
         idx += 1
+    # the guide photo (guide.py): a cut-out person on the right over the stock shots guide.json names
+    guide_idx, guide_on = None, None
+    if (HERE / "guide.py").exists():
+        import guide
+        guide_on = guide.mux(job)
+        if guide_on:
+            inputs += ["-loop", "1", "-i", str(guide_on[0])]
+            guide_idx = idx
+            idx += 1
     qr_idx = None
     if has_qr:
         # -loop 1 keeps the QR image on screen for the WHOLE video (a single-frame
@@ -6484,6 +6714,16 @@ def _final_mux(job: Path, mp3: Path, srt: Path, burn_subs: bool, add_qr: bool = 
         filters.append(f"[{lines_idx}:v]format=rgba[lines]")
         filters.append(f"[{last}][lines]overlay=0:0:format=auto,format=yuv420p[lined]")
         last = "lined"
+    if guide_idx is not None:
+        _, win, share, margin, bottom = guide_on
+        gh = max(2, int(VIDEO_H * share) // 2 * 2)
+        expr = "+".join(f"between(t,{a:.2f},{b:.2f})" for a, b in win)
+        # a negative margin/bottom pushes the photo past the frame edge (W-w+15), hiding any sliver of empty edge
+        gx = f"W-w-{margin}" if margin >= 0 else f"W-w+{-margin}"
+        gy = f"H-h-{bottom}" if bottom >= 0 else f"H-h+{-bottom}"
+        filters.append(f"[{guide_idx}:v]format=rgba,scale=-2:{gh}:flags=lanczos[guide]")
+        filters.append(f"[{last}][guide]overlay=x={gx}:y={gy}:format=auto:enable='{expr}',format=yuv420p[guided]")
+        last = "guided"
     if has_subs:
         filters.append(f"[{last}]subtitles=subs_burn.ass{_FONTSDIR}[subd]")
         last = "subd"
@@ -8040,8 +8280,8 @@ def generate_motion_segments(script: str, srt: Path, job: Path, total: float, fo
         op["template"] = "opener"
         if faces:
             op["image"] = motion.image_data_uri(faces[0], 900)
-        op["cutout_names"] = motion.pick_cutouts(op.get("cutouts"), 6, vseed) or \
-            motion.pick_cutouts([], 6, vseed)
+        op["cutout_names"] = motion.pick_cutouts(op.get("cutouts"), 6, vseed, style=style) or \
+            motion.pick_cutouts([], 6, vseed, style=style)
 
     pool = sorted((job / "images").glob("scene_*.jpg")) or sorted((job / "images").glob("*.jpg"))
     # The local library is tried first and matched against what the scene SAYS;
@@ -8938,6 +9178,9 @@ def assemble_astrology_motion(photos: list, ai_clips: list, pexels_clips: list, 
     if (HERE / "cinema.py").exists():
         import cinema
         segs = cinema.post_segments(sys.modules[__name__], plan, segs, job, style)
+    if (HERE / "guide.py").exists():
+        import guide
+        guide.write_job(job, guide_image_path(style), plan, guide.settings(STYLE_INFO.get(style) or {}), log)
     _concat_segments(segs, job / "_visual.mp4")
     _final_mux(job, _with_sound_design(job, mp3, plan, style), srt, burn_subs, add_qr=False,
                vignette=ASTRO_VIGNETTE, no_dust_ranges=no_dust, sub_center=sub_center, no_sub_ranges=no_dust)
@@ -9134,6 +9377,10 @@ def generate_youtube_meta(title: str, script: str, srt: Path, job: Path, style: 
         body += ["", "CHAPTERS"] + [f"{_stamp(t)} {ttl}" for t, ttl in chapters]
     if sources:
         body += ["", "SOURCES"] + [f"- {s['label']}" + (f" — {s['url']}" if s["url"] else "") for s in sources]
+    # the channel's own closing lines (a music licence credit, a fixed note), word for word
+    footer = st.get("description_footer")
+    if footer:
+        body += [""] + ([str(x) for x in footer] if isinstance(footer, list) else [str(footer)])
     if tags:
         body += ["", "TAGS", ", ".join(tags)]
     out.write_text("\n".join(body).strip() + "\n", encoding="utf-8")
@@ -9489,6 +9736,7 @@ def run_pipeline(title: str, minutes: int = 20, force: bool = False,
                 fv = ex.submit(generate_voiceover, script, job, force, avatar_min, style)
                 fx = ex.submit(generate_astrology_visuals, script, job, force, style, minutes)
                 fpx = ex.submit(fetch_footage, script, job, force, style, title)
+                fsp = ex.submit(fetch_stock_photos, job, force, style, minutes)
                 if _directed(style) and _FEATURES and style not in STYLE_NO_GRAPHICS:
                     if force:
                         _clear_scene_work(job)
@@ -9510,6 +9758,7 @@ def run_pipeline(title: str, minutes: int = 20, force: bool = False,
                 fplan = (ex.submit(_prewarm_scene_plans, srt, job, style)
                          if _FEATURES and (not force or _directed(style)) and style not in STYLE_NO_GRAPHICS else None)
                 photos, ai_clips = fx.result()
+                photos = list(photos or []) + fsp.result()
                 pexels_clips = fpx.result()
                 if fplan is not None:
                     fplan.result()
@@ -9746,7 +9995,8 @@ def run_custom(title: str, minutes: int = 20, steps=None, script_text: str = "",
                character_image: str = "", maps: bool = True,
                  headlines: bool = True, spotlight: bool = True, objects: bool = True,
                  depth: bool = True, features: dict = None, extra: str = "",
-               avatar_id: str = "", avatar_s: float = 0, avatar_count: int = 1) -> Path:
+               avatar_id: str = "", avatar_s: float = 0, avatar_count: int = 1,
+               guide_image: str = "") -> Path:
     """Run a chosen SUBSET of the pipeline. `steps` is any of:
     {'script','voiceover','pexels','images','video'}.
 
@@ -9765,6 +10015,7 @@ def run_custom(title: str, minutes: int = 20, steps=None, script_text: str = "",
     _lock_mix(style)
     set_character(character)
     set_character_image(character_image)
+    set_guide_image(guide_image)
     set_scene_dlcs(maps, headlines, spotlight, objects, depth)
     # One tonal range per channel — see FOOTAGE_GRADE.
     _GRADE = os.environ.get("FOOTAGE_GRADE") or FOOTAGE_GRADE.get(style, "")

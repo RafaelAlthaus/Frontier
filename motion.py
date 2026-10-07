@@ -115,6 +115,17 @@ SKINS = {
         "title_font": "Montserrat, 'Helvetica Neue', sans-serif",
         "title_weight": "800",
     },
+    # LUZ: dawn light — warm ivory, soft gold, dawn rose and nothing else; warm brown type, never black.
+    "luz": {
+        "good": "#b8913f",
+        "warn": "#c98472",
+        "bg": "#f7f1e6", "bg2": "#fffbf3", "paper": True, "deco": "rays",
+        "ink": "#4a3b2c", "ink_soft": "#8c7860",
+        "accent": ["#c8a24e", "#d49a88", "#e3b5a4", "#a8843a", "#e8cfa0"],
+        "card": "#fffbf3", "card_line": "#e8d8bc",
+        "title_font": "'Poppins Extra Bold', Poppins, Montserrat, sans-serif",
+        "title_weight": "800",
+    },
     # MYSTIC: deep teal-black ground, warm brass and
     # ivory — old-teacher authority rather than cosmic sparkle.
     "mystic": {
@@ -341,7 +352,10 @@ NICHE_CUTOUTS = {"bible", "holy_bible", "jesus", "jesus_and_disciples_drawing",
 CUTOUT_ALIASES.pop("word", None)
 
 
-def pick_cutouts(names: list, n: int, seed: int = 0, strict: bool = False) -> list:
+STYLE_CUTOUT_POOL: dict = {}   # look.cutouts: the only stickers a channel's filler may use (niche ones allowed)
+
+
+def pick_cutouts(names: list, n: int, seed: int = 0, strict: bool = False, style: str = "") -> list:
     """Resolve requested sticker names to real files.
 
     `strict` returns ONLY genuine matches. Padding a scene with whatever was
@@ -362,7 +376,9 @@ def pick_cutouts(names: list, n: int, seed: int = 0, strict: bool = False) -> li
     # The library is alphabetical, so an unmatched opener was padded with the
     # Bible and three drawings of Jesus — on a psychology channel. They stay
     # available to any scene that asks for them by name.
-    pool = [k for k in CUTOUTS if k not in used and k not in NICHE_CUTOUTS]
+    own = [k for k in STYLE_CUTOUT_POOL.get(style or "", []) if k in CUTOUTS]
+    pool = ([k for k in own if k not in used] if own else
+            [k for k in CUTOUTS if k not in used and k not in NICHE_CUTOUTS])
     i = seed
     while len(got) < n and pool:
         k = pool[i % len(pool)]
@@ -1179,10 +1195,12 @@ T.opener=()=>{
             .35+i*.16, {from:left?'left':'right', ar:ar, card:SCENE.card});
   }
 
-  /* the title writes on under the photo */
+  /* the title writes on under the photo — between the two sticker columns (they reach ~300px in from each
+     edge), so a long title or subtitle wraps instead of running over the stickers */
+  const side=N?340:200;
   const fs=fit(SCENE.title, hasPhoto?76:104);
   const ttl=mk('div','',`<span class="mtxt">${esc(SCENE.title||'')}</span>`);
-  Object.assign(ttl.style,{left:'200px',width:(W-400)+'px',fontFamily:SK.tf,
+  Object.assign(ttl.style,{left:side+'px',width:(W-2*side)+'px',fontFamily:SK.tf,
     fontSize:fs+'px',color:SK.ink,textAlign:'center',lineHeight:'1.16'});
   add(ttl,t=>{const p=eOut(seg(t,1.05,.8));
     ttl.style.opacity=p;
@@ -1193,7 +1211,8 @@ T.opener=()=>{
   ttl.style.top=ty+'px';
   const r=lastLine(ttl);
   if(r) marker(r.left+r.width*.04, r.bottom-fs*0.14, r.width*.92, SK.ac[1], 1.95);
-  sub(SCENE.subtitle, ty+th+62, 44);
+  const sn=sub(SCENE.subtitle, ty+th+62, 44);
+  if(sn){ sn.style.left=side+'px'; sn.style.width=(W-2*side)+'px'; }
 };
 
 /* 17. PILLARS — three ancient columns rise from the floor, each carrying one
@@ -1900,7 +1919,11 @@ buildDeco();
 
 /* ── build + drive ────────────────────────────────────────────────────── */
 const ICON_R=__ICONR__;
-(T[SCENE.template]||T.title)();
+/* The scene is built once its fonts have loaded. Built straight away, every measurement (how many lines a title
+   wraps to, where the subtitle and the underline go) was taken in the fallback face: a three-line Poppins title was
+   laid out as two lines and ran into its subtitle. Every embedded face is loaded first (a face nothing uses yet is
+   never fetched on its own), at most 4 s, then the page is built and reports ready. */
+const __build=()=>(T[SCENE.template]||T.title)();
 
 /* paper texture strength (grain always, crumple only on the paper skin) */
 const grainEl=document.getElementById('gr'), crumpEl=document.getElementById('crump');
@@ -1954,8 +1977,12 @@ window.renderFrame=function(t){
   /* a slow brightness breath, continuous like everything else */
   stage.style.filter=`brightness(${(1.0+0.018*Math.sin(t*0.45+dr)).toFixed(3)})`;
 };
-window.renderFrame(0);
-window.__ready=true;
+const __fonts=(document.fonts ? Promise.all([...document.fonts].map(f=>f.load().catch(()=>null))) : Promise.resolve());
+Promise.race([__fonts, new Promise(r=>setTimeout(r,4000))]).then(()=>{
+  try{ __build(); }catch(err){ console.error(err); }
+  window.renderFrame(0);
+  window.__ready=true;
+});
 </script></body></html>"""
 
 

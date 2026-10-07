@@ -108,7 +108,7 @@ def capabilities() -> dict:
     }
     need = {
         "": (True, ""),
-        "pexels": (_has(env, "PEXELS_API_KEY"), "Add PEXELS_API_KEY to .env (free at pexels.com/api)."),
+        "pexels": (_has(env, "PEXELS_API_KEY", "PIXABAY_API_KEY"), "Add PEXELS_API_KEY (free at pexels.com/api) or PIXABAY_API_KEY (free at pixabay.com/api/docs) to .env."),
         "images": (images, "Add ALGROW_API_KEY, WAVESPEED_API_KEY or KIE_API_KEY to .env."),
         # cutouts and reference pictures: WaveSpeed, or kie.ai's remover and hosting (removebg.py)
         "wavespeed": (_has(env, "WAVESPEED_API_KEY", "KIE_API_KEY"), "Add WAVESPEED_API_KEY (wavespeed.ai) or KIE_API_KEY (kie.ai) to .env."),
@@ -181,7 +181,7 @@ def prices() -> dict:
           "": (0.0, "")}.get(watcher, (0.03, f"{watcher} watches the candidate videos"))
     feats = {
         "youtube": yt,
-        "stock": (0.0, "Pexels — free"),
+        "stock": (0.0, "Pexels / Pixabay — free"),
         "ai_images": (2.5 * picture, f"about ${picture:.3f} a picture on {images or 'your image service'}"),
         "depth": (0.004, "WaveSpeed background remover — $0.004 a picture"),
         "motion": (0.0, "drawn on your computer — free"),

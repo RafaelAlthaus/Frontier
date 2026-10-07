@@ -80,7 +80,8 @@ def _run_spec(spec):
                       depth=spec.get("depth", True),
                       features=spec.get("features"), extra=spec.get("extra", ""),
                       avatar_id=spec.get("avatar_id", ""), avatar_s=spec.get("avatar_s", 0),
-                      avatar_count=spec.get("avatar_count", 1))
+                      avatar_count=spec.get("avatar_count", 1),
+                      guide_image=spec.get("guide_image", ""))
         job["state"] = "done"
     except BaseException as e:                                   # noqa: BLE001
         job["error"] = str(e) or e.__class__.__name__
@@ -169,6 +170,7 @@ def api_run():
         byo_audio=(d.get("byo_audio") or "").strip(),
         character=(d.get("character") or "").strip()[:4000],
         character_image=_char_rel(d.get("character_image")),
+        guide_image=_guide_rel(d.get("guide_image")),
         maps=bool(d.get("maps", True)),
         headlines=bool(d.get("headlines", True)),
         spotlight=bool(d.get("spotlight", True)),
@@ -539,6 +541,68 @@ def api_character_upload():
         print(f"  character description failed: {str(e)[:160]}")
     item = next((x for x in _char_items() if x["file"] == dest.name), None)
     return jsonify(character=item)
+
+
+# ── the guide photo (guide.py): a person cut out and laid on the right over stock shots ──
+GUIDE_DIR = HERE / "assets" / "guides"
+
+
+def _guide_rel(raw) -> str:
+    """A guide photo picked in Options, as a path under assets/ — or "" if it is not one."""
+    rel = str(raw or "").strip().replace("\\", "/")
+    name = rel[len("guides/"):] if rel.startswith("guides/") else ""
+    if not name or "/" in name or ".." in name or Path(name).suffix.lower() != ".png":
+        return ""
+    return rel if (GUIDE_DIR / name).is_file() else ""
+
+
+def _guide_items() -> list:
+    out = []
+    for p in sorted(GUIDE_DIR.glob("*.png")) if GUIDE_DIR.is_dir() else []:
+        out.append({"rel": f"guides/{p.name}", "file": p.name, "src": f"/guideimg/{p.name}",
+                    "label": re.sub(r"-[0-9a-f]{6}$", "", p.stem).replace("-", " ").strip() or "guide",
+                    "mtime": int(p.stat().st_mtime)})
+    return out
+
+
+@app.get("/api/guides")
+def api_guides():
+    return jsonify(guides=_guide_items())
+
+
+@app.get("/guideimg/<name>")
+def f_guideimg(name):
+    p = GUIDE_DIR / name
+    if "/" in name or "\\" in name or ".." in name or p.suffix.lower() != ".png" or not p.is_file():
+        return Response(status=404)
+    return send_file(p)
+
+
+@app.post("/api/guides")
+def api_guide_upload():
+    """A guide photo of your own: its plain backdrop cut away on this computer (guide.cutout), saved as a PNG."""
+    f = request.files.get("file")
+    if f is None:
+        return jsonify(error="No picture came with the upload."), 400
+    raw = f.read()
+    if len(raw) > 20 * 1024 * 1024:
+        return jsonify(error="That picture is over 20 MB — export a smaller one."), 400
+    try:
+        from PIL import Image, ImageOps
+        im = Image.open(io.BytesIO(raw))
+        im.load()
+        im = ImageOps.exif_transpose(im)
+    except Exception:                                            # noqa: BLE001
+        return jsonify(error="Frontier cannot read that file as a picture — use PNG, JPG or WebP."), 400
+    import guide
+    stem = re.sub(r"[^a-z0-9]+", "-", Path(f.filename or "").stem.lower()).strip("-")[:40] or "guide"
+    dest = GUIDE_DIR / f"{stem}-{hashlib.sha1(raw).hexdigest()[:6]}.png"
+    try:
+        how = guide.cutout(im, dest)
+    except Exception as e:                                       # noqa: BLE001
+        return jsonify(error=f"The photo could not be cut out: {str(e)[:120]}"), 400
+    item = next((x for x in _guide_items() if x["file"] == dest.name), None)
+    return jsonify(guide=item, how=how)
 
 
 @app.get("/char/<style>")

@@ -830,7 +830,10 @@ def _settings(style: str, mv) -> dict:
             # a dropped frame, so a modern style turns it off.
             "smooth": bool(cfg.get("smooth")),
             # the opening: how many pages belong inside the first hook_s seconds (0 = wherever the story has them)
-            "hook_n": int(float(cfg.get("hook_n") or 0)), "hook_s": float(cfg.get("hook_s") or 120.0)}
+            "hook_n": int(float(cfg.get("hook_n") or 0)), "hook_s": float(cfg.get("hook_s") or 120.0),
+            # "lang": every page in this language ("es" = Spanish Wikipedia and Spanish news), searched in it, and
+            # never an English page as a fallback — a Spanish channel showed English Wikipedia articles
+            "lang": str(cfg.get("lang") or "").strip().lower()[:2]}
 
 
 def plan_moments(srt: Path, job: Path, style: str, force: bool, total: float, mv) -> list:
@@ -851,6 +854,13 @@ def plan_moments(srt: Path, job: Path, style: str, force: bool, total: float, mv
         extra += (HOOK_NOTE.replace("[INSERT HOOK S HERE]", f"{cfg['hook_s']:.0f}")
                   .replace("[INSERT HOOK N HERE]", str(cfg["hook_n"]))
                   .replace("[INSERT HOOK GAP HERE]", str(max(12, int(cfg["hook_s"] / (cfg["hook_n"] + 1))))))
+    if cfg["lang"]:
+        extra += (f"\nTHIS CHANNEL SHOWS ONLY PAGES IN THE LANGUAGE \"{cfg['lang']}\": every moment's \"lang\" is "
+                  f"\"{cfg['lang']}\", and its \"query\" is written in that language — for reference, the title the "
+                  f"article has on the {cfg['lang']}.wikipedia.org edition (e.g. \"Luz cenicienta\", not \"Earthshine\"); its "
+                  f"\"claim\" too is written in that language, worded the way that page would state it (the line on the "
+                  f"page is found by its words). "
+                  "Skip a claim whose only good source is in another language.\n")
     prompt = (MOMENTS_PROMPT.replace("[INSERT MAX HERE]", str(most))
               .replace("[INSERT GAP HERE]", str(int(cfg["gap_s"])))
               .replace("TRANSCRIPT:", extra + "TRANSCRIPT:")
@@ -858,6 +868,9 @@ def plan_moments(srt: Path, job: Path, style: str, force: bool, total: float, mv
                        "\n".join(f"#{i + 1} [{_stamp_s(st)}] {txt}" for i, (st, en, txt) in enumerate(entries))))
     mv.log(f"headlines: Claude is looking for claims a real article backs up (up to {most})...")
     moments = [m for m in mv._json_items(prompt, max_tokens=max(3000, most * 350)) if isinstance(m, dict)]
+    if cfg["lang"]:
+        for m in moments:
+            m["lang"], m["lang_only"] = cfg["lang"], True
     if cfg["hook_n"] > 0:
         at = lambda m: entries[max(0, min(len(entries) - 1, int(float(m.get("cue") or 1)) - 1))][0]
         early = [m for m in moments if at(m) < cfg["hook_s"]]
@@ -885,11 +898,12 @@ def find_pages(moments: list, job: Path, force: bool, mv) -> list:
             # the page itself is named (a subreddit, a forum thread, a company's post): photograph that one
             cands.append([{"title": "", "url": str(m["url"]), "outlet": _domain(str(m["url"])), "date": ""}])
             continue
+        only = bool(m.get("lang_only"))          # look.headlines.lang: this language and no other
         if str(m.get("kind")) == "reference":
-            found = wikipedia(q, lang) + (wikipedia(q, "en") if lang != "en" else [])
+            found = wikipedia(q, lang) + (wikipedia(q, "en") if lang != "en" and not only else [])
         else:
-            found = bing_news(q, lang) + (bing_news(q, "en") if lang != "en" else [])
-            if len(found) < 3 and m.get("claim"):
+            found = bing_news(q, lang) + (bing_news(q, "en") if lang != "en" and not only else [])
+            if len(found) < 3 and m.get("claim") and not only:
                 found += bing_news(str(m["claim"])[:120], "en")
         seen, uniq = set(), []
         for c in found:
